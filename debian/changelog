@@ -1,0 +1,8 @@
+2008-01-29  Stephen Hemminger <stephen.hemminger@vyatta.com>
+
+	* include/iptables.h: change path to iptables (from debian)
+
+2008-01-29  Stephen Hemminger <stephen.hemminger@vyatta.com>
+
+	* : Add vyatta specific Makefile and versioning
+
