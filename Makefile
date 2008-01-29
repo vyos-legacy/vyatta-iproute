@@ -1,5 +1,5 @@
 DESTDIR=
-SBINDIR=/usr/sbin
+SBINDIR=/sbin
 CONFDIR=/etc/iproute2
 DOCDIR=/usr/share/doc/iproute2
 MANDIR=/usr/share/man
@@ -60,7 +60,7 @@ install: all
 	install -m 0644 $(shell find man/man3 -maxdepth 1 -type f) $(DESTDIR)$(MANDIR)/man3
 
 snapshot:
-	echo "static const char SNAPSHOT[] = \""`date +%y%m%d`"\";" \
+	echo "static const char SNAPSHOT[] = \"vyatta-"`date +%y%m%d`"\";" \
 		> include/SNAPSHOT.h
 
 clean:
