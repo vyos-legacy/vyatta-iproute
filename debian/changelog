@@ -1,8 +1,6 @@
-2008-01-29  Stephen Hemminger <stephen.hemminger@vyatta.com>
+vyatta-cfg (0.1) unstable; urgency=low
 
-	* include/iptables.h: change path to iptables (from debian)
+  * Initial Release.
 
-2008-01-29  Stephen Hemminger <stephen.hemminger@vyatta.com>
-
-	* : Add vyatta specific Makefile and versioning
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 29 Jan 2008 17:39:53 -0700
 
