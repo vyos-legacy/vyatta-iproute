@@ -2,5 +2,6 @@ This version of the iproute2 utilities is just a branch
 off of the upstream iproute2 repository with:
   * changes to fit in with the iso build environment
   * change to debian locations for make install
+  * debian documentation patches
   * cherry picked patches for bug fixes
   * version (snapshot changed)
