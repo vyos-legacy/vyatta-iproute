@@ -8,8 +8,8 @@ Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison
 
 Package: vyatta-iproute
 Architecture: any
-Provides: arpd
-Conflicts: arpd
+Provides: arpd, iproute
+Conflicts: arpd, iproute
 Depends: ${shlibs:Depends}
 Recommends: libatm1
 Suggests: vyatta-iproute-doc
