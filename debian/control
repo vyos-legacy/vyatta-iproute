@@ -10,6 +10,7 @@ Package: vyatta-iproute
 Architecture: any
 Provides: arpd, iproute
 Conflicts: arpd, iproute
+Replaces: iproute
 Depends: ${shlibs:Depends}
 Recommends: libatm1
 Suggests: vyatta-iproute-doc
