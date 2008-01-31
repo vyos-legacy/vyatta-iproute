@@ -11,7 +11,7 @@ Architecture: any
 Provides: arpd, iproute
 Conflicts: arpd, iproute
 Replaces: iproute
-Depends: ${shlibs:Depends}
+Depends: libc6 (>= 2.7-1), libdb4.6
 Recommends: libatm1
 Suggests: vyatta-iproute-doc
 Description: Professional tools to control the networking in Linux kernels
