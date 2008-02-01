@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
 			break;
 		case 'v':
 		case 'V':
-			printf("rtacct utility, iproute2-ss%s\n", SNAPSHOT);
+			printf("rtacct utility, %s\n", VERSION);
 			exit(0);
 		case 'M':
 			/* Some secret undocumented option, nobody

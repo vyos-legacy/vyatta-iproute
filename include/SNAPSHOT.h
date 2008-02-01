@@ -1,1 +1,1 @@
-static const char SNAPSHOT[] = "vyatta-080130";
+#define VERSION "vyatta-080201"
