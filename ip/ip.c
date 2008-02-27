@@ -202,7 +202,7 @@ int main(int argc, char **argv)
 			rtnl_names_numeric++;
 #endif
 		} else if (matches(opt, "-Version") == 0) {
-			printf("ip utility, iproute2-ss%s\n", SNAPSHOT);
+			printf("ip utility, %s\n", VERSION);
 			exit(0);
 		} else if (matches(opt, "-force") == 0) {
 			++force;

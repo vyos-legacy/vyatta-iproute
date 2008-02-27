@@ -220,7 +220,7 @@ static int batch(const char *name)
 
 	if (name && strcmp(name, "-") != 0) {
 		if (freopen(name, "r", stdin) == NULL) {
-			fprintf(stderr, "Cannot open file \"%s\" for reading: %s=n",
+			fprintf(stderr, "Cannot open file \"%s\" for reading: %s\n",
 				name, strerror(errno));
 			return -1;
 		}
@@ -274,7 +274,7 @@ int main(int argc, char **argv)
 		} else if (matches(argv[1], "-raw") == 0) {
 			++show_raw;
 		} else if (matches(argv[1], "-Version") == 0) {
-			printf("tc utility, iproute2-ss%s\n", SNAPSHOT);
+			printf("tc utility, %s\n", VERSION);
 			return 0;
 		} else if (matches(argv[1], "-iec") == 0) {
 			++use_iec;

@@ -1,0 +1,56 @@
+vyatta-iproute (0.2) unstable; urgency=low
+
+  vc4.0.0
+  [ Mark O'Brien ]
+
+
+  [ Andreas Henriksson ]
+  * iproute2: revert syntax help text mistake.
+  * iproute2: add synonyms for ip rule options to ip(8) manpage.
+
+  [ PJ Waskiewicz ]
+  * Update various classifiers' help output for expected CLASSID syntax
+
+  [ Stephen Hemminger ]
+  * add decode of match rules
+  * Revert "TC action parsing bug fix"
+  * fix typo in ip batch error message
+  * libnetlink: don't spin forever on receive error
+  * remove extra newline from perror() calls
+  * poll for errors after rtnl_send
+  * Add vyatta specific Makefile and versioning
+  * change path to iptables (from debian)
+  * Add debian based build procedures
+  * reset initial changelog
+  * label changelog correctly
+  * Add debian patch to produce txt based documentation
+  * update version information
+  * add entry about debian patches
+  * fix package name
+  * Use Provides to avoid package conflicts
+  * vyatta-iproute replaces debian iproute
+  * fix debian rules to match vyatta-iproute package name
+  * more package name changes
+  * fix problem caused by rtnl_send checks
+  * change version number on command output
+  * don't build unneede doc and devel packages
+  * ignore emacs backup files
+  * fix typos in help message for meta match
+  * Protocol field on tc_filter is required
+  * minor typo fixes
+  * break excessively long lines
+  * decode the output of u32 matches
+
+  [ rbalocca ]
+  * Add more derived files to .gitinore for vyatta-iproute
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Mon, 25 Feb 2008 17:39:02 -0800
+
+vyatta-iproute (0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 29 Jan 2008 17:39:53 -0700
+

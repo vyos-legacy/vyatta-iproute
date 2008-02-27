@@ -60,8 +60,7 @@ install: all
 	install -m 0644 $(shell find man/man3 -maxdepth 1 -type f) $(DESTDIR)$(MANDIR)/man3
 
 snapshot:
-	echo "static const char SNAPSHOT[] = \""`date +%y%m%d`"\";" \
-		> include/SNAPSHOT.h
+	echo "#define VERSION \"vyatta-"`date +%y%m%d`"\"" > include/SNAPSHOT.h
 
 clean:
 	rm -f cscope.*

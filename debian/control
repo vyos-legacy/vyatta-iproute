@@ -1,0 +1,25 @@
+Source: vyatta-iproute
+Section: contrib/net
+Priority: extra
+Maintainer: Stephen Hemminger <shemminger@vyatta.com>
+Homepage: http://www.linux-foundation.org/en/Net:Iproute2
+Standards-Version: 3.7.3
+Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison, libdb-dev, linuxdoc-tools, linux-libc-dev, debhelper (>= 5), lynx, dpatch, flex
+
+Package: vyatta-iproute
+Architecture: any
+Provides: arpd, iproute
+Conflicts: arpd, iproute
+Replaces: iproute
+Depends: libc6 (>= 2.7-1), libdb4.6
+Recommends: libatm1
+Suggests: vyatta-iproute-doc
+Description: Professional tools to control the networking in Linux kernels
+ This is `iproute', the professional set of tools to control the
+ networking behavior in kernels 2.2.x and later.
+ .
+ At least, the options CONFIG_NETLINK and CONFIG_NETLINK_DEV (or
+ CONFIG_RTNETLINK) must be compiled into the running kernel.
+ .
+ This package is also known as iproute2 upstream and in some
+ documentation.
