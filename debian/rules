@@ -17,7 +17,7 @@ clean-patched:
 
 binary: binary-indep binary-arch
 
-binary-indep: build-indep
+binary-indep: build-indep include/SNAPSHOT.h
 	dh_testdir
 	dh_testroot
 	dh_install -i --fail-missing
@@ -42,7 +42,7 @@ stamp-doc:
 
 
 
-binary-arch: build-arch
+binary-arch: build-arch include/SNAPSHOT.h
 	dh_testdir
 	dh_testroot
 	dh_install -a --fail-missing
@@ -60,8 +60,12 @@ binary-arch: build-arch
 	dh_builddeb -a
 
 build-arch: stamp-build
-stamp-build: patch
+stamp-build: patch include/SNAPSHOT.h
 	$(MAKE) KERNEL_INCLUDE=./include
 	touch stamp-build
+
+include/SNAPSHOT.h:
+	echo SNAPSHOT!!!!
+	echo "#define VERSION \"vyatta-"`date +%y%m%d`"\"" > include/SNAPSHOT.h
 
 .PHONY: build binary binary-arch binary-indep clean

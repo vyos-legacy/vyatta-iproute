@@ -31,7 +31,7 @@ SUBDIRS=lib ip tc misc netem genl
 
 LIBNETLINK=../lib/libnetlink.a ../lib/libutil.a
 
-all: Config
+all: Config include/SNAPSHOT.h
 	@set -e; \
 	for i in $(SUBDIRS); \
 	do $(MAKE) $(MFLAGS) -C $$i; done
@@ -59,6 +59,7 @@ install: all
 	install -m 0755 -d $(DESTDIR)$(MANDIR)/man3
 	install -m 0644 $(shell find man/man3 -maxdepth 1 -type f) $(DESTDIR)$(MANDIR)/man3
 
+include/SNAPSHOT.h:
 snapshot:
 	echo "#define VERSION \"vyatta-"`date +%y%m%d`"\"" > include/SNAPSHOT.h
 

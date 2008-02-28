@@ -39,3 +39,4 @@ patch-stamp
 stamp-build
 stamp-doc
 *~
+include/SNAPSHOT.h
