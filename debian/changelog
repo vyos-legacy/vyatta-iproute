@@ -1,3 +1,101 @@
+vyatta-iproute (0.3) unstable; urgency=low
+
+  3.0.1
+  [ Mark O'Brien ]
+
+
+  [ Alexander Wirt ]
+  * Fix various typos and nitpicks
+  * Add parameters to usage help text.
+
+  [ Andreas Barth ]
+  * Remove bogus reference to tc-filters(8) from tc(8) manpage.
+
+  [ Andreas Henriksson ]
+  * Fix corruption when using batch files with comments and broken
+    lines.
+  * iproute2: support dotted-quad netmask notation.
+  * iproute2: revert syntax help text mistake.
+  * iproute2: add synonyms for ip rule options to ip(8) manpage.
+  * iproute2: revert syntax help text mistake.
+  * iproute2: add synonyms for ip rule options to ip(8) manpage.
+
+  [ Denys Fedoryshchenko ]
+  * iptables compatiablity
+
+  [ François Delawarde ]
+  * tc mask patch
+
+  [ Herbert Xu ]
+  * Fix typo in tunnel code (o_key vs. i_key).
+  * Add NAT action
+  * Add NAT action
+
+  [ Jesper Dangaard Brouer ]
+  * Overhead calculation is now done in the kernel.
+  * Cleanup: tc_calc_rtable().
+  * Change the rate table calc of transmit cost to use upper bound
+    value.
+
+  [ Patrick McHardy ]
+  * iproute 2.6.23 incompatibility
+
+  [ Pavel Emelyanov ]
+  * iplink_parse() routine
+
+  [ Stephen Hemminger ]
+  * 2.6.24-rc3 headers
+  * Merge header file changes from net-2.6.25
+  * Fix breakage from netfilter/ip_tables header change.
+  * Fix breakage from netfilter/ip_tables header change.
+  * Fix off by one in nested attribute management.
+  * rlim qdisc support
+  * Fix dotted quad for bit order
+  * netem potential dist table overflow
+  * veth: use kernel header file
+  * snapshot target
+  * veth.h move to linux/
+  * Manual page fixes
+  * add decode of match rules
+  * snapshot 31 Dec 2007
+  * Use netinet/tcp.h (with correction) rather than kernel headers
+  * Update header files from net-2.6.25
+  * add include/netinet/tcp.h
+  * Revert "TC action parsing bug fix"
+  * Revert "TC action parsing bug fix"
+  * release v2.6.24-080108
+  * fix typo in ip batch error message
+  * update headers to current net-2.6.25
+  * vlan meta tag match
+  * libnetlink: don't spin forever on receive error
+  * remove extra newline from perror() calls
+  * poll for errors after rtnl_send
+  * whitespace typo in tc_common.h
+  * fix problem caused by rtnl_send checks
+  * Add default value to /etc/iproute2/rt_dsfield
+  * Update address of FSF in license
+  * update from VPL1 to GPLv2
+
+  [ Templin, Fred L ]
+  * iproute2-2.6.23: RFC4214 Support (v2.5)
+
+  [ Tomas Janousek ]
+  * Correct documentation regarding PROMISC and ALLMULTI.
+
+  [ Vitaliy Gusev ]
+  * Fix lost export-dynamic
+  * veth device link management
+
+  [ YOSHIFUJI Hideaki / 吉藤英明 ]
+  * rto_min value display overflow
+
+  [ rbalocca ]
+  * SNAPSHOT.h is a derived file that needs to be created
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@vyatta.com>  Tue, 18 Mar 2008 19:04:34 -0700
+
 vyatta-iproute (0.2) unstable; urgency=low
 
   vc4.0.0
