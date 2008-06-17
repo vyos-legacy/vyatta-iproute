@@ -1,3 +1,119 @@
+vyatta-iproute (0.10) unstable; urgency=low
+
+	  3.1.0
+  [ Mark O'Brien ]
+
+
+  [ Andreas Henriksson ]
+  * Add routel and routef man page.
+
+  [ Herbert Xu ]
+  * xfrm: Allow replay setting
+
+  [ jamal ]
+  * Infrastructure for pretty printing
+  * Expose the filter protocol
+
+  [ Stephen Hemminger ]
+  * Change formatting of u32 back to default
+  * Fix bad hash calculation because of signed address
+
+  [ Daniel Silverstone ]
+  * Avoid infinite loop in ip addr flush.
+
+  [ Andreas Henriksson ]
+  * document promote_secondaries
+  * Fix typos (syntax error) in ip(8) manpage.
+
+  [ Stephen Hemminger ]
+  * Update version
+
+  [ Patrick McHardy ]
+  * Fix classifier help
+
+  [ Jesper Dangaard Brouer ]
+  * ATM cell alignment.
+
+  [ Stephen Hemminger ]
+  * In police, fix uninitialized "overhead" variable.
+
+  [ Marcela Maslanova ]
+  * man ip.8 miss xfrm option
+
+  [ Björn Steinbrink ]
+  * ss: Fix return value checks for net_*_open
+
+  [ Stephen Hemminger ]
+  * Update kernel headers to 2.6.25-rc7
+
+  [ Jesper Dangaard Brouer ]
+  * police, implement overhead parameter parsing.
+  * CBQ, doc usage of overhead parameter.
+  * CBQ, implement overhead parameter parsing.
+  * CBQ use matches() function instead of strcmp().
+  * TBF overhead parameter parsing.
+
+  [ Mike Frysinger ]
+  * Do not strip binaries with
+
+  [ YOSHIFUJI Hideaki / 吉藤英明 ]
+  * Add missing description about ISATAP and IPv6 tunnels in ip(8)
+    manpage.
+  * Add more aliases for tunnel subcommand.
+
+  [ Stephen Hemminger ]
+  * IP link state show enhancements
+  * Update address of FSF in license
+  * revert earlier mistake ALGO_NAME is okay
+  * Add default value to /etc/iproute2/rt_dsfield
+
+  [ Marcela Maslanova ]
+  * I found out when I was writing manual page, that options ALGO_NAME
+    and
+
+  [ Andreas Henriksson ]
+  * iproute2: fix ip manpage typo (syntax error)
+
+  [ Stephen Hemminger ]
+  * missing dport in f_u32 output
+  * decode the output of u32 matches
+  * get rid of warning from misnamed prototype
+  * break excessively long lines
+  * Revert "rlim qdisc support"
+
+  [ Varun Chandramohan ]
+  * Add missing prefix bit length for addrlabel
+
+  [ YOSHIFUJI Hideaki / 吉藤英明 ]
+  * Add addrlabel sub-command.
+
+  [ PJ Waskiewicz ]
+  * Update various classifiers' help output for expected CLASSID syntax
+
+  [ Stephen Hemminger ]
+  * add include/linux/hdlc/ioctl.h
+  * minor typo fixes
+  * Protocol field on tc_filter is required
+  * add support for matching AOE and CAN ether types
+  * reharmonize headers with pre-freeze 2.6.25
+  * fix typos in help message for meta match
+  * ignore emacs backup files
+  * Change where vlan option shows up in help
+
+  [ Patrick McHardy ]
+  * cls_flow: add vlan-tag support
+
+  [ Stephen Hemminger ]
+  * harmonize headers with upcoming 2.6.25
+
+  [ Patrick McHardy ]
+  * Add flow classifier support
+  * Add support for SFQ xstats
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 17 Jun 2008 09:26:55 -0700
+
 vyatta-iproute (0.9) unstable; urgency=low
 
   3.0.5
