@@ -35,6 +35,7 @@ doc/ss.dvi
 doc/ss.html
 doc/ss.ps
 doc/ss.txt
+doc/ss-*.html
 patch-stamp
 stamp-build
 stamp-doc
