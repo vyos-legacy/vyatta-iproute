@@ -7,7 +7,7 @@ PSFILES=ip-cref.ps ip-tunnels.ps api-ip6-flowlabels.ps ss.ps nstat.ps arpd.ps rt
 LATEX=latex
 DVIPS=dvips
 SGML2DVI=sgml2latex --output=dvi
-SGML2HTML=sgml2html -s 0
+SGML2HTML=sgml2html
 LPR=lpr -Zsduplex
 SHELL=bash
 PAGESIZE=a4
