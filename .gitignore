@@ -3,7 +3,7 @@ Config
 *.a
 *.so
 debian/files
-debian/iproute*
+debian/iproute/*
 doc/api-ip6-flowlabels.aux
 doc/api-ip6-flowlabels.dvi
 doc/api-ip6-flowlabels.log
