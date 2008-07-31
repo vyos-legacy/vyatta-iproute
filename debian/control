@@ -8,8 +8,8 @@ Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison
 
 Package: iproute
 Architecture: any
-Provides: arpd, iproute
-Conflicts: arpd, iproute
+Provides: arpd
+Conflicts: arpd, vyatta-iproute
 Replaces: vyatta-iproute
 Depends: libc6 (>= 2.7-1), libdb4.6
 Recommends: libatm1
