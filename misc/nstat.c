@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
 			break;
 		case 'v':
 		case 'V':
-			printf("nstat utility, %s\n", VERSION);
+			printf("nstat utility, iproute2-ss%s\n", SNAPSHOT);
 			exit(0);
 		case 'h':
 		case '?':

@@ -2586,7 +2586,7 @@ int main(int argc, char *argv[])
 			break;
 		case 'v':
 		case 'V':
-			printf("ss utility, %s\n", VERSION);
+			printf("ss utility, iproute2-ss%s\n", SNAPSHOT);
 			exit(0);
 		case 'h':
 		case '?':

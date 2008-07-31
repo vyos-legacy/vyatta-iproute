@@ -100,7 +100,7 @@ main(int argc, char **argv)
 		} else if (strcmp(argv[1], "-0") == 0) {
 			family = AF_PACKET;
 		} else if (matches(argv[1], "-Version") == 0) {
-			printf("rtmon utility, %s\n", VERSION);
+			printf("rtmon utility, iproute2-ss%s\n", SNAPSHOT);
 			exit(0);
 		} else if (matches(argv[1], "file") == 0) {
 			argc--;

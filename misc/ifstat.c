@@ -630,7 +630,7 @@ int main(int argc, char *argv[])
 			break;
 		case 'v':
 		case 'V':
-			printf("ifstat utility, %s\n", VERSION);
+			printf("ifstat utility, iproute2-ss%s\n", SNAPSHOT);
 			exit(0);
 		case 'h':
 		case '?':
