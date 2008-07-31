@@ -1,1 +1,1 @@
-#define VERSION "vyatta-080508"
+static const char SNAPSHOT[] = "080725";
