@@ -22,7 +22,7 @@ binary-indep: build-indep include/SNAPSHOT.h
 	dh_testroot
 	dh_install -i --fail-missing
 	dh_link -i
-	dh_installexamples -i -p vyatta-iproute-doc examples/*
+	dh_installexamples -i -p iproute-doc examples/*
 	dh_installman -i
 	dh_installdocs -i 
 	dh_installchangelogs -i
