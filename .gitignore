@@ -3,7 +3,12 @@ Config
 *.a
 *.so
 debian/files
-debian/iproute/*
+debian/iproute/
+debian/iproute-doc.debhelper.log
+debian/iproute-doc/
+debian/iproute.debhelper.log
+debian/iproute.substvars
+
 doc/api-ip6-flowlabels.aux
 doc/api-ip6-flowlabels.dvi
 doc/api-ip6-flowlabels.log
@@ -40,4 +45,3 @@ patch-stamp
 stamp-build
 stamp-doc
 *~
-
