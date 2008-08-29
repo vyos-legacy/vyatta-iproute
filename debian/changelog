@@ -1,4 +1,4 @@
-iproute (2008725-vyatta1) unstable; urgency=low
+iproute (20080725-vyatta1) unstable; urgency=low
 
     * Change name from vyatta-iproute back to iproute
     * Merge in upstream version
