@@ -1,3 +1,65 @@
+iproute (20080725-vyatta2) unstable; urgency=low
+
+	  3.2.0
+  [ Mark O'Brien ]
+
+
+  [ Rick Balocca ]
+  * Fix date in version string
+
+  [ rbalocca ]
+  * Ignore derived files
+
+  [ Stephen Hemminger ]
+  * Fix some control file noise
+
+  [ Andreas Henriksson ]
+  * fix syntax errors in ip(8) manpage.
+
+  [ Denys Fedoryshchenko ]
+  * long/ulong iproute-git fix
+
+  [ Stephen Hemminger ]
+  * More file renames from package rename
+  * Rename package from vyatta-iproute to iproute
+  * Fix up version string changes
+  * Update snapshot
+
+  [ Rafael Almeida ]
+  * Fixed installation when changing DESTDIR
+
+  [ Varun Chandramohan ]
+  * Display Correct Error For Addrlabel Info
+
+  [ Stephen Hemminger ]
+  * Update headers to 2.6.26
+  * Add warning message when MAX_FIELDS reached
+  * Fix array out of bounds problem
+
+  [ Yu Zhiguo ]
+  * Fix generic_proc_open() of command 'nstat' and 'rtacct'
+
+  [ Bertrand Jacquin ]
+  * netem: fix cross-compiling failure
+
+  [ Benjamin Thery ]
+  * iproute2: add support for IFLA_NET_NS_PID in ip link
+
+  [ Patrick McHardy ]
+  * tc: don't set protococol field on filter delete
+
+  [ Stephen Hemminger ]
+  * timers are in user hz
+  * Neighbor cache timer is in user hz
+  * use correct hz for rto,ato
+  * Update to 2.6.26-rc6 headers
+  * ematch related bugfix and cleanup
+  * Use inet_pton to read ipv4 addresses
+
+  [ Mark O'Brien ]
+
+ -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 25 Nov 2008 19:07:44 -0800
+
 iproute (20080725-vyatta1) unstable; urgency=low
 
     * Change name from vyatta-iproute back to iproute
