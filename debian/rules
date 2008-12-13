@@ -18,6 +18,7 @@ clean-patched:
 binary: binary-indep binary-arch
 
 binary-indep: build-indep include/SNAPSHOT.h
+	rm -f debian/files
 	dh_testdir
 	dh_testroot
 	dh_install -i --fail-missing
