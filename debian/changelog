@@ -1,3 +1,10 @@
+iproute (20081027-vyatta3) unstable; urgency=low
+
+  [ Mark O'Brien ]
+  * 3.2.0
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Mon, 12 Jan 2009 19:01:41 -0800
+
 iproute (20081027-vyatta2) unstable; urgency=low
 
   * add support for development build
