@@ -1,4 +1,48 @@
-iproute (20081027-vyatta3) intrepid; urgency=low
+iproute (20090115-vyatta1) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Update to 2.6.27 API
+  * update version id
+  * Restore old address parsing but with checking
+  * Compatiable network abbreviation support
+  * Fix help text for ip link
+  * tc filter help should just print usage
+  * Fix duplicate return
+  * Add DSCP values for RFC2597
+  * Merge in upstream 2.6.28 version
+
+  [ An-Cheng Huang ]
+  * "files" file should be removed before package build
+  * update maintainer information
+  * add support for development build
+
+  [ Patrick McHardy ]
+  * Refuse "ip link add/replace" without device type parameter
+  * Support "ip link add help" for rtnl_link API
+  * iflink_vlan: support GVRP flag
+  * cls_flow: add perturbation support
+
+  [ Andreas Henriksson ]
+  * Allow he in tunnel name
+  * iproute: DESTDIR vs LIBDIR.
+  * ip a flush: unnecessarily chatty when there's nothing to flush
+  * ip: abbreviation of network-prefix is no longer possible with ip
+    route
+
+  [ Herbert Xu ]
+  * ip: xfrm: Add AEAD support
+
+  [ Li Yewang ]
+  * distinguish the inet and inet6 domain when loading the tcp_diag
+    module
+  * Fix the error of "ss -f inet -t"
+
+  [ Jussi Kivilinna ]
+  * add generic size table for qdiscs
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Thu, 15 Jan 2009 12:54:50 -0800
+
+iproute (20081027-vyatta3) unstable; urgency=low
 
   [ Mark O'Brien ]
   * 3.2.0
