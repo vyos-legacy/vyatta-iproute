@@ -13,7 +13,7 @@ clean-patched:
 	dh_testdir
 	dh_testroot
 	dh_clean
-	make clean
+	make distclean
 
 binary: binary-indep binary-arch
 
