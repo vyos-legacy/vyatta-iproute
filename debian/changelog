@@ -1,3 +1,49 @@
+iproute (20090115-vyatta2) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Update headers to 2.6.28
+
+  [ Herbert Xu ]
+  * ip: gre: Add GRE configuration support through rtnl_link
+  * Update version of IP gre
+
+  [ Olivier Fourdan ]
+  * ip maddr show” on an infiniband address causes a stack corruption
+
+  [ Alexander Duyck ]
+  * add support for skbedit action
+  * add support for multiq qdisc
+
+  [ Benedikt Gollatz ]
+  * When the preferred lifetime of a prefix assigned by IPv6
+    autoconfiguration
+
+  [ Denys Fedoryshchenko ]
+  * Fix tc/m_ipt memory leaks
+
+  [ Stephen Hemminger ]
+  * Fix leftovers from earlier change
+  * Fix compile warnings
+  * Update snapshot
+
+  [ Patrick McHardy ]
+  * iproute: add DRR support
+
+  [ Stephen Hemminger ]
+  * fix uninitialized memory in tc_skbedit
+
+  [ Jamal Hadi Salim ]
+  * Breakage noticed when debian upgraded to xtables (iptables > 1.4.1)
+
+  [ Denys Fedoryschenko ]
+  * Fix memory leak in local options
+
+  [ Stephen Hemminger ]
+  * Add missing limits.h
+  * Add DHCP as routing protocol
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 18 Mar 2009 13:38:49 -0700
+
 iproute (20090115-vyatta1) unstable; urgency=low
 
   [ Stephen Hemminger ]
