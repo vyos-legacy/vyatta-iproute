@@ -1,3 +1,12 @@
+iproute (20090115-vyatta3) unstable; urgency=low
+
+  * Need newer version of iptables-dev
+  * Force configure after clean
+  * Force check for libxtables
+  * Need to clean out leftover yacc/lex temporary
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 18 Mar 2009 17:46:41 -0700
+
 iproute (20090115-vyatta2) unstable; urgency=low
 
   [ Stephen Hemminger ]
