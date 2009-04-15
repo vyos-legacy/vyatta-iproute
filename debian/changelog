@@ -1,3 +1,59 @@
+iproute (20090115-vyatta4) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Add support for IFALIAS
+  * Handle default hoplimit
+  * Use sanatized headers from 2.6.29
+  * Update snapshot
+  * Fix headers needed for gre
+
+  [ jamal ]
+  * ip: Allow for easier debug of buggy devices that dont send their
+    names
+
+  [ Petr Jediný ]
+  * Changing commandline help text to be more uniform...
+
+  [ Stephen Hemminger ]
+  * remove duplicate limits.h
+
+  [ Varun Chandramohan ]
+  * Add Monitor Support For Neigh Table
+  * Enable Type Labels For "ip monitor all"
+
+  [ Andreas Henriksson ]
+  * iproute2: drop equalize support.
+
+  [ Sascha Hlusiak ]
+  * iptunnel: allow ISATAP with stateless autoconf
+
+  [ Srivats P ]
+  * ip6tunnel: Fix no default display of ip4ip6 tunnels
+
+  [ Oliver Hartkopp ]
+  * Add support Controller Area Network
+
+  [ Olaf Rempel ]
+  * iproute2-2.6.14-051107: missing arpd directory
+
+  [ Stephen Hemminger ]
+  * Remove goto chain
+
+  [ Oliver Hartkopp ]
+  * iproute2: add vcan to ip link help text
+
+  [ Thomas Graf ]
+  * cgroup support
+
+  [ Thomas Egerer ]
+  * Fix display of xfrm
+
+  [ Stephen Hemminger ]
+  * Add u32 extension to match on ether source/destination
+  * fix changelog errors
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 15 Apr 2009 15:56:57 -0700
+
 iproute (20090115-vyatta3) unstable; urgency=low
 
   * Need newer version of iptables-dev
