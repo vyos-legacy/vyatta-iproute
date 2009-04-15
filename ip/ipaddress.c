@@ -109,6 +109,7 @@ void print_link_flags(FILE *fp, unsigned flags, unsigned mdown)
 	_PF(UP);
 	_PF(LOWER_UP);
 	_PF(DORMANT);
+	_PF(ECHO);
 #undef _PF
         if (flags)
 		fprintf(fp, "%x", flags);
@@ -210,8 +211,7 @@ int print_linkinfo(const struct sockaddr_nl *who,
 
 	parse_rtattr(tb, IFLA_MAX, IFLA_RTA(ifi), len);
 	if (tb[IFLA_IFNAME] == NULL) {
-		fprintf(stderr, "BUG: nil ifname\n");
-		return -1;
+		fprintf(stderr, "BUG: device with ifindex %d has nil ifname\n", ifi->ifi_index);
 	}
 	if (filter.label &&
 	    (!filter.family || filter.family == AF_PACKET) &&
