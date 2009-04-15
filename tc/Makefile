@@ -96,8 +96,8 @@ install: all
 	done
 
 clean:
-	rm -f $(TCOBJ) $(TCLIB) libtc.a tc *.so emp_ematch.yacc.h; \
-	rm -f emp_ematch.yacc.output
+	rm -f $(TCOBJ) $(TCLIB) libtc.a tc *.so 
+	rm -f emp_ematch.yacc.* emp_ematch.lex.*
 
 q_atm.so: q_atm.c
 	$(CC) $(CFLAGS) -shared -fpic -o q_atm.so q_atm.c -latm

@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Vyatta Package Maintainers <maintainers@vyatta.com>
 Homepage: http://www.linux-foundation.org/en/Net:Iproute2
 Standards-Version: 3.7.3
-Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison, libdb-dev, linuxdoc-tools, linux-libc-dev, debhelper (>= 5), lynx, dpatch, flex
+Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison, libdb-dev, linuxdoc-tools, linux-libc-dev, debhelper (>= 5), lynx, dpatch, flex, iptables-dev (>= 1.4.1)
 
 Package: iproute
 Architecture: any
