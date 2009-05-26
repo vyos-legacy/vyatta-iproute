@@ -1,3 +1,26 @@
+iproute (20090115-vyatta5) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Add IPV6 match pretty print
+  * Allow default DP of zero in gred
+
+  [ Andreas Henriksson ]
+  * Bug#526329: iproute: Segfault on garbage lladdr
+
+  [ Denys Fedoryshchenko ]
+  * Filter class output by classid
+
+  [ Sascha Hlusiak ]
+  * iproute2: ISATAP potential router list
+
+  [ Wolfgang Grandegger ]
+  * iproute2: Fixes an issue with cross-compilation
+  * iproute2: Support for the CAN netlink
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 26 May 2009 15:52:02 -0700
+
 iproute (20090115-vyatta4) unstable; urgency=low
 
   [ Stephen Hemminger ]
