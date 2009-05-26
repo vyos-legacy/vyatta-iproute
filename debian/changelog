@@ -1,3 +1,9 @@
+iproute (20090115-vyatta6) unstable; urgency=low
+
+  * fix handling of GRED DPs args
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 26 May 2009 15:58:39 -0700
+
 iproute (20090115-vyatta5) unstable; urgency=low
 
   [ Stephen Hemminger ]
