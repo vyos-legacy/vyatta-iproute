@@ -1,3 +1,15 @@
+iproute (20090115-vyatta9) unstable; urgency=low
+
+  [ Andreas Henriksson ]
+  * iproute: typo in ip manpage
+
+  [ Mike Frysinger ]
+  * tc/q_atm.so: respect LDFLAGS
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 06 Aug 2009 14:51:35 -0700
+
 iproute (20090115-vyatta8) unstable; urgency=low
 
   * Fix flushing of large number of entries
