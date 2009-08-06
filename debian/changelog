@@ -1,3 +1,11 @@
+iproute (20090115-vyatta8) unstable; urgency=low
+
+  * Fix flushing of large number of entries
+  * update kernel headers to 2.6.31-rc5
+  * Fix typo in IPPROTO_DCCP
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 06 Aug 2009 14:42:25 -0700
+
 iproute (20090115-vyatta7) unstable; urgency=low
 
   * UNRELEASED
