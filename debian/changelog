@@ -1,3 +1,43 @@
+iproute (20090115-vyatta11) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * add include/linux/if_arp.h
+  * Update kernel headers to 2.6.31
+
+  [ Eric Dumazet ]
+  * ss: correct display of sk pointer
+  * ss: adds a space before congestion string
+
+  [ Stephen Hemminger ]
+  * Update to 2.6.32 kernel headers
+  * Consolidate fprintf statements
+
+  [ Sven Anders ]
+  * Fix flushing code - rtnl_send_check
+
+  [ Patrick McHardy ]
+  * iproute uses too small of a receive buffer
+
+  [ Mike Frysinger ]
+  * arpd/ifstat/nstat/rtacct: use daemon()
+  * support static-only systems
+
+  [ Stephen Hemminger ]
+  * Add static-syms.h to ignore
+
+  [ Mike Frysinger ]
+  * tc: remove dlfcn.h from files that dont need it
+
+  [ Stephen Hemminger ]
+  * Add more files to gitignore
+
+  [ Mike Frysinger ]
+  * Ignore GDB related files
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 16 Nov 2009 21:56:16 -0800
+
 iproute (20090115-vyatta10) unstable; urgency=low
 
   * Build with new iptables-dev
