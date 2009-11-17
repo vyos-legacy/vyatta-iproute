@@ -1,3 +1,4 @@
+static-syms.h
 Config
 *.o
 *.a
@@ -45,3 +46,19 @@ patch-stamp
 stamp-build
 stamp-doc
 *~
+\#*#
+# cscope
+cscope.*
+ncscope.*
+# for patch generation
+*.diff
+*.patch
+*.orig
+*.rej
+# for quilt
+patches
+series
+# for gdb
+.gdbinit
+.gdb_history
+*.gdb

@@ -3,9 +3,6 @@
 
 #include <linux/types.h>
 
-#ifdef __KERNEL__
-#include <linux/ip.h>
-#endif
 
 #define SIOCGETTUNNEL   (SIOCDEVPRIVATE + 0)
 #define SIOCADDTUNNEL   (SIOCDEVPRIVATE + 1)
@@ -44,7 +41,7 @@ struct ip_tunnel_prl {
 	__u16			flags;
 	__u16			__reserved;
 	__u32			datalen;
-	__u32			rs_delay;
+	__u32			__reserved2;
 	/* data follows */
 };
 
