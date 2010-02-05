@@ -8,8 +8,6 @@
  *
  * Authors:	Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
  *
- * Changes:
- *	Laszlo Valko <valko@linux.karinthy.hu> 990223: address label must be zero terminated
  */
 
 #include <stdio.h>
@@ -64,7 +62,7 @@ static void usage(void)
 		iplink_usage();
 	}
 	fprintf(stderr, "Usage: ip addr {add|change|replace} IFADDR dev STRING [ LIFETIME ]\n");
-	fprintf(stderr, "                                                      [ CONFFLAG-LIST]\n");
+	fprintf(stderr, "                                                      [ CONFFLAG-LIST ]\n");
 	fprintf(stderr, "       ip addr del IFADDR dev STRING\n");
 	fprintf(stderr, "       ip addr {show|flush} [ dev STRING ] [ scope SCOPE-ID ]\n");
 	fprintf(stderr, "                            [ to PREFIX ] [ FLAG-LIST ] [ label PATTERN ]\n");
@@ -74,7 +72,8 @@ static void usage(void)
 	fprintf(stderr, "SCOPE-ID := [ host | link | global | NUMBER ]\n");
 	fprintf(stderr, "FLAG-LIST := [ FLAG-LIST ] FLAG\n");
 	fprintf(stderr, "FLAG  := [ permanent | dynamic | secondary | primary |\n");
-	fprintf(stderr, "           tentative | deprecated | CONFFLAG-LIST ]\n");
+	fprintf(stderr, "           tentative | deprecated | dadfailed |\n");
+	fprintf(stderr, "           CONFFLAG-LIST ]\n");
 	fprintf(stderr, "CONFFLAG-LIST := [ CONFFLAG-LIST ] CONFFLAG\n");
 	fprintf(stderr, "CONFFLAG  := [ home | nodad ]\n");
 	fprintf(stderr, "LIFETIME := [ valid_lft LFT ] [ preferred_lft LFT ]\n");
@@ -508,6 +507,10 @@ int print_addrinfo(const struct sockaddr_nl *who, struct nlmsghdr *n,
 		fprintf(fp, "dynamic ");
 	} else
 		ifa->ifa_flags &= ~IFA_F_PERMANENT;
+	if (ifa->ifa_flags&IFA_F_DADFAILED) {
+		ifa->ifa_flags &= ~IFA_F_DADFAILED;
+		fprintf(fp, "dadfailed ");
+	}
 	if (ifa->ifa_flags)
 		fprintf(fp, "flags %02x ", ifa->ifa_flags);
 	if (rta_tb[IFA_LABEL])
@@ -537,6 +540,27 @@ int print_addrinfo(const struct sockaddr_nl *who, struct nlmsghdr *n,
 	return 0;
 }
 
+int print_addrinfo_primary(const struct sockaddr_nl *who, struct nlmsghdr *n,
+			   void *arg)
+{
+	struct ifaddrmsg *ifa = NLMSG_DATA(n);
+
+	if (!ifa->ifa_flags & IFA_F_SECONDARY)
+		return 0;
+
+	return print_addrinfo(who, n, arg);
+}
+
+int print_addrinfo_secondary(const struct sockaddr_nl *who, struct nlmsghdr *n,
+			     void *arg)
+{
+	struct ifaddrmsg *ifa = NLMSG_DATA(n);
+
+	if (ifa->ifa_flags & IFA_F_SECONDARY)
+		return 0;
+
+	return print_addrinfo(who, n, arg);
+}
 
 struct nlmsg_list
 {
@@ -655,6 +679,9 @@ static int ipaddr_list_or_flush(int argc, char **argv, int flush)
 		} else if (strcmp(*argv, "nodad") == 0) {
 			filter.flags |= IFA_F_NODAD;
 			filter.flagmask |= IFA_F_NODAD;
+		} else if (strcmp(*argv, "dadfailed") == 0) {
+			filter.flags |= IFA_F_DADFAILED;
+			filter.flagmask |= IFA_F_DADFAILED;
 		} else if (strcmp(*argv, "label") == 0) {
 			NEXT_ARG();
 			filter.label = *argv;
@@ -698,12 +725,32 @@ static int ipaddr_list_or_flush(int argc, char **argv, int flush)
 		filter.flushe = sizeof(flushb);
 
 		while (round < MAX_ROUNDS) {
+			const struct rtnl_dump_filter_arg a[3] = {
+				{
+					.filter = print_addrinfo_secondary,
+					.arg1 = stdout,
+					.junk = NULL,
+					.arg2 = NULL
+				},
+				{
+					.filter = print_addrinfo_primary,
+					.arg1 = stdout,
+					.junk = NULL,
+					.arg2 = NULL
+				},
+				{
+					.filter = NULL,
+					.arg1 = NULL,
+					.junk = NULL,
+					.arg2 = NULL
+				},
+			};
 			if (rtnl_wilddump_request(&rth, filter.family, RTM_GETADDR) < 0) {
 				perror("Cannot send dump request");
 				exit(1);
 			}
 			filter.flushed = 0;
-			if (rtnl_dump_filter(&rth, print_addrinfo, stdout, NULL, NULL) < 0) {
+			if (rtnl_dump_filter_l(&rth, a) < 0) {
 				fprintf(stderr, "Flush terminated\n");
 				exit(1);
 			}
