@@ -1,3 +1,86 @@
+iproute (20100205-vyatta1) unstable; urgency=low
+
+  [ David Ward ]
+  * iproute2: Support 20-byte link layer address in idxmap
+
+  [ Stephen Hemminger ]
+  * Remove Changes: comments
+
+  [ Gilad Ben-Yossef ]
+  * iproute2 add hoplimit parsing and update usage and documentation
+
+  [ David Ward ]
+  * iproute2: Add ll_index_to_addr function
+
+  [ Brian Haley ]
+  * ipv6: Add IFA_F_DADFAILED flag
+
+  [ Mark Borst ]
+  * iproute: "ip mroute show" doesn't show all output interfaces
+
+  [ Andreas Henriksson ]
+  * iproute2: use -fPIC in lib/
+
+  [ Patrick McHardy ]
+  * f_fw: fix compat mode
+
+  [ Andreas Henriksson ]
+  * iproute: make ss --help output to stdout
+  * Keep the old tc/ipt/xt module for compatibility.
+  * Add new (iptables 1.4.5 compatible) tc/ipt/xt module.
+
+  [ Simon Horman ]
+  * flush secondary addresses before primary ones
+
+  [ Stephen Hemminger ]
+  * Fix warning about strtod() return value
+  * Fix warning about sprintf() and NSTAT_HIST
+
+  [ Andreas Henriksson ]
+  * Slightly improve the configure script.
+
+  [ Stephen Hemminger ]
+  * iproute2-091226
+  * Update exported kernel headers
+
+  [ Patrick McHardy ]
+  * iplink_vlan: add support for VLAN loose binding flag
+
+  [ Jamal Hadi Salim ]
+  * skbedit: Add support to mark packets
+
+  [ Patrick McHardy ]
+  * iprule: add oif classification support
+
+  [ Brian Haley ]
+  * Add dadfailed option to ip command
+
+  [ Arnd Bergmann ]
+  * iproute2/iplink: add macvlan options for bridge mode
+
+  [ Mike Frysinger ]
+  * tc: respect LDFLAGS for %.so targets
+
+  [ Andreas Henriksson ]
+  * iproute2: avoid using bashisms in configure script.
+
+  [ Alex Badea ]
+  * ip xfrm state: parse and print "icmp" and "af-unspec" flags
+  * ip xfrm policy: allow different tmpl family
+
+  [ Florian Westphal ]
+  * tc: man: add limit parameter to tc-sfq man page
+  * tc: man: SO_PRIORITY is described in socket documentation, not tc
+    one
+  * tc: red, gred, tbf: more helpful error messages
+  * tc: remove stale code
+  * tc: man: add man page for drr scheduler
+
+  [ Stephen Hemminger ]
+  * Fix spelling errors in changelog
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Fri, 05 Feb 2010 12:07:28 -0800
+
 iproute (20091117-vyatta1) unstable; urgency=low
 
   [ Stephen Hemminger ]
