@@ -26,7 +26,7 @@ iproute (20091117-vyatta1) unstable; urgency=low
   * Add static-syms.h to ignore
 
   [ Mike Frysinger ]
-  * tc: remove dlfcn.h from files that dont need it
+  * tc: remove dlfcn.h from files that don't need it
 
   [ Stephen Hemminger ]
   * Add more files to gitignore
@@ -110,7 +110,7 @@ iproute (20090115-vyatta4) unstable; urgency=low
   * Fix headers needed for gre
 
   [ jamal ]
-  * ip: Allow for easier debug of buggy devices that dont send their
+  * ip: Allow for easier debug of buggy devices that don't send their
     names
 
   [ Petr Jediný ]
