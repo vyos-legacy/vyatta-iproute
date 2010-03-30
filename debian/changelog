@@ -1,3 +1,60 @@
+iproute (20100329-vyatta1) unstable; urgency=low
+
+  [ David Woodhouse ]
+  * Add 'ip tuntap' support.
+
+  [ Alexandre Cassen ]
+  * IPv6: 6rd iproute2 support
+
+  [ Stephen Hemminger ]
+  * iproute2-10224
+
+  [ Hagen Paul Pfeifer ]
+  * tc: add new queue discipline: head drop fifo
+
+  [ laurent chavey ]
+  * Add initrwnd to iproute2
+
+  [ Stephen Hemminger ]
+  * Update headers for 2.6.33-net-next
+  * Fix line numbering on batch commands
+
+  [ Williams, Mitch A ]
+  * Update man page to indicate current options
+  * ip: Add support for setting and showing SR-IOV virtual funtion link
+    params
+  * libnetlink: Modify the parser to track first duplicated attributes
+
+  [ jamal ]
+  * skbedit: use get_u32 for parsing mark
+
+  [ Jamal Hadi Salim ]
+  * xfrm: policy by mark
+  * xfrm: Introduce xfrm by mark
+  * xfrm: add support for SA by mark
+
+  [ Wolfgang Grandegger ]
+  * iproute2: netlink support for bus-error reporting and counters
+
+  [ Michele Petrazzo - Unipex ]
+  * Continue after errors in -batch
+
+  [ YOSHIFUJI Hideaki / 吉藤英明 ]
+  * gaiconf: /etc/gai.conf configuration helper.
+
+  [ Jan Engelhardt ]
+  * ip: correctly report tunnel link type
+
+  [ Andreas Henriksson ]
+  * iproute2: detect iptables modules dir in configure.
+
+  [ Stephen Hemminger ]
+  * Update to 2.6.34-rc2 headers
+  * Workaround missing ALIGN() macro
+  * Remove mirred debug message
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Mar 2010 17:39:23 -0700
+
 iproute (20100205-vyatta3) unstable; urgency=low
 
   * UNRELEASED
