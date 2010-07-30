@@ -1,3 +1,9 @@
+iproute (20100329-vyatta1+larkspur2) unstable; urgency=low
+
+  * Fix NULL pointer reference when using basic match
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 29 Jul 2010 18:06:22 -0700
+
 iproute (20100329-vyatta1+larkspur1) unstable; urgency=low
 
   * UNRELEASED
