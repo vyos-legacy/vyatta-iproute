@@ -432,7 +432,8 @@ static int parse_ip6_class(int *argc_p, char ***argv_p, struct tc_u32_sel *sel)
 	key = htonl(key);
 	mask = htonl(mask);
 
-	if (res = pack_key(sel, key, mask, off, offmask) < 0)
+	res = pack_key(sel, key, mask, off, offmask);
+	if (res < 0)
 		return -1;
 
 	*argc_p = argc;
@@ -595,12 +596,15 @@ static int parse_ether(int *argc_p, char ***argv_p, struct tc_u32_sel *sel)
 	if (argc < 2)
 		return -1;
 
+	sel->offoff = -ETH_HLEN;
+	sel->flags |= TC_U32_VAROFFSET;
+
 	if (strcmp(*argv, "src") == 0) {
 		NEXT_ARG();
-		res = parse_ether_addr(&argc, &argv, sel, -8);
+		res = parse_ether_addr(&argc, &argv, sel, ETH_ALEN);
 	} else if (strcmp(*argv, "dst") == 0) {
 		NEXT_ARG();
-		res = parse_ether_addr(&argc, &argv, sel, -14);
+		res = parse_ether_addr(&argc, &argv, sel, 0);
 	} else {
 		fprintf(stderr, "Unknown match: ether %s\n", *argv);
 		return -1;
