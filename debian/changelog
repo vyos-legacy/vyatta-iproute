@@ -1,3 +1,11 @@
+iproute (20100329-vyatta1+larkspur3) unstable; urgency=low
+
+  * Fix matching on ethernet src/dst address
+  * Fix byte order of ether address match for u32
+  * Revert "Fix matching on ethernet src/dst address"
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 02 Aug 2010 12:05:55 -0700
+
 iproute (20100329-vyatta1+larkspur2) unstable; urgency=low
 
   * Fix NULL pointer reference when using basic match
