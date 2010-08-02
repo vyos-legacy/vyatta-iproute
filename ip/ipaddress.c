@@ -187,6 +187,36 @@ static void print_linktype(FILE *fp, struct rtattr *tb)
 	}
 }
 
+static void print_vfinfo(FILE *fp, struct rtattr *vfinfo)
+{
+	struct ifla_vf_mac *vf_mac;
+	struct ifla_vf_vlan *vf_vlan;
+	struct ifla_vf_tx_rate *vf_tx_rate;
+	struct rtattr *vf[IFLA_VF_MAX+1];
+	SPRINT_BUF(b1);
+
+	if (vfinfo->rta_type != IFLA_VF_INFO) {
+		fprintf(stderr, "BUG: rta type is %d\n", vfinfo->rta_type);
+		return;
+	}
+
+	parse_rtattr_nested(vf, IFLA_VF_MAX, vfinfo);
+
+	vf_mac = RTA_DATA(vf[IFLA_VF_MAC]);
+	vf_vlan = RTA_DATA(vf[IFLA_VF_VLAN]);
+	vf_tx_rate = RTA_DATA(vf[IFLA_VF_TX_RATE]);
+
+	fprintf(fp, "\n    vf %d MAC %s", vf_mac->vf,
+		ll_addr_n2a((unsigned char *)&vf_mac->mac,
+		ETH_ALEN, 0, b1, sizeof(b1)));
+	if (vf_vlan->vlan)
+		fprintf(fp, ", vlan %d", vf_vlan->vlan);
+	if (vf_vlan->qos)
+		fprintf(fp, ", qos %d", vf_vlan->qos);
+	if (vf_tx_rate->rate)
+		fprintf(fp, ", tx rate %d (Mbps)", vf_tx_rate->rate);
+}
+
 int print_linkinfo(const struct sockaddr_nl *who,
 		   struct nlmsghdr *n, void *arg)
 {
@@ -284,7 +314,60 @@ int print_linkinfo(const struct sockaddr_nl *who,
 		fprintf(fp,"\n    alias %s", 
 			(const char *) RTA_DATA(tb[IFLA_IFALIAS]));
 
-	if (do_link && tb[IFLA_STATS] && show_stats) {
+	if (do_link && tb[IFLA_STATS64] && show_stats) {
+		struct rtnl_link_stats64 slocal;
+		struct rtnl_link_stats64 *s = RTA_DATA(tb[IFLA_STATS64]);
+		if (((unsigned long)s) & (sizeof(unsigned long)-1)) {
+			memcpy(&slocal, s, sizeof(slocal));
+			s = &slocal;
+		}
+		fprintf(fp, "%s", _SL_);
+		fprintf(fp, "    RX: bytes  packets  errors  dropped overrun mcast   %s%s",
+			s->rx_compressed ? "compressed" : "", _SL_);
+		fprintf(fp, "    %-10llu %-8llu %-7llu %-7llu %-7llu %-7llu",
+			(unsigned long long)s->rx_bytes,
+			(unsigned long long)s->rx_packets,
+			(unsigned long long)s->rx_errors,
+			(unsigned long long)s->rx_dropped,
+			(unsigned long long)s->rx_over_errors,
+			(unsigned long long)s->multicast);
+		if (s->rx_compressed)
+			fprintf(fp, " %-7llu",
+				(unsigned long long)s->rx_compressed);
+		if (show_stats > 1) {
+			fprintf(fp, "%s", _SL_);
+			fprintf(fp, "    RX errors: length  crc     frame   fifo    missed%s", _SL_);
+			fprintf(fp, "               %-7llu  %-7llu %-7llu %-7llu %-7llu",
+				(unsigned long long)s->rx_length_errors,
+				(unsigned long long)s->rx_crc_errors,
+				(unsigned long long)s->rx_frame_errors,
+				(unsigned long long)s->rx_fifo_errors,
+				(unsigned long long)s->rx_missed_errors);
+		}
+		fprintf(fp, "%s", _SL_);
+		fprintf(fp, "    TX: bytes  packets  errors  dropped carrier collsns %s%s",
+			s->tx_compressed ? "compressed" : "", _SL_);
+		fprintf(fp, "    %-10llu %-8llu %-7llu %-7llu %-7llu %-7llu",
+			(unsigned long long)s->tx_bytes,
+			(unsigned long long)s->tx_packets,
+			(unsigned long long)s->tx_errors,
+			(unsigned long long)s->tx_dropped,
+			(unsigned long long)s->tx_carrier_errors,
+			(unsigned long long)s->collisions);
+		if (s->tx_compressed)
+			fprintf(fp, " %-7llu",
+				(unsigned long long)s->tx_compressed);
+		if (show_stats > 1) {
+			fprintf(fp, "%s", _SL_);
+			fprintf(fp, "    TX errors: aborted fifo    window  heartbeat%s", _SL_);
+			fprintf(fp, "               %-7llu  %-7llu %-7llu %-7llu",
+				(unsigned long long)s->tx_aborted_errors,
+				(unsigned long long)s->tx_fifo_errors,
+				(unsigned long long)s->tx_window_errors,
+				(unsigned long long)s->tx_heartbeat_errors);
+		}
+	}
+	if (do_link && !tb[IFLA_STATS64] && tb[IFLA_STATS] && show_stats) {
 		struct rtnl_link_stats slocal;
 		struct rtnl_link_stats *s = RTA_DATA(tb[IFLA_STATS]);
 		if (((unsigned long)s) & (sizeof(unsigned long)-1)) {
@@ -331,31 +414,13 @@ int print_linkinfo(const struct sockaddr_nl *who,
 				);
 		}
 	}
-	if (do_link && tb[IFLA_VFINFO] && tb[IFLA_NUM_VF]) {
-		SPRINT_BUF(b1);
-		struct rtattr *rta = tb[IFLA_VFINFO];
-		struct ifla_vf_info *ivi;
-		int i;
-		for (i = 0; i < *(int *)RTA_DATA(tb[IFLA_NUM_VF]); i++) {
-			if (rta->rta_type != IFLA_VFINFO) {
-				fprintf(stderr, "BUG: rta type is %d\n", rta->rta_type);
-				break;
-			}
-			ivi = RTA_DATA(rta);
-			fprintf(fp, "\n    vf %d: MAC %s",
-				ivi->vf,
-				ll_addr_n2a((unsigned char *)&ivi->mac,
-					    ETH_ALEN, 0, b1, sizeof(b1)));
-				if (ivi->vlan)
-					fprintf(fp, ", vlan %d", ivi->vlan);
-				if (ivi->qos)
-					fprintf(fp, ", qos %d", ivi->qos);
-				if (ivi->tx_rate)
-					fprintf(fp, ", tx rate %d (Mbps_",
-						ivi->tx_rate);
-			rta = (struct rtattr *)((char *)rta + RTA_ALIGN(rta->rta_len));
-		}
+	if (do_link && tb[IFLA_VFINFO_LIST] && tb[IFLA_NUM_VF]) {
+		struct rtattr *i, *vflist = tb[IFLA_VFINFO_LIST];
+		int rem = RTA_PAYLOAD(vflist);
+		for (i = RTA_DATA(vflist); RTA_OK(i, rem); i = RTA_NEXT(i, rem))
+			print_vfinfo(fp, i);
 	}
+
 	fprintf(fp, "\n");
 	fflush(fp);
 	return 0;
