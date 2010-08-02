@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# Make sure file capabilities are not lost when updating
+setcap cap_net_admin+pe	/sbin/tc
+setcap cap_net_admin+pe	/bin/ip
