@@ -1,3 +1,86 @@
+iproute (20100329-vyatta3) unstable; urgency=low
+
+  [ Andreas Henriksson ]
+  * iproute2: add option to build m_xt as a tc module (v3)
+
+  [ Alexandre Cassen ]
+  * Detect 6rd kernel missing support / 6rd tunnel scope
+
+  [ Stephen Hemminger ]
+  * Update ip.8 man page to describe route table id values
+
+  [ Bart Trojanowski ]
+  * fix build issues with flex ver 2.5
+
+  [ Florian Westphal ]
+  * iproute2: fix addrlabel interface names handling
+
+  [ Stephen Hemminger ]
+  * Update kernel headers to 2.6.34 final version
+  * Add documentation for ip link add/delete sub-commands
+
+  [ Chris Wright ]
+  * iproute2: rework SR-IOV VF support
+
+  [ Brian Bloniarz ]
+  * ip: document initcwnd
+
+  [ Stephen Hemminger ]
+  * ip: add documentation for initrwnd
+  * v2.6.34
+  * Update kernel derived headers
+
+  [ Jan Engelhardt ]
+  * Add IFLA_STATS64 support
+
+  [ Patrick McHardy ]
+  * ip: add support for multicast rules
+
+  [ Ulrich Weber ]
+  * iproute2: filter routing entries based on clone flag
+  * iproute2: use get_user_hz() for IPv6 print_route
+  * iproute2: use int instead of long for RTAX_HOPLIMIT compare
+
+  [ Ben Greear ]
+  * iproute2: Fix batch-mode for mrules.
+
+  [ Arnd Hannemann ]
+  * iproute2: Add dsfield as alias for tos for ip rules
+
+  [ Mike Frysinger ]
+  * tc: revert "echo" in install target
+
+  [ Petr Lautrbach ]
+  * iproute: fix tc generating ipv6 priority filter
+
+  [ Mike Frysinger ]
+  * dnet: fix strict aliasing warnings
+
+  [ Stephen Hemminger ]
+  * Update ARP header type table
+  * Fix NULL pointer reference when using basic match
+
+  [ Mike Frysinger ]
+  * netem: fix installs of dist files
+
+  [ Steve Fink ]
+  * ss -p is much too slow
+
+  [ Stephen Hemminger ]
+  * Fix matching on ethernet src/dst address
+
+  [ Andreas Henriksson ]
+  * tc: make symbols loaded from tc action modules global.
+
+  [ Stephen Hemminger ]
+  * Fix byte order of ether address match for u32
+  * Set capabilities on tc and ip executables
+  * snapshot 100804
+
+  [ An-Cheng Huang ]
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 20 Aug 2010 08:42:58 -0700
+
 iproute (20100329-vyatta2) unstable; urgency=low
 
   * UNRELEASED
