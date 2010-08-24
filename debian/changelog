@@ -1,3 +1,9 @@
+iproute (20100804-vyatta1) unstable; urgency=low
+
+  * Add dependency on libcap2-bin
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 24 Aug 2010 14:06:15 -0700
+
 iproute (20100329-vyatta3) unstable; urgency=low
 
   [ Andreas Henriksson ]
