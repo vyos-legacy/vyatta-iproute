@@ -11,7 +11,7 @@ Architecture: any
 Provides: arpd
 Conflicts: arpd, vyatta-iproute
 Replaces: vyatta-iproute
-Depends: libc6 (>= 2.7-1), libdb4.6
+Depends: libc6 (>= 2.7-1), libdb4.6, libcap2-bin
 Recommends: libatm1
 Suggests: iproute-doc
 Description: Professional tools to control the networking in Linux kernels
