@@ -4,50 +4,17 @@
 
 build: build-arch
 
-include /usr/share/dpatch/dpatch.make
-
-clean: clean-patched unpatch
-clean-patched:
+clean:
 	-rm stamp-build
-	-rm stamp-doc
 	dh_testdir
 	dh_testroot
 	dh_clean
 	make distclean
 
-binary: binary-indep binary-arch
-
-binary-indep: build-indep include/SNAPSHOT.h
-	rm -f debian/files
-	dh_testdir
-	dh_testroot
-	dh_install -i --fail-missing
-	dh_link -i
-	dh_installexamples -i -p iproute-doc examples/*
-	dh_installman -i
-	dh_installdocs -i 
-	dh_installchangelogs -i
-	dh_compress -i
-	dh_strip -i
-	dh_fixperms -i
-	dh_installdeb -i
-	if [ -f "../.VYATTA_DEV_BUILD" ]; then \
-		dh_gencontrol -i -- -v999.dev; \
-	else \
-		dh_gencontrol -i; \
-	fi
-	dh_md5sums -i
-	dh_builddeb -i
-
-
-build-indep: stamp-doc
-stamp-doc:
-	$(MAKE) -C doc all txt
-	touch stamp-doc
-
-
+binary: binary-arch
 
 binary-arch: build-arch include/SNAPSHOT.h
+	rm -f debian/files
 	dh_testdir
 	dh_testroot
 	dh_install -a --fail-missing
@@ -69,7 +36,7 @@ binary-arch: build-arch include/SNAPSHOT.h
 	dh_builddeb -a
 
 build-arch: stamp-build
-stamp-build: patch include/SNAPSHOT.h
+stamp-build: include/SNAPSHOT.h
 	$(MAKE) KERNEL_INCLUDE=./include
 	touch stamp-build
 
@@ -77,4 +44,5 @@ include/SNAPSHOT.h:
 	echo SNAPSHOT!!!!
 	echo "#define VERSION \"vyatta-"`date +%y%m%d`"\"" > include/SNAPSHOT.h
 
-.PHONY: build binary binary-arch binary-indep clean
+.PHONY: build binary binary-arch clean
+

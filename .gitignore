@@ -46,6 +46,7 @@ patch-stamp
 stamp-build
 stamp-doc
 *~
+.*.swp
 \#*#
 # cscope
 cscope.*

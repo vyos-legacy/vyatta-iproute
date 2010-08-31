@@ -4,16 +4,18 @@ Priority: extra
 Maintainer: Vyatta Package Maintainers <maintainers@vyatta.com>
 Homepage: http://www.linux-foundation.org/en/Net:Iproute2
 Standards-Version: 3.7.3
-Build-Depends: texlive-latex-base, texlive-latex-recommended, libatm1-dev, bison, libdb-dev, linuxdoc-tools, linux-libc-dev, debhelper (>= 5), lynx, dpatch, flex, iptables-dev (>= 1.4.1)
+Build-Depends: libatm1-dev, linux-libc-dev, debhelper (>= 5),
+ flex, bison,
+ libdb-dev,
+ iptables-dev (>= 1.4.1)
 
 Package: iproute
 Architecture: any
 Provides: arpd
 Conflicts: arpd, vyatta-iproute
 Replaces: vyatta-iproute
-Depends: libc6 (>= 2.7-1), libdb4.6, libcap2-bin
+Depends: libcap2-bin, ${shlibs:Depends}
 Recommends: libatm1
-Suggests: iproute-doc
 Description: Professional tools to control the networking in Linux kernels
  This is `iproute', the professional set of tools to control the
  networking behavior in kernels 2.2.x and later.
@@ -23,13 +25,4 @@ Description: Professional tools to control the networking in Linux kernels
  .
  This package is also known as iproute2 upstream and in some
  documentation.
-
-Package: iproute-doc
-Section: doc
-Architecture: all
-Description: networking and traffic control tools - documentation
- The iproute suite, also known as iproute2, is a collection of
- utilities for networking and traffic control.
- .
- This package contains the documentation for iproute.
 
