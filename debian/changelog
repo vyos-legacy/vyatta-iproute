@@ -1,3 +1,9 @@
+iproute (20100804-vyatta2) unstable; urgency=low
+
+  * remove doc package from build
+
+ -- An-Cheng Huang <ancheng@vyatta.com>  Mon, 30 Aug 2010 19:25:06 -0700
+
 iproute (20100804-vyatta1) unstable; urgency=low
 
   * Add dependency on libcap2-bin
