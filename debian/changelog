@@ -1,3 +1,17 @@
+iproute (20100804-vyatta4) unstable; urgency=low
+
+  [ Ben Greear ]
+  * iproute2: Fix filtering related to flushing IP addresses.
+
+  [ Ulrich Weber ]
+  * iproute2: dont filter cached routes on iproute_get
+
+  [ Stephen Hemminger ]
+  * Snapshot for 2.6.35.1
+  * Workaround for repeated distclean
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 18 Nov 2010 15:30:54 -0800
+
 iproute (20100804-vyatta3) unstable; urgency=low
 
   * UNRELEASED
