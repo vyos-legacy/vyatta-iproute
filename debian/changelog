@@ -1,3 +1,30 @@
+iproute (20100804-vyatta5) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Update kernel headers to 2.6.36-rc2
+
+  [ Eric Dumazet ]
+  * ip: add RTA_MARK support
+
+  [ Stephen Hemminger ]
+  * Use correct rt_link_statistics
+
+  [ Eric Dumazet ]
+  * iproute2: add 64bit support to ifstat
+
+  [ Stephen Hemminger ]
+  * Fix GRED options clearing
+
+  [ Ulrich Weber ]
+  * iproute2: display xfrm socket policy direction
+
+  [ Stephen Hemminger ]
+  * Update to 2.6.36 headers
+  * Workaround for repeated distclean
+  * Use standard routines for interface name to index etc
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Nov 2010 12:17:45 -0800
+
 iproute (20100804-vyatta4) unstable; urgency=low
 
   [ Ben Greear ]
