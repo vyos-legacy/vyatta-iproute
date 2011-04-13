@@ -1,3 +1,190 @@
+iproute (20110317-vyatta1) unstable; urgency=low
+
+  [ Petr Sabata ]
+  * ss(8) improvements by Jiri Popelka <jpopelka@redhat.com>
+
+  [ Mike Frysinger ]
+  * m_xt: stop using xtables_set_revision()
+
+  [ Timo Teräs ]
+  * iproute2: treat gre key as number
+  * iproute2: support xfrm upper protocol gre key
+
+  [ Changli Gao ]
+  * iproute2: tc: f_flow: add key rxhash
+
+  [ Andreas Schwab ]
+  * iproute2: remove useless use of buffer
+
+  [ Sridhar Samudrala ]
+  * Support 'mode' parameter when creating macvtap device
+
+  [ Ben Greear ]
+  * Allow 'ip addr flush' to loop more than 10 times
+
+  [ Gregoire Baron ]
+  * tc: add ACT_CSUM action support (csum)
+
+  [ Dan Smith ]
+  * Add ip route save/restore
+
+  [ Petr Sabata ]
+  * ss(8) improvements by Jiri Popelka <jpopelka@redhat.com>
+
+  [ Mike Frysinger ]
+  * m_xt: stop using xtables_set_revision()
+
+  [ Timo Teräs ]
+  * iproute2: treat gre key as number
+  * iproute2: support xfrm upper protocol gre key
+
+  [ Changli Gao ]
+  * iproute2: tc: f_flow: add key rxhash
+
+  [ Andreas Schwab ]
+  * iproute2: remove useless use of buffer
+
+  [ Sridhar Samudrala ]
+  * Support 'mode' parameter when creating macvtap device
+
+  [ Ben Greear ]
+  * Allow 'ip addr flush' to loop more than 10 times
+
+  [ Gregoire Baron ]
+  * tc: add ACT_CSUM action support (csum)
+
+  [ Dan Smith ]
+  * Add ip route save/restore
+
+  [ Petr Sabata ]
+  * ss: Change "do now" to "do not" in ss(8), -n option
+
+  [ Gerrit Renker ]
+  * tc-red: typo in man page
+
+  [ Stephen Hemminger ]
+  * Increase size of ifindex hash heads
+
+  [ Octavian Purdila ]
+  * iproute2: initialize the ll_map only once
+
+  [ Stephen Hemminger ]
+  * Cleanup ll_map
+
+  [ Petr Sabata ]
+  * ip: Few typo and grammar errors fixes for ip(8) manpage
+
+  [ Stephen Hemminger ]
+  * Update to 2.6.37-rc8 headers
+  * v2.6.37
+  * Update to lasest kernel headers
+
+  [ Roopa Prabhu ]
+  * iproute2: add VF_PORT support
+
+  [ Stephen Hemminger ]
+  * Revert "iproute2: add VF_PORT support"
+  * CHOKe scheduler
+  * update to net-next (2.6.39) headers
+
+  [ Vlad Dogaru ]
+  * iproute2: support listing devices by group
+  * iproute2: support device group semantics
+  * iproute2: support device group semantics
+
+  [ Joy Latten ]
+  * xfrm security context support
+  * xfrm security context support
+  * xfrm security context support
+
+  [ Gerrit Renker ]
+  * utils: get_jiffies always uses base=0
+  * iproute: fix unit conversion of rtt/rttvar/rto_min
+  * iproute: rename 'get_jiffies' since it uses msecs
+
+  [ Eric Dumazet ]
+  * sfq: add divisor support
+
+  [ Vlad Dogaru ]
+  * iproute2: fix man page whitespace
+
+  [ Nicolas Dichtel ]
+  * iproute2: allow to specify truncation bits on auth algo
+
+  [ Jiri Pirko ]
+  * iplink: implement setting of master devic
+
+  [ Stephen Hemminger ]
+  * Remove #ifdef's
+
+  [ Nicolas Dichtel ]
+  * iproute2: add support of flag XFRM_STATE_ALIGN4
+
+  [ Diego Elio Pettenò ]
+  * Remove -L flags from link
+
+  [ Stephen Hemminger ]
+  * v2.6.38
+
+  [ Sridhar Samudrala ]
+  * macvlan/macvtap: support 'passthru' mode
+
+  [ Joy Latten ]
+  * xfrm security context support
+  * xfrm security context support
+  * xfrm security context support
+
+  [ Gerrit Renker ]
+  * utils: get_jiffies always uses base=0
+  * iproute: fix unit conversion of rtt/rttvar/rto_min
+  * iproute: rename 'get_jiffies' since it uses msecs
+
+  [ Vlad Dogaru ]
+  * iproute2: fix man page whitespace
+
+  [ Nicolas Dichtel ]
+  * iproute2: allow to specify truncation bits on auth algo
+
+  [ Stephen Hemminger ]
+  * v2.6.38.1
+
+  [ Vlad Dogaru ]
+  * iproute2: support listing devices by group
+
+  [ Stephen Hemminger ]
+  * update to 2.6.39-rc3 headers
+  * Add no-strict-aliasing to genl
+  * Add checks for fgets() when reading proc
+  * Fix snprintf with non format
+  * Fix warning in u32 from assignment in conditional
+
+  [ Brandon Philips ]
+  * ip: fix memory leak in ipmaddr.c
+
+  [ Stephen Hemminger ]
+  * Update email address of netem
+  * Add README.devel
+
+  [ Juliusz Chroboczek ]
+  * tc : SFB flow scheduler
+
+  [ Brandon Philips ]
+  * doc: add pdf targets
+
+  [ John Fastabend ]
+  * iproute2: tc add mqprio qdisc support
+
+  [ Stephen Hemminger ]
+  * Update README information
+
+  [ Ulrich Weber ]
+  * iproute2: parse flag XFRM_POLICY_ICMP
+
+  [ Stephen Hemminger ]
+  * Use INIT_NETDEV_GROUP
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 13 Apr 2011 09:26:16 -0700
+
 iproute (20100804-vyatta6) unstable; urgency=low
 
   * new branch
