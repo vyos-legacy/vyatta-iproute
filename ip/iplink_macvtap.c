@@ -1,13 +1,10 @@
 /*
- * iplink_vlan.c	VLAN device support
+ * iplink_macvtap.c	macvtap device support
  *
  *              This program is free software; you can redistribute it and/or
  *              modify it under the terms of the GNU General Public License
  *              as published by the Free Software Foundation; either version
  *              2 of the License, or (at your option) any later version.
- *
- * Authors:     Patrick McHardy <kaber@trash.net>
- *		Arnd Bergmann <arnd@arndb.de>
  */
 
 #include <stdio.h>
@@ -23,7 +20,7 @@
 static void explain(void)
 {
 	fprintf(stderr,
-		"Usage: ... macvlan mode { private | vepa | bridge | passthru }\n"
+		"Usage: ... macvtap mode { private | vepa | bridge | passthru }\n"
 	);
 }
 
@@ -34,7 +31,7 @@ static int mode_arg(void)
         return -1;
 }
 
-static int macvlan_parse_opt(struct link_util *lu, int argc, char **argv,
+static int macvtap_parse_opt(struct link_util *lu, int argc, char **argv,
 			  struct nlmsghdr *n)
 {
 	while (argc > 0) {
@@ -58,7 +55,7 @@ static int macvlan_parse_opt(struct link_util *lu, int argc, char **argv,
 			explain();
 			return -1;
 		} else {
-			fprintf(stderr, "macvlan: what is \"%s\"?\n", *argv);
+			fprintf(stderr, "macvtap: what is \"%s\"?\n", *argv);
 			explain();
 			return -1;
 		}
@@ -68,7 +65,7 @@ static int macvlan_parse_opt(struct link_util *lu, int argc, char **argv,
 	return 0;
 }
 
-static void macvlan_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+static void macvtap_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
 {
 	__u32 mode;
 
@@ -88,9 +85,9 @@ static void macvlan_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[]
 		:				 "unknown");
 }
 
-struct link_util macvlan_link_util = {
-	.id		= "macvlan",
+struct link_util macvtap_link_util = {
+	.id		= "macvtap",
 	.maxattr	= IFLA_MACVLAN_MAX,
-	.parse_opt	= macvlan_parse_opt,
-	.print_opt	= macvlan_print_opt,
+	.parse_opt	= macvtap_parse_opt,
+	.print_opt	= macvtap_print_opt,
 };

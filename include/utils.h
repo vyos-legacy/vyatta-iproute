@@ -17,6 +17,7 @@ extern int resolve_hosts;
 extern int oneline;
 extern int timestamp;
 extern char * _SL_;
+extern int max_flush_loops;
 
 #ifndef IPPROTO_ESP
 #define IPPROTO_ESP	50
@@ -78,7 +79,7 @@ extern int mask2bits(__u32 netmask);
 
 extern int get_integer(int *val, const char *arg, int base);
 extern int get_unsigned(unsigned *val, const char *arg, int base);
-extern int get_jiffies(unsigned *val, const char *arg, int base, int *raw);
+extern int get_time_rtt(unsigned *val, const char *arg, int *raw);
 #define get_byte get_u8
 #define get_ushort get_u16
 #define get_short get_s16
@@ -150,5 +151,6 @@ extern int makeargs(char *line, char *argv[], int maxargs);
 
 struct iplink_req;
 int iplink_parse(int argc, char **argv, struct iplink_req *req,
-		char **name, char **type, char **link, char **dev);
+		char **name, char **type, char **link, char **dev,
+		int *group);
 #endif /* __UTILS_H__ */
