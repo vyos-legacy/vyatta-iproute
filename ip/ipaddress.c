@@ -33,7 +33,6 @@
 #include "ll_map.h"
 #include "ip_common.h"
 
-#define MAX_ROUNDS 10
 
 static struct
 {
@@ -50,6 +49,7 @@ static struct
 	char *flushb;
 	int flushp;
 	int flushe;
+	int group;
 } filter;
 
 static int do_link;
@@ -247,6 +247,12 @@ int print_linkinfo(const struct sockaddr_nl *who,
 	    fnmatch(filter.label, RTA_DATA(tb[IFLA_IFNAME]), 0))
 		return 0;
 
+	if (tb[IFLA_GROUP]) {
+		int group = *(int*)RTA_DATA(tb[IFLA_GROUP]);
+		if (group != filter.group)
+			return -1;
+	}
+
 	if (n->nlmsg_type == RTM_DELLINK)
 		fprintf(fp, "Deleted ");
 
@@ -272,12 +278,10 @@ int print_linkinfo(const struct sockaddr_nl *who,
 		fprintf(fp, "mtu %u ", *(int*)RTA_DATA(tb[IFLA_MTU]));
 	if (tb[IFLA_QDISC])
 		fprintf(fp, "qdisc %s ", (char*)RTA_DATA(tb[IFLA_QDISC]));
-#ifdef IFLA_MASTER
 	if (tb[IFLA_MASTER]) {
 		SPRINT_BUF(b1);
 		fprintf(fp, "master %s ", ll_idx_n2a(*(int*)RTA_DATA(tb[IFLA_MASTER]), b1));
 	}
-#endif
 	if (tb[IFLA_OPERSTATE])
 		print_operstate(fp, *(__u8 *)RTA_DATA(tb[IFLA_OPERSTATE]));
 		
@@ -613,23 +617,21 @@ int print_addrinfo(const struct sockaddr_nl *who, struct nlmsghdr *n,
 		fprintf(fp, "%s", (char*)RTA_DATA(rta_tb[IFA_LABEL]));
 	if (rta_tb[IFA_CACHEINFO]) {
 		struct ifa_cacheinfo *ci = RTA_DATA(rta_tb[IFA_CACHEINFO]);
-		char buf[128];
 		fprintf(fp, "%s", _SL_);
+		fprintf(fp, "       valid_lft ");
 		if (ci->ifa_valid == INFINITY_LIFE_TIME)
-			sprintf(buf, "valid_lft forever");
+			fprintf(fp, "forever");
 		else
-			sprintf(buf, "valid_lft %usec", ci->ifa_valid);
+			fprintf(fp, "%usec", ci->ifa_valid);
+		fprintf(fp, " preferred_lft ");
 		if (ci->ifa_prefered == INFINITY_LIFE_TIME)
-			sprintf(buf+strlen(buf), " preferred_lft forever");
+			fprintf(fp, "forever");
 		else {
 			if (deprecated)
-				sprintf(buf+strlen(buf), " preferred_lft %dsec",
-					ci->ifa_prefered);
+				fprintf(fp, "%dsec", ci->ifa_prefered);
 			else
-				sprintf(buf+strlen(buf), " preferred_lft %usec",
-					ci->ifa_prefered);
+				fprintf(fp, "%usec", ci->ifa_prefered);
 		}
-		fprintf(fp, "       %s", buf);
 	}
 	fprintf(fp, "\n");
 	fflush(fp);
@@ -721,9 +723,12 @@ static int ipaddr_list_or_flush(int argc, char **argv, int flush)
 	if (filter.family == AF_UNSPEC)
 		filter.family = preferred_family;
 
+	filter.group = INIT_NETDEV_GROUP;
+
 	if (flush) {
 		if (argc <= 0) {
 			fprintf(stderr, "Flush requires arguments.\n");
+
 			return -1;
 		}
 		if (filter.family == AF_PACKET) {
@@ -782,6 +787,10 @@ static int ipaddr_list_or_flush(int argc, char **argv, int flush)
 		} else if (strcmp(*argv, "label") == 0) {
 			NEXT_ARG();
 			filter.label = *argv;
+		} else if (strcmp(*argv, "group") == 0) {
+			NEXT_ARG();
+			if (rtnl_group_a2n(&filter.group, *argv))
+				invarg("Invalid \"group\" value\n", *argv);
 		} else {
 			if (strcmp(*argv, "dev") == 0) {
 				NEXT_ARG();
@@ -821,7 +830,7 @@ static int ipaddr_list_or_flush(int argc, char **argv, int flush)
 		filter.flushp = 0;
 		filter.flushe = sizeof(flushb);
 
-		while (round < MAX_ROUNDS) {
+		while ((max_flush_loops == 0) || (round < max_flush_loops)) {
 			const struct rtnl_dump_filter_arg a[3] = {
 				{
 					.filter = print_addrinfo_secondary,
@@ -879,7 +888,8 @@ flush_done:
 			if (!(filter.flags & IFA_F_SECONDARY) && (filter.flagmask & IFA_F_SECONDARY))
 				goto flush_done;
 		}
-		fprintf(stderr, "*** Flush remains incomplete after %d rounds. ***\n", MAX_ROUNDS); fflush(stderr);
+		fprintf(stderr, "*** Flush remains incomplete after %d rounds. ***\n", max_flush_loops);
+		fflush(stderr);
 		return 1;
 	}
 

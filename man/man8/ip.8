@@ -42,7 +42,7 @@ ip \- show / manipulate routing, devices, policy routing and tunnels
 .RB "[ " mtu
 .IR MTU " ]"
 .br
-.BR type TYPE
+.BR type " TYPE"
 .RI "[ " ARGS " ]"
 
 .ti -8
@@ -51,12 +51,14 @@ ip \- show / manipulate routing, devices, policy routing and tunnels
 
 .ti -8
 .BI "ip link delete " DEVICE
-.BI type TYPE
+.BI type " TYPE"
 .RI "[ " ARGS " ]"
 
 .ti -8
-.BI "ip link set " DEVICE
-.RB "{ " up " | " down " | " arp " { " on " | " off " } |"
+.BR "ip link set " {
+.IR DEVICE " | "
+.BI "group " GROUP
+.RB "} { " up " | " down " | " arp " { " on " | " off " } |"
 .br
 .BR promisc " { " on " | " off " } |"
 .br
@@ -95,11 +97,18 @@ ip \- show / manipulate routing, devices, policy routing and tunnels
 .B qos
 .IR VLAN-QOS " ] ] ["
 .B rate
-.IR TXRATE " ]"
+.IR TXRATE " ] |"
+.br
+.B master
+.IR DEVICE
+.br
+.B nomaster
 
 .ti -8
 .B ip link show
-.RI "[ " DEVICE " ]"
+.RI "[ " DEVICE " | "
+.B group
+.IR GROUP " ]"
 
 .ti -8
 .BR "ip addr" " { " add " | " del " } "
@@ -156,6 +165,13 @@ tentative " | " deprecated " | " dadfailed " | " temporary " ]"
 .BR "ip route" " { "
 .BR list " | " flush " } "
 .I  SELECTOR
+
+.ti -8
+.BR "ip route save"
+.I SELECTOR
+
+.ti -8
+.BR "ip route restore"
 
 .ti -8
 .B  ip route get
@@ -384,7 +400,7 @@ throw " | " unreachable " | " prohibit " | " blackhole " | " nat " ]"
 .IR KEY " := { " DOTTED_QUAD " | " NUMBER " }"
 
 .ti -8
-.IR TIME " := " NUMBER "[s|ms|us|ns|j]"
+.IR TIME " := " NUMBER "[s|ms]"
 
 .ti -8
 .BR "ip maddr" " [ " add " | " del " ]"
@@ -547,7 +563,10 @@ throw " | " unreachable " | " prohibit " | " blackhole " | " nat " ]"
 .RB " [ " type
 .IR NUMBER " ] "
 .RB " [ " code
-.IR NUMBER " ]] "
+.IR NUMBER " ] | "
+.br
+.RB " [ " key
+.IR KEY " ]] "
 
 .ti -8
 .IR LIMIT-LIST " := [ " LIMIT-LIST " ] |"
@@ -642,7 +661,10 @@ throw " | " unreachable " | " prohibit " | " blackhole " | " nat " ]"
 .RB " [ " type
 .IR NUMBER " ] "
 .RB " [ " code
-.IR NUMBER " ] ] "
+.IR NUMBER " ] | "
+.br
+.RB " [ " key
+.IR KEY " ] ] "
 
 .ti -8
 .IR ACTION " := "
@@ -728,6 +750,12 @@ utility and exit.
 output more information.  If the option
 appears twice or more, the amount of information increases.
 As a rule, the information is statistics or some time values.
+
+.TP
+.BR "\-l" , " \-loops"
+Specify maximum number of loops the 'ip addr flush' logic
+will attempt before giving up.  The default is 10.
+Zero (0) means loop until all addresses are removed.
 
 .TP
 .BR "\-f" , " \-family"
@@ -909,6 +937,13 @@ specifies network device to operate on. When configuring SR-IOV Virtual Fuction
 device.
 
 .TP
+.BI group " GROUP "
+.I GROUP
+has a dual role: If both group and dev are present, then move the device to the
+specified group.  If only a group is specified, then the command operates on
+all devices in that group.
+
+.TP
 .BR up " and " down
 change the state of the device to
 .B UP
@@ -975,6 +1010,12 @@ move the device to the network namespace associated with the process
 give the device a symbolic name for easy reference.
 
 .TP
+.BI group " GROUP"
+specify the group the device belongs to.
+The available groups are listed in file
+.BR "/etc/iproute2/group" .
+
+.TP
 .BI vf " NUM"
 specify a Virtual Function device to be configured. The associated PF device
 must be specified using the
@@ -1019,6 +1060,14 @@ Setting this parameter to 0 disables rate limiting. The
 parameter must be specified.
 .in -8
 
+.TP
+.BI master " DEVICE"
+set master device of the device (enslave device).
+
+.TP
+.BI nomaster
+unset master device of the device (release device).
+
 .PP
 .B Warning:
 If multiple parameter changes are requested,
@@ -1037,7 +1086,12 @@ call.
 .BI dev " NAME " (default)
 .I NAME
 specifies the network device to show.
-If this argument is omitted all devices are listed.
+If this argument is omitted all devices in the default group are listed.
+
+.TP
+.BI group " GROUP "
+.I GROUP
+specifies what group of devices to show.
 
 .TP
 .B up
@@ -1270,7 +1324,7 @@ can also be
 .BI nud " NUD_STATE"
 the state of the neighbour entry.
 .B nud
-is an abbreviation for 'Neigh bour Unreachability Detection'.
+is an abbreviation for 'Neighbour Unreachability Detection'.
 The state can take one of the following values:
 
 .in +8
@@ -1595,12 +1649,9 @@ peers are allowed to send to us.
 .BI rtt " TIME"
 the initial RTT ('Round Trip Time') estimate. If no suffix is
 specified the units are raw values passed directly to the
-routing code to maintain compatability with previous releases.
+routing code to maintain compatibility with previous releases.
 Otherwise if a suffix of s, sec or secs is used to specify
-seconds; ms, msec or msecs to specify milliseconds; us, usec
-or usecs to specify microseconds; ns, nsec or nsecs to specify
-nanoseconds; j, hz or jiffies to specify jiffies, the value is
-converted to what the routing code expects.
+seconds and ms, msec or msecs to specify milliseconds.
 
 
 .TP
@@ -1945,6 +1996,21 @@ however, no packets are actually sent.  With the
 .B iif
 argument, the kernel pretends that a packet arrived from this interface
 and searches for a path to forward the packet.
+
+.SS ip route save - save routing table information to stdout
+this command behaves like
+.BR "ip route show"
+except that the output is raw data suitable for passing to
+.BR "ip route restore" .
+
+.SS ip route restore - restore routing table information from stdin
+this command expects to read a data stream as returned from
+.BR "ip route save" .
+It will attempt to restore the routing table information exactly as
+it was at the time of the save, so any translation of information
+in the stream (such as device indexes) must be done first.  Any existing
+routes are left unchanged.  Any routes specified in the data stream that
+already exist in the table will be ignored.
 
 .SH ip rule - routing policy database management
 
@@ -2450,7 +2516,7 @@ contains one or more algorithms
 .I ALGO
 which depend on the type of algorithm set by
 .IR ALGO_TYPE "."
-It can be used these algoritms
+Valid algorithms are:
 .BR enc ", " auth " or " comp "."
 
 .SS ip xfrm policy add - add a new policy
@@ -2487,9 +2553,11 @@ is defined by source port
 .BR sport ", "
 destination port
 .BR dport ", " type
-as number and
+as number,
 .B code
-also number.
+also number and
+.BR key
+as dotted-quad or number.
 
 .TP
 .BI dev " DEV "
@@ -2556,11 +2624,10 @@ and the other choice is
 .TP
 .IR UPSPEC
 is specified by
-.BR sport ", "
-.BR dport ", " type
-and
-.B code
-(NUMBER).
+.BR sport " and " dport " (for UDP/TCP), "
+.BR type " and " code " (for ICMP; as number) or "
+.BR key " (for GRE; as dotted-quad or number)."
+.
 
 .SS ip xfrm monitor - is used for listing all objects or defined group of them.
 The

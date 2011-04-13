@@ -48,14 +48,15 @@
 #define NLMSG_BUF_SIZE 4096
 #define RTA_BUF_SIZE 2048
 #define XFRM_TMPLS_BUF_SIZE 1024
+#define CTX_BUF_SIZE 256
 
 static void usage(void) __attribute__((noreturn));
 
 static void usage(void)
 {
-	fprintf(stderr, "Usage: ip xfrm policy { add | update } dir DIR SELECTOR [ index INDEX ] [ ptype PTYPE ]\n");
+	fprintf(stderr, "Usage: ip xfrm policy { add | update } dir DIR SELECTOR [ ctx SEC_CTX ][ index INDEX ] [ ptype PTYPE ]\n");
 	fprintf(stderr, "        [ action ACTION ] [ priority PRIORITY ] [ flag FLAG-LIST ] [ LIMIT-LIST ] [ TMPL-LIST ] [mark MARK [mask MASK]]\n");
-	fprintf(stderr, "Usage: ip xfrm policy { delete | get } dir DIR [ SELECTOR | index INDEX ] [ ptype PTYPE ] [mark MARK [mask MASK]]\n");
+	fprintf(stderr, "Usage: ip xfrm policy { delete | get } dir DIR [ SELECTOR | index INDEX ] [ ctx SEC_CTX ][ ptype PTYPE ] [mark MARK [mask MASK]]\n");
 	fprintf(stderr, "Usage: ip xfrm policy { deleteall | list } [ dir DIR ] [ SELECTOR ]\n");
 	fprintf(stderr, "        [ index INDEX ] [ action ACTION ] [ priority PRIORITY ]  [ flag FLAG-LIST ]\n");
 	fprintf(stderr, "Usage: ip xfrm policy flush [ ptype PTYPE ]\n");
@@ -66,7 +67,8 @@ static void usage(void)
 	fprintf(stderr, "SELECTOR := src ADDR[/PLEN] dst ADDR[/PLEN] [ UPSPEC ] [ dev DEV ]\n");
 
 	fprintf(stderr, "UPSPEC := proto PROTO [ [ sport PORT ] [ dport PORT ] |\n");
-	fprintf(stderr, "                        [ type NUMBER ] [ code NUMBER ] ]\n");
+	fprintf(stderr, "                        [ type NUMBER ] [ code NUMBER ] |\n");
+	fprintf(stderr, "                        [ key { DOTTED_QUAD | NUMBER } ] ]\n");
 
 	//fprintf(stderr, "DEV - device name(default=none)\n");
 
@@ -75,7 +77,7 @@ static void usage(void)
 	//fprintf(stderr, "PRIORITY - priority value(default=0)\n");
 
 	fprintf(stderr, "FLAG-LIST := [ FLAG-LIST ] FLAG\n");
-	fprintf(stderr, "FLAG := [ localok ]\n");
+	fprintf(stderr, "FLAG := [ localok | icmp ]\n");
 
 	fprintf(stderr, "LIMIT-LIST := [ LIMIT-LIST ] | [ limit LIMIT ]\n");
 	fprintf(stderr, "LIMIT := [ [time-soft|time-hard|time-use-soft|time-use-hard] SECONDS ] |\n");
@@ -154,6 +156,8 @@ static int xfrm_policy_flag_parse(__u8 *flags, int *argcp, char ***argvp)
 		while (1) {
 			if (strcmp(*argv, "localok") == 0)
 				*flags |= XFRM_POLICY_LOCALOK;
+			else if (strcmp(*argv, "icmp") == 0)
+				*flags |= XFRM_POLICY_ICMP;
 			else {
 				PREV_ARG(); /* back track */
 				break;
@@ -221,6 +225,23 @@ static int xfrm_tmpl_parse(struct xfrm_user_tmpl *tmpl,
 	return 0;
 }
 
+int xfrm_sctx_parse(char *ctxstr, char *s,
+			   struct xfrm_user_sec_ctx *sctx)
+{
+	int slen;
+
+	slen = strlen(s) + 1;
+
+	sctx->exttype = XFRMA_SEC_CTX;
+	sctx->ctx_doi = 1;
+	sctx->ctx_alg = 1;
+	sctx->ctx_len = slen;
+	sctx->len = sizeof(struct xfrm_user_sec_ctx) + slen;
+	memcpy(ctxstr, s, slen);
+
+	return 0;
+}
+
 static int xfrm_policy_modify(int cmd, unsigned flags, int argc, char **argv)
 {
 	struct rtnl_handle rth;
@@ -232,14 +253,20 @@ static int xfrm_policy_modify(int cmd, unsigned flags, int argc, char **argv)
 	char *dirp = NULL;
 	char *selp = NULL;
 	char *ptypep = NULL;
+	char *sctxp = NULL;
 	struct xfrm_userpolicy_type upt;
 	char tmpls_buf[XFRM_TMPLS_BUF_SIZE];
 	int tmpls_len = 0;
 	struct xfrm_mark mark = {0, 0};
+	struct {
+		struct xfrm_user_sec_ctx sctx;
+		char	str[CTX_BUF_SIZE];
+	} ctx;
 
 	memset(&req, 0, sizeof(req));
 	memset(&upt, 0, sizeof(upt));
 	memset(&tmpls_buf, 0, sizeof(tmpls_buf));
+	memset(&ctx, 0, sizeof(ctx));
 
 	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(req.xpinfo));
 	req.n.nlmsg_flags = NLM_F_REQUEST|flags;
@@ -259,6 +286,15 @@ static int xfrm_policy_modify(int cmd, unsigned flags, int argc, char **argv)
 
 			NEXT_ARG();
 			xfrm_policy_dir_parse(&req.xpinfo.dir, &argc, &argv);
+		} else if (strcmp(*argv, "ctx") == 0) {
+			char *context;
+
+			if (sctxp)
+				duparg("ctx", *argv);
+			sctxp = *argv;
+			NEXT_ARG();
+			context = *argv;
+			xfrm_sctx_parse((char *)&ctx.str, context, &ctx.sctx);
 		} else if (strcmp(*argv, "mark") == 0) {
 			xfrm_parse_mark(&mark, &argc, &argv);
 		} else if (strcmp(*argv, "index") == 0) {
@@ -346,6 +382,10 @@ static int xfrm_policy_modify(int cmd, unsigned flags, int argc, char **argv)
 		}
 	}
 
+	if (sctxp) {
+		addattr_l(&req.n, sizeof(req), XFRMA_SEC_CTX,
+			  (void *)&ctx, ctx.sctx.len);
+	}
 
 	if (rtnl_open_byproto(&rth, 0, NETLINK_XFRM) < 0)
 		exit(1);
@@ -527,11 +567,18 @@ static int xfrm_policy_get_or_delete(int argc, char **argv, int delete,
 	char *selp = NULL;
 	char *indexp = NULL;
 	char *ptypep = NULL;
+	char *sctxp = NULL;
 	struct xfrm_userpolicy_type upt;
 	struct xfrm_mark mark = {0, 0};
+	struct {
+		struct xfrm_user_sec_ctx sctx;
+		char    str[CTX_BUF_SIZE];
+	} ctx;
+
 
 	memset(&req, 0, sizeof(req));
 	memset(&upt, 0, sizeof(upt));
+	memset(&ctx, 0, sizeof(ctx));
 
 	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(req.xpid));
 	req.n.nlmsg_flags = NLM_F_REQUEST;
@@ -546,6 +593,15 @@ static int xfrm_policy_get_or_delete(int argc, char **argv, int delete,
 			NEXT_ARG();
 			xfrm_policy_dir_parse(&req.xpid.dir, &argc, &argv);
 
+		} else if (strcmp(*argv, "ctx") == 0) {
+			char *context;
+
+			if (sctxp)
+				duparg("ctx", *argv);
+			sctxp = *argv;
+			NEXT_ARG();
+			context = *argv;
+			xfrm_sctx_parse((char *)&ctx.str, context, &ctx.sctx);
 		} else if (strcmp(*argv, "mark") == 0) {
 			xfrm_parse_mark(&mark, &argc, &argv);
 		} else if (strcmp(*argv, "index") == 0) {
@@ -607,6 +663,11 @@ static int xfrm_policy_get_or_delete(int argc, char **argv, int delete,
 			fprintf(stderr, "%s: XFRMA_MARK failed\n",__func__);
 			exit(1);
 		}
+	}
+
+	if (sctxp) {
+		addattr_l(&req.n, sizeof(req), XFRMA_SEC_CTX,
+			  (void *)&ctx, ctx.sctx.len);
 	}
 
 	if (rtnl_talk(&rth, &req.n, 0, 0, res_nlbuf, NULL, NULL) < 0)
