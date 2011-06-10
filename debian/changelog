@@ -1,3 +1,10 @@
+iproute (20110317-vyatta2) unstable; urgency=low
+
+  * Revert "Fix matching on ethernet src/dst address"
+  * u32 match copy from upstream
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Fri, 10 Jun 2011 10:29:16 -0700
+
 iproute (20110317-vyatta1) unstable; urgency=low
 
   [ Petr Sabata ]
