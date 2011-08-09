@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdarg.h>
-#include <limits.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
@@ -124,11 +123,9 @@ static int parse_ipt(struct action_util *a,int *argc_p,
 	char **argv = *argv_p;
 	int argc = 0, iargc = 0;
 	char k[16];
-	int res = -1;
 	int size = 0;
 	int iok = 0, ok = 0;
 	__u32 hook = 0, index = 0;
-	res = 0;
 
 	xtables_init_all(&tcipt_globals, NFPROTO_IPV4);
 	set_lib_dir();
@@ -162,9 +159,13 @@ static int parse_ipt(struct action_util *a,int *argc_p,
 					return -1;
 				}
 				tcipt_globals.opts =
-				    xtables_merge_options(tcipt_globals.opts,
-				                          m->extra_opts,
-				                          &m->option_offset);
+				    xtables_merge_options(
+#if (XTABLES_VERSION_CODE >= 6)
+				        tcipt_globals.orig_opts,
+#endif
+				        tcipt_globals.opts,
+				        m->extra_opts,
+				        &m->option_offset);
 			} else {
 				fprintf(stderr," failed to find target %s\n\n", optarg);
 				return -1;
@@ -307,7 +308,11 @@ print_ipt(struct action_util *au,FILE * f, struct rtattr *arg)
 			}
 
 			tcipt_globals.opts =
-			    xtables_merge_options(tcipt_globals.opts,
+			    xtables_merge_options(
+#if (XTABLES_VERSION_CODE >= 6)
+				                  tcipt_globals.orig_opts,
+#endif
+				                  tcipt_globals.opts,
 			                          m->extra_opts,
 			                          &m->option_offset);
 		} else {
