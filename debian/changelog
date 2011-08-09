@@ -1,3 +1,62 @@
+iproute (20110629-vyatta+1) unstable; urgency=low
+
+  [ John Fastabend ]
+  * iproute2: improve mqprio inputs for queue offsets and counts
+
+  [ Eric Dumazet ]
+  * ip: Support IFLA_TXQLEN in ip link command
+
+  [ Stephen Hemminger ]
+  * tc filter: fix dport/sport in pretty print output
+
+  [ Eric Dumazet ]
+  * ss: fix autobound filter
+
+  [ Stephen Hemminger ]
+  * ip: addrlabel fix set never used warning
+  * ip: iproute fix set never used warning
+  * tc: fix set never used warning in red
+  * libnetlink: fix set never used warning
+  * Fix set-never-used warning in ifstat
+  * ss: check result of readlink
+  * skbedit: fix set-never-used warning
+  * xt match: fix set-never-used warning
+  * v2.6.39
+
+  [ Gilles Espinasse ]
+  * iproute2: fix minor typo in comments
+
+  [ David Ward ]
+  * xfrm: Update documentation
+
+  [ Petr Sabata ]
+  * iproute2: Remove unreachable code
+
+  [ Andreas Henriksson ]
+  * iproute2: Fix building xt module against xtables version 6
+
+  [ Stephen Hemminger ]
+  * Update .gitignore
+  * Update kernel headers to 3.0
+  * Fix test for EOF on continuation line
+
+  [ Eric W. Biederman ]
+  * iproute2: Add processless network namespace support
+
+  [ Stephen Hemminger ]
+  * Remove redundant limits.h
+  * Add QFQ scheduler
+
+  [ Christoph Biedl ]
+  * ip: fix display of prefix cache info
+
+  [ Andreas Henriksson ]
+  * iproute2: Remove "monitor" from "ip route help" output
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 09 Aug 2011 10:18:44 -0700
+
 iproute (20110317-vyatta3) unstable; urgency=low
 
   * new branch
