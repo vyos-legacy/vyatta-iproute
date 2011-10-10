@@ -1,3 +1,72 @@
+iproute (20111010-vyatta+1) unstable; urgency=low
+
+  [ Bin Li ]
+  * ip: fix typo in ip link manual page
+
+  [ Florian Westphal ]
+  * tc: man: add man page for choke scheduler
+  * tc: man: update sfq man page
+
+  [ Stephen Hemminger ]
+  * Add LLDP to ethernet type table
+
+  [ Dan McGee ]
+  * iproute2: Remove ChangeLog
+
+  [ Florian Westphal ]
+  * tc: filter: fix default 'protocol all' on little-endian platforms
+
+  [ Dan McGee ]
+  * Make iproute2 configure script more flexible
+
+  [ Stephen Hemminger ]
+  * Update headers to 3.0.4
+
+  [ Eric W. Biederman ]
+  * iproute2: Auto-detect the presence of setns in libc
+  * iproute2: Fail "ip netns add" on existing network namespaces.
+
+  [ Dan McGee ]
+  * iptuntap: avoid double open
+  * genl: remove unused code
+  * ensure uptime is initialized if /proc/uptime cannot be opened
+  * xt: only unset fields if m is non NULL
+
+  [ Stephen Hemminger ]
+  * Add ntable to ip man page
+
+  [ Petr Sabata ]
+  * iproute2: ss - fix missing parameters
+  * iproute2: lnstat - fix typos
+  * iproute2: arpd - fix usage and manpage options
+
+  [ Sridhar Samudrala ]
+  * iproute2: Fix usage and man page for 'ip link'
+
+  [ Thomas Jarosch ]
+  * Fix pipe I/O stream descriptor leak in init_service_resolver()
+
+  [ Jiri Benc ]
+  * iproute2: fix changing of ip6ip6 tunnel parameters
+
+  [ Thomas Jarosch ]
+  * Fix file descriptor leak on error in rtnl_hash_initialize()
+  * Fix wrong comparison in cmp_print_eopt()
+  * Fix wrong sanity check in choke_parse_opt()
+  * Fix memory leak of lname variable in get_target_name()
+  * Add missing closedir() call in do_show()
+  * Fix file descriptor leak on error in iproute_flush_cache()
+  * Fix file descriptor leak on error in read_viftable()
+  * Fix file descriptor leak on error in read_mroute_list()
+  * Fix file descriptor leak in do_tunnels_list()
+  * Fix file descriptor leak on error in read_igmp()
+
+  [ Stephen Hemminger ]
+  * ip: fix man page warnings
+  * v3.0.0
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 10 Oct 2011 09:05:02 -0700
+
 iproute (20110629-vyatta+1) unstable; urgency=low
 
   [ John Fastabend ]
