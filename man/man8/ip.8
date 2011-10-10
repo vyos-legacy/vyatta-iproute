@@ -47,7 +47,7 @@ ip \- show / manipulate routing, devices, policy routing and tunnels
 
 .ti -8
 .IR TYPE " := [ "
-.BR vlan " | " maclan " | " can " ]"
+.BR vlan " | " veth " | " vcan " | " dummy " | " ifb " | " macvlan " | " can " | " bridge ]"
 
 .ti -8
 .BI "ip link delete " DEVICE
@@ -106,6 +106,8 @@ ip \- show / manipulate routing, devices, policy routing and tunnels
 .IR DEVICE
 .br
 .B nomaster
+.BR " }"
+
 
 .ti -8
 .B ip link show
@@ -352,6 +354,46 @@ throw " | " unreachable " | " prohibit " | " blackhole " | " nat " ]"
 .IR STATE " ]"
 
 .ti -8
+.BR "ip ntable change name"
+.IR NAME " [ "
+.B dev
+.IR DEV " ] " PARMS
+
+.ti -8
+.IR PARMS " := { "
+.B thresh1
+.IR VAL " | "
+.B thresh2
+.IR VAL " | "
+.B thresh3
+.IR VAL " | "
+.B gc_int
+.IR MSEC " | "
+.B base_reachable
+.IR MSEC " | "
+.B retrans
+.IR MSEC " | " "gc_stale MSEC " " | "
+.B delay_probe
+.IR MSEC " | " "queue LEN " " | "
+.B app_probs
+.IR VAL " | "
+.B ucast_probes
+.IR VAL " | " "mcast_probes VAL " " | "
+.B anycast_delay
+.IR MSEC " | "
+.B proxy_delay
+.IR MSEC " | " "proxy_queue LEN " " | "
+.B locktime
+.IR MSEC " }"
+
+.ti -8
+.BR "ip ntable show" " [ "
+.B dev
+.IR DEV " ] [ "
+.B name
+.IR NAME " ]"
+
+.ti -8
 .BR "ip tunnel" " { " add " | " change " | " del " | " show " | " prl " }"
 .RI "[ " NAME " ]"
 .br
@@ -542,12 +584,10 @@ throw " | " unreachable " | " prohibit " | " blackhole " | " nat " ]"
 .ti -8
 .IR ALGO " :="
 .RB "{ " enc " | " auth " | " comp " } " 
-.IR ALGO-NAME " " ALGO-KEY
-.R "|"
+.IR ALGO-NAME " " ALGO-KEY " |"
 .br
-.B aead
-.IR ALGO-NAME " " ALGO-KEY " " ALGO-ICV-LEN
-.R "|"
+.B  aead
+.IR ALGO-NAME " " ALGO-KEY " " ALGO-ICV-LEN  " |"
 .br
 .B auth-trunc
 .IR ALGO-NAME " " ALGO-KEY " " ALGO-TRUNC-LEN
@@ -947,13 +987,28 @@ Link types:
 
 .in +8
 .B vlan
-- 802.1q tagged virrtual LAN interface
+- 802.1q tagged virtual LAN interface
+.sp
+.B veth
+- Virtual ethernet interface
+.sp
+.B vcan
+- Virtual Local CAN interface
+.sp
+.B dummy
+- Dummy network interface
+.sp
+.B ifb
+- Intermediate Functional Block device
 .sp
 .B macvlan
 - virtual interface base on link layer address (MAC)
 .sp
 .B can
 - Controller Area Network interface
+.sp
+.B bridge
+- Ethernet Bridge device
 .in -8
 
 .SS ip link delete - delete virtual link
@@ -1470,6 +1525,32 @@ neighbour table.  If the option is given
 twice,
 .B ip neigh flush
 also dumps all the deleted neighbours.
+
+.SH ip ntable - neighbour table configuration
+Display and change the parameters for the neighbour tables.
+
+.SS ip ntable show - list the ip neighbour tables
+
+This commands displays neighbour table parameters and statistics.
+
+.TP
+.BI dev " DEV"
+only list the table attached to this device.
+
+.TP
+.BI name " NAME"
+only lists the table with the given name.
+
+.SS ip ntable change - modify table parameter
+
+This command allows modifying table parameters such as timers and queue lengths.
+.TP
+.BI name " NAME"
+the name of the table to modify.
+
+.TP
+.BI dev " DEV"
+the name of the device to modify the table values.
 
 .SH ip route - routing table management
 Manipulate route entries in the kernel routing tables keep
