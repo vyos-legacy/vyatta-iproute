@@ -89,6 +89,7 @@ endif
 
 YACC := bison
 LEX := flex
+CFLAGS += -DYY_NO_INPUT
 
 MODDESTDIR := $(DESTDIR)$(patsubst /usr%,%,$(LIBDIR))/tc
 
@@ -118,23 +119,28 @@ install: all
 	fi
 
 clean:
-	rm -f $(TCOBJ) $(TCLIB) libtc.a tc *.so 
-	rm -f emp_ematch.yacc.* emp_ematch.lex.*
+	rm -f $(TCOBJ) $(TCLIB) libtc.a tc *.so emp_ematch.yacc.h; \
+	rm -f emp_ematch.yacc.*
 
 q_atm.so: q_atm.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o q_atm.so q_atm.c -latm
 
 m_xt.so: m_xt.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o m_xt.so m_xt.c -lxtables
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o m_xt.so m_xt.c $$(pkg-config xtables --cflags --libs)
 
 m_xt_old.so: m_xt_old.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o m_xt_old.so m_xt_old.c -lxtables
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o m_xt_old.so m_xt_old.c $$(pkg-config xtables --cflags --libs)
 
 %.yacc.c: %.y
 	$(YACC) $(YACCFLAGS) -o $@ $<
 
 %.lex.c: %.l
 	$(LEX) $(LEXFLAGS) -o$@ $<
+
+# our lexer includes the header from yacc, so make sure
+# we don't attempt to compile it before the header has
+# been generated as part of the yacc step.
+emp_ematch.lex.o: emp_ematch.yacc.c
 
 ifneq ($(SHARED_LIBS),y)
 
