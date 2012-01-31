@@ -1,3 +1,137 @@
+iproute (20120105-vyatta+1) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Update to 3.1-rc9 kernel headers
+
+  [ Thomas Jarosch ]
+  * Fix unterminated readlink() buffer usage
+
+  [ Stephen Hemminger ]
+  * ip: fix exit codes
+
+  [ Mike Frysinger ]
+  * tc: fix parallel build file with lex/yacc
+
+  [ Michal Soltys ]
+  * HFSC (7) & (8) documentation + assorted changes
+  * HFS manpage changes
+
+  [ Stephen Hemminger ]
+  * cleanup ematch yacc files
+
+  [ Petr Šabata ]
+  * Display closed UDP sockets on 'ss -ul'
+
+  [ Stephen Hemminger ]
+  * v3.1.0
+  * Update to 3.2.0-rc2 headers
+
+  [ Thomas Jarosch ]
+  * tc: Remove unused variable 'res'.
+  * tc: Use correct variable type for get_distribution() result
+
+  [ Eric Dumazet ]
+  * ss: report ecnseen
+
+  [ Greg Rose ]
+  * iproute2: Add new command to ip link to enable/disable VF spoof check
+
+  [ Eric Dumazet ]
+  * red: give a hint about burst value
+  * red: make burst optional
+
+  [ Hagen Paul Pfeifer ]
+  * netem: add man-page
+
+  [ Eric Dumazet ]
+  * red: harddrop support and cleanups
+
+  [ Florian Westphal ]
+  * tc: man: add man page for stochastic fair blue
+
+  [ Stephen Hemminger ]
+  * Split up ip man page
+  * Update to latest 3.2 kernel headers
+  * netem: fix man page
+  * netem: add support for 4 state and GE loss model
+  * libnetlink: change rtnl_send() to take void *
+  * libnetlink: add more attribute functions
+
+  [ Eric Dumazet ]
+  * netem: fix a typo in explain()
+
+  [ Stephen Hemminger ]
+  * libnetlink: remove unused junk callback
+  * libnetlink: add attribute access inline functions
+  * l2tp: Add l2tp support
+
+  [ Jan Engelhardt ]
+  * iproute2: avoid use of implicit declarations
+
+  [ Stephen Hemminger ]
+  * ematch: fix warning about yyerror and const
+  * ematch: fix warning about unused input()
+  * README cleanup's
+
+  [ Jan Engelhardt ]
+  * iproute2: proper detection of libxtables position and flags
+  * iproute2: fix calling up the xt action
+
+  [ Stephen Hemminger ]
+  * v3.2.0
+  * iplt2p: remove unused libnl headers
+  * Fix man page whatis entry errors
+  * Update to kernel v3.3 headers
+  * Update to 3.3 headers (with inet_diag fix)
+
+  [ Vijay Subramanian ]
+  * netem: Add missing '}' in man page
+
+  [ Masatake YAMATO ]
+  * using NLM_F_DUMP flag constant in libnetlink.c
+
+  [ Hagen Paul Pfeifer ]
+  * utils: add s32 parser
+  * tc: netem rate shaping and cell extension
+
+  [ Stephen Hemminger ]
+  * netem: add rate extension to man page
+
+  [ Eric Dumazet ]
+  * red: Add adaptative algo Logged in as shemminger
+  * red: fix adaptive spelling
+  * sfq: add optional RED on top of SFQ
+  * choke: support TCA_CHOKE_MAX_P
+  * gred: support TCA_GRED_MAX_P attribute
+
+  [ Stephen Hemminger ]
+  * ip: make 'ip l' be 'ip link'
+
+  [ Vijay Subramanian ]
+  * netem: Fail cleanly if user input is wrong
+
+  [ nick black ]
+  * Update ip manpage
+
+  [ Pavel Emelyanov ]
+  * iproute: Dump unix sockets via netlink
+
+  [ Stephen Hemminger ]
+  * Fix unix socket diagnostic build
+
+  [ Vijay Subramanian ]
+  * netem: Fix up grammatical errors in man page
+  * netem: Fix 'reorder' section of man page
+
+  [ Eric Dumazet ]
+  * tc-red: update man page
+  * tc-sfq: update man page
+  * ss: should support CONFIG_INET_UDP_DIAG=n kernels
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 31 Jan 2012 14:57:18 -0800
+
 iproute (20111010-vyatta+1) unstable; urgency=low
 
   [ Bin Li ]
