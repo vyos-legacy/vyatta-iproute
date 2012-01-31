@@ -45,7 +45,7 @@ static void usage(void)
 "       ip [ -force ] -batch filename\n"
 "where  OBJECT := { link | addr | addrlabel | route | rule | neigh | ntable |\n"
 "                   tunnel | tuntap | maddr | mroute | mrule | monitor | xfrm |\n"
-"                   netns }\n"
+"                   netns | l2tp }\n"
 "       OPTIONS := { -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |\n"
 "                    -f[amily] { inet | inet6 | ipx | dnet | link } |\n"
 "                    -l[oops] { maximum-addr-flush-attempts } |\n"
@@ -73,6 +73,7 @@ static const struct cmd {
 	{ "ntable",	do_ipntable },
 	{ "ntbl",	do_ipntable },
 	{ "link",	do_iplink },
+	{ "l2tp",	do_ipl2tp },
 	{ "tunnel",	do_iptunnel },
 	{ "tunl",	do_iptunnel },
 	{ "tuntap",	do_iptuntap },
@@ -91,31 +92,32 @@ static int do_cmd(const char *argv0, int argc, char **argv)
 	const struct cmd *c;
 
 	for (c = cmds; c->cmd; ++c) {
-		if (matches(argv0, c->cmd) == 0)
-			return c->func(argc-1, argv+1);
+		if (matches(argv0, c->cmd) == 0) {
+			return -(c->func(argc-1, argv+1));
+		}
 	}
 
 	fprintf(stderr, "Object \"%s\" is unknown, try \"ip help\".\n", argv0);
-	return -1;
+	return EXIT_FAILURE;
 }
 
 static int batch(const char *name)
 {
 	char *line = NULL;
 	size_t len = 0;
-	int ret = 0;
+	int ret = EXIT_SUCCESS;
 
 	if (name && strcmp(name, "-") != 0) {
 		if (freopen(name, "r", stdin) == NULL) {
 			fprintf(stderr, "Cannot open file \"%s\" for reading: %s\n",
 				name, strerror(errno));
-			return -1;
+			return EXIT_FAILURE;
 		}
 	}
 
 	if (rtnl_open(&rth, 0) < 0) {
 		fprintf(stderr, "Cannot open rtnetlink\n");
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	cmdlineno = 0;
@@ -129,7 +131,7 @@ static int batch(const char *name)
 
 		if (do_cmd(largv[0], largc, largv)) {
 			fprintf(stderr, "Command failed %s:%d\n", name, cmdlineno);
-			ret = 1;
+			ret = EXIT_FAILURE;
 			if (!force)
 				break;
 		}
