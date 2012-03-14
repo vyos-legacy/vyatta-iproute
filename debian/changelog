@@ -1,3 +1,43 @@
+iproute (20120105-vyatta+3) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Add cast to rta_getattr_str
+  * red: add missing include math.h
+
+  [ Greg Rose ]
+  * iproute2: Add VF spoofchk command description to ip-link.8 man page
+
+  [ Tony Zelenoff ]
+  * Modify neighbour proxy show
+  * Adjust man page for new functionality
+
+  [ Stephen Hemminger ]
+  * Don't put configure files in /tmp
+  * dhcp-client-script: don't use /tmp
+
+  [ Matt Tierney ]
+  * ss: Close file descriptors in tcp_show_netlink.
+
+  [ Stephen Hemminger ]
+  * ss: simplify code
+  * arpd: allow configuring polling interval
+  * ipaddress: cleanup code for link stats64
+
+  [ Petr Sabata ]
+  * iproute2: tc - mqprio formatted print fix
+
+  [ Yegor Yefremov ]
+  * iproute2: cleanup dependencies
+
+  [ Andreas Henriksson ]
+  * iproute: fix tc -iec display of Mibit rates
+
+  [ Stephen Hemminger ]
+  * Keep cscope around after make clean
+  * iproute: allow changing gretap parameters
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Wed, 14 Mar 2012 10:33:29 -0700
+
 iproute (20120105-vyatta+2) unstable; urgency=low
 
   * new branch
