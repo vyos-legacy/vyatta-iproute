@@ -1,3 +1,26 @@
+iproute (20120105-vyatta+4) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Fix ip-monitor manual page what-is entry
+
+  [ Anton Danilov ]
+  * csum action, fix typo
+
+  [ Kenyon Ralph ]
+  * Update ip address manual page
+
+  [ Stephen Hemminger ]
+  * update to 3.3-rc7 kernel headers
+
+  [ Florian Westphal ]
+  * ip: xfrm: report nat-t/encapsulation portmapping updates
+
+  [ Stephen Hemminger ]
+  * Fix rta_getattr_u32 wrapper and add getattr_u8
+  * gre: allow 0 as a legal key value
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Thu, 15 Mar 2012 18:39:51 -0700
+
 iproute (20120105-vyatta+3) unstable; urgency=low
 
   [ Stephen Hemminger ]
