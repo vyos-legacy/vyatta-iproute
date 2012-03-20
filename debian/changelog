@@ -1,3 +1,11 @@
+iproute (20120319-vyatta+1) unstable; urgency=low
+
+  * gre: allow 0 as a legal key value
+  * ip: allow set and display of link mode parameter
+  * v3.3.0
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 19 Mar 2012 20:03:05 -0700
+
 iproute (20120105-vyatta+4) unstable; urgency=low
 
   [ Stephen Hemminger ]
