@@ -1,3 +1,14 @@
+iproute (20120319-vyatta+2) unstable; urgency=low
+
+  [ João Valverde ]
+  * ipl2tp: allow setting session interface name
+
+  [ Stephen Hemminger ]
+  * Add ability to set link state with ip
+  * Make link mode case independent
+
+ -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 05 Apr 2012 15:14:34 -0700
+
 iproute (20120319-vyatta+1) unstable; urgency=low
 
   * gre: allow 0 as a legal key value
