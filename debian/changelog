@@ -1,3 +1,9 @@
+iproute (20120319-vyatta+3) unstable; urgency=low
+
+  * Vti support for ip tunnel cmd.
+
+ -- Saurabh Mohan <saurabh.mohan@vyatta.com>  Thu, 17 May 2012 18:19:45 -0700
+
 iproute (20120319-vyatta+2) unstable; urgency=low
 
   [ João Valverde ]
