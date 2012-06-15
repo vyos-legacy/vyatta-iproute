@@ -31,7 +31,7 @@ iproute (20120319-vyatta+4) unstable; urgency=low
   * Revert "iproute2: allow IPv6 addresses for l2tp local and remote parameters"
 
   [ Shan Wei ]
-  * ss: use new INET_DIAG_SKMEMINFO option to get more memory information for tcp socket
+  * ss: use new INET_DIAG_SKMEMINFO option to get more memory information 
 
   [ James Chapman ]
   * iproute2: add ip-l2tp man page
