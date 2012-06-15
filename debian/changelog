@@ -1,3 +1,9 @@
+iproute (20120521-vyatta+2) unstable; urgency=low
+
+  * Update to current debian build infrastructure
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 15 Jun 2012 16:10:58 -0700
+
 iproute (20120319-vyatta+4) unstable; urgency=low
 
   [ Jorge Boncompte [DTI2] ]
