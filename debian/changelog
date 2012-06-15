@@ -1,3 +1,93 @@
+iproute (20120319-vyatta+4) unstable; urgency=low
+
+  [ Jorge Boncompte [DTI2] ]
+  * iproute: show metrics as an unsigned value
+
+  [ Stephen Hemminger ]
+  * Convert to use rta_getattr_ functions
+
+  [ Eric Dumazet ]
+  * Fix ss if INET_DIAG not enabled in kernel
+
+  [ Florian Westphal ]
+  * tc: man: choke counts packets, not bytes
+
+  [ Stephen Hemminger ]
+  * Merge in 3.3-rc2 kernel headers
+
+  [ Rose, Gregory V ]
+  * iproute2: Add netlink attribute to filter dump requests
+
+  [ Christoph J. Thompson ]
+  * iproute2 - Don't hardcode the path to config files
+  * iproute2 - Split up cflags
+  * iproute2 - Split up manual page installation
+  * iproute2 - Fix up and simplify variables pointing to install directories
+
+  [ Chris Elston ]
+  * iproute2: allow IPv6 addresses for l2tp local and remote parameters
+
+  [ Stephen Hemminger ]
+  * Revert "iproute2: allow IPv6 addresses for l2tp local and remote parameters"
+
+  [ Shan Wei ]
+  * ss: use new INET_DIAG_SKMEMINFO option to get more memory information for tcp socket
+
+  [ James Chapman ]
+  * iproute2: add ip-l2tp man page
+
+  [ Vijay Subramanian ]
+  * Update man8 Makefile
+
+  [ Andreas Henriksson ]
+  * iproute2: trivial fix of ip link syntax in manpage
+
+  [ Stephen Hemminger ]
+  * v3.4.0
+
+  [ Andreas Henriksson ]
+  * iproute2: man page and /bin/ip disagree on del vs delete
+
+  [ Stephen Hemminger ]
+  * Update headers to 3.5 merge window
+  * Remove derived man pages
+
+  [ Vijay Subramanian ]
+  * Update tc-netem manpage to add ecn capability
+  * tc-netem: Add support for ECN packet marking
+
+  [ Eric Dumazet ]
+  * tc_codel: Controlled Delay AQM
+  * fq_codel: Fair Queue Codel AQM
+
+  [ Chris Elston ]
+  * iproute2: allow IPv6 addresses for l2tp local and remote parameters
+
+  [ Vijay Subramanian ]
+  * tc-codel: Add manpage
+  * tc-codel: Update usage text
+
+  [ Jan Ceuleers ]
+  * tc-codel: Fix typos in manpage
+
+  [ Bjarni Ingi Gislason ]
+  * tc(8): Negative indent and missing "-" after an escape
+  * tc-drr(8): tab unquoted in a argument to a macro
+
+  [ Jan Ceuleers ]
+  * Add reference to tc-codel(8) to the SEE ALSO section
+
+  [ Eric Dumazet ]
+  * ip: speedup ip link
+
+  [ Vijay Subramanian ]
+  * tc-fq_codel: Add manpage
+  * tc: Update manpage
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 15 Jun 2012 15:32:17 -0700
+
 iproute (20120319-vyatta+3) unstable; urgency=low
 
   * Vti support for ip tunnel cmd.
