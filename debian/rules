@@ -16,5 +16,5 @@ override_dh_shlibdeps:
 
 
 override_dh_auto_build:
-	$(MAKE) -C doc all txt
+	# $(MAKE) -C doc all txt
 	$(MAKE) KERNEL_INCLUDE=./include
