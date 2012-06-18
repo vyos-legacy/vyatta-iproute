@@ -1,3 +1,9 @@
+iproute (20120521-vyatta+5) unstable; urgency=low
+
+  * Don't build documentation
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 18 Jun 2012 13:41:40 -0700
+
 iproute (20120521-vyatta+4) unstable; urgency=low
 
   * rebuild again
