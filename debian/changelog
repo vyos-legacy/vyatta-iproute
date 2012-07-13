@@ -1,3 +1,24 @@
+iproute (20120521-vyatta+6) unstable; urgency=low
+
+  [ Li Wei ]
+  * tc: man: Fix incorrect parameter format in prio.
+  * tc: prio: Perform more strict check on priomap.
+
+  [ Hiroaki SHIMODA ]
+  * tc: u32: Fix icmp_code off.
+  * tc: u32: Fix firstfrag filter.
+
+  [ Li Wei ]
+  * tc: filter: validate filter priority in userspace.
+  * tc: man: add 'delete' command.
+  * tc: man: change man page and comment to confirm to code's behavior.
+  * tc-bfifo: man: Add parameter value range.
+
+  [ Stephen Hemminger ]
+  * Enable hardening
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 13 Jul 2012 11:02:01 -0700
+
 iproute (20120521-vyatta+5) unstable; urgency=low
 
   * Don't build documentation
