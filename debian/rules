@@ -1,5 +1,12 @@
 #!/usr/bin/make -f
 
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# Use hardening options
+export DEB_BUILD_HARDENING=1
+
+
 %:
 	dh $@
 
