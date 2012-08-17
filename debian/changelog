@@ -1,3 +1,54 @@
+iproute (20120801-vyatta+1) unstable; urgency=low
+
+  [ Stephen Hemminger ]
+  * Refactor ipaddr_list_or_flush
+  * Remove reference to multipath algorithms in usage
+
+  [ Ben Hutchings ]
+  * ss: Report MSS from internal TCP information
+
+  [ Stephen Hemminger ]
+  * man8: build cleanup
+  * Add bridge command
+  * v3.5.0
+  * Update to 3.6.0-pre headers
+
+  [ Saurabh Mohan ]
+  * VTI support for ip tunnel
+
+  [ Saurabh ]
+  * iproute2: VTI support for ip link command.
+
+  [ Rostislav Lisovy ]
+  * add can.h
+
+  [ Eric Dumazet ]
+  * ss: report SK_MEMINFO_BACKLOG
+
+  [ Jiri Pirko ]
+  * iplink: add support for num[tr]xqueues
+
+  [ Xose Vazquez Perez ]
+  * Fix Makefile's
+
+  [ Mike Frysinger ]
+  * Fix regression with 'ip address show'
+
+  [ Florian Westphal ]
+  * tc: add ipset ematch
+  * add ematch man page
+
+  [ Chris Webb ]
+  * Correct the bridge command name in help messages
+
+  [ Dan Kenigsberg ]
+  * utils: invarg: msg precedes the faulty arg
+
+  [ Stephen Hemminger ]
+  * Fix formatting of ip.8 family man page
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 17 Aug 2012 15:34:57 -0700
+
 iproute (20120521-vyatta+6) unstable; urgency=low
 
   [ Li Wei ]
