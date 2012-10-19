@@ -1,3 +1,99 @@
+iproute (20120801-vyatta+3) unstable; urgency=low
+
+  [ Li Wei ]
+  * iproute2: fix typo in help message.
+  * iproute2: configure: Add search path for 64bit library.
+
+  [ Stephen Hemminger ]
+  * Explain TC class id limits
+
+  [ Pavel Emelyanov ]
+  * iproute: Fix errno propagation from rtnl_talk
+
+  [ Stephen Hemminger ]
+  * Update can.h to 3.6-rc2
+
+  [ Rostislav Lisovy ]
+  * Ematch used to classify CAN frames according to their identifiers
+
+  [ Oliver Hartkopp ]
+  * iproute2: Add missing tc-ematch.8 for man page installation
+
+  [ John Fastabend ]
+  * iproute2: Add FDB print and update cmds for self and master
+
+  [ Stephen Hemminger ]
+  * Install all tc and ip sub pages
+
+  [ John Fastabend ]
+  * iproute2: build failure due to missing '\' in Makefile
+  * iproute2: bridge: remove replace and change options
+
+  [ Mathias Krause ]
+  * configure: remove TMPDIR on exit
+
+  [ Andreas Schwab ]
+  * iproute2: Fix various manpage formatting nits
+
+  [ Pavel Emelyanov ]
+  * iproute: Add magic cookie to route dump file
+  * iproute: Add route showdump command (v2)
+
+  [ Li Wei ]
+  * iproute2: tc.8: update UNITS section.
+
+  [ Julian Anastasov ]
+  * iproute2: add libgenl files
+  * iproute2: use libgenl in ipl2tp
+
+  [ Pavel Emelyanov ]
+  * iproute: Add ability to save, restore and show the interfaces' addresses (resend)
+
+  [ John Fastabend ]
+  * iproute2: bridge: finish removing replace option in man pages
+
+  [ Stephen Hemminger ]
+  * vxlan: add vxlan support to ip command
+  * man: make sure tc man page gets installed
+
+  [ Julian Anastasov ]
+  * iproute2: GENL: merge GENL_REQUEST and GENL_INITIALIZER
+
+  [ Stephen Hemminger ]
+  * Add support for AF_BRIDGE
+
+  [ Werner Fink ]
+  * Change how pdf doc's are created
+
+  [ Stephen Hemminger ]
+  * vxlan support
+  * update header files to 3.6
+  * v3.6.0
+  * bridge: manage VXLAN based forwarding tables
+  * l2tp: remove references to old bridge utils
+
+  [ Petr Písař ]
+  * iproute2: List interfaces without net address by default
+
+  [ Stephen Hemminger ]
+  * Update headers to 3.7-pre-rc
+
+  [ Matt Burgess ]
+  * iproute2-3.6.0 assumes presence of iptables
+
+  [ Nicolas Dichtel ]
+  * iproute2: inform user when a neighbor is removed
+
+  [ Julian Anastasov ]
+  * iproute2: add support for tcp_metrics
+
+  [ Stephen Hemminger ]
+  * vxlan: add support for port range
+  * vxlan: only send group address if defined
+  * Update kernel headers to 3.7-rc1
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 19 Oct 2012 13:35:27 -0700
+
 iproute (20120801-vyatta+1) unstable; urgency=low
 
   [ Stephen Hemminger ]
