@@ -22,7 +22,7 @@ Provides: arpd
 Conflicts: arpd, vyatta-iproute
 Replaces: vyatta-iproute
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin
-Recommends: libatm1
+Recommends: ${ipmods:Recommends}
 Description: networking and traffic control tools
  The iproute suite, also known as iproute2, is a collection of
  utilities for networking and traffic control.
