@@ -1,3 +1,55 @@
+iproute (20121211-vyatta+1) unstable; urgency=low
+
+  [ Or Gerlitz ]
+  * iplink: Added support for the kernel IPoIB RTNL ops
+
+  [ Stephen Hemminger ]
+  * iplink: add vxlan to man page
+
+  [ Vincent Bernat ]
+  * ip: fix "ip -6 route add ... nexthop"
+
+  [ Pavel Emelyanov ]
+  * ss: Rename some tcp- names into inet-
+  * ss: Split inet_show_netlink into parts
+  * ss: Support sock-diag
+  * ss: Get udp sockets info via sock-diag
+
+  [ Stephen Hemminger ]
+  * bridge: remove trailing whitespace
+  * bridge: use rta_getattr_xxx wrappers
+
+  [ Mike Frysinger ]
+  * allow pkg-config to be customized
+
+  [ Andreas Henriksson ]
+  * iproute2: avoid errors from double-installing manpages
+
+  [ Stephen Hemminger ]
+  * man: fix incorrect use of "it's"
+
+  [ Andreas Henriksson ]
+  * iproute2: drop libresolv
+
+  [ Wookey ]
+  * configure: respect $CC environment var override
+
+  [ Nicolas Dichtel ]
+  * ip/ip6tunnel: fix help for TCLASS
+  * ip/ip6tunnel: reset encap limit flag on change
+  * ip/ip6tunnel: fix update of tclass and flowlabel
+
+  [ Rostislav Lisovy ]
+  * tc: add canid ematch to ematch_map
+
+  [ Petr Sabata ]
+  * iproute2: ss - change default filter to include all socket types
+
+  [ Stephen Hemminger ]
+  * v3.7.0
+
+ -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 14 Dec 2012 11:26:22 -0800
+
 iproute (20120801-vyatta+3) unstable; urgency=low
 
   [ Li Wei ]
