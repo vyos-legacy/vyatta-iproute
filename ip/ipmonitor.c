@@ -29,13 +29,16 @@ int prefix_banner;
 
 static void usage(void)
 {
-	fprintf(stderr, "Usage: ip monitor [ all | LISTofOBJECTS ]\n");
+	fprintf(stderr, "Usage: ip monitor [ all | LISTofOBJECTS ] [ FILE ]\n");
+	fprintf(stderr, "LISTofOBJECTS := link | address | route | mroute | prefix |\n");
+	fprintf(stderr, "                 neigh | netconf\n");
+	fprintf(stderr, "FILE := file FILENAME\n");
 	exit(-1);
 }
 
 
-int accept_msg(const struct sockaddr_nl *who,
-	       struct nlmsghdr *n, void *arg)
+static int accept_msg(const struct sockaddr_nl *who,
+		      struct nlmsghdr *n, void *arg)
 {
 	FILE *fp = (FILE*)arg;
 

@@ -79,12 +79,12 @@ void iplink_usage(void)
 	fprintf(stderr, "				   [ spoofchk { on | off} ] ] \n");
 	fprintf(stderr, "			  [ master DEVICE ]\n");
 	fprintf(stderr, "			  [ nomaster ]\n");
-	fprintf(stderr, "       ip link show [ DEVICE | group GROUP ]\n");
+	fprintf(stderr, "       ip link show [ DEVICE | group GROUP ] [up]\n");
 
 	if (iplink_have_newlink()) {
 		fprintf(stderr, "\n");
 		fprintf(stderr, "TYPE := { vlan | veth | vcan | dummy | ifb | macvlan | can |\n");
-		fprintf(stderr, "          bridge | ipoib | ip6tnl | ipip | sit }\n");
+		fprintf(stderr, "          bridge | ipoib | ip6tnl | ipip | sit | vxlan }\n");
 	}
 	exit(-1);
 }
@@ -94,9 +94,9 @@ static void usage(void)
 	iplink_usage();
 }
 
-static int on_off(char *msg)
+static int on_off(const char *msg, const char *realval)
 {
-	fprintf(stderr, "Error: argument of \"%s\" must be \"on\" or \"off\"\n", msg);
+	fprintf(stderr, "Error: argument of \"%s\" must be \"on\" or \"off\", not \"%s\"\n", msg, realval);
 	return -1;
 }
 
@@ -135,7 +135,7 @@ struct link_util *get_link_kind(const char *id)
 	return l;
 }
 
-int get_link_mode(const char *mode)
+static int get_link_mode(const char *mode)
 {
 	if (strcasecmp(mode, "default") == 0)
 		return IF_LINK_MODE_DEFAULT;
@@ -194,7 +194,7 @@ struct iplink_req {
 	char			buf[1024];
 };
 
-int iplink_parse_vf(int vf, int *argcp, char ***argvp,
+static int iplink_parse_vf(int vf, int *argcp, char ***argvp,
 			   struct iplink_req *req)
 {
 	int len, argc = *argcp;
@@ -348,7 +348,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "off") == 0) {
 				req->i.ifi_flags &= ~IFF_MULTICAST;
 			} else
-				return on_off("multicast");
+				return on_off("multicast", *argv);
 		} else if (strcmp(*argv, "allmulticast") == 0) {
 			NEXT_ARG();
 			req->i.ifi_change |= IFF_ALLMULTI;
@@ -357,7 +357,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "off") == 0) {
 				req->i.ifi_flags &= ~IFF_ALLMULTI;
 			} else
-				return on_off("allmulticast");
+				return on_off("allmulticast", *argv);
 		} else if (strcmp(*argv, "promisc") == 0) {
 			NEXT_ARG();
 			req->i.ifi_change |= IFF_PROMISC;
@@ -366,7 +366,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "off") == 0) {
 				req->i.ifi_flags &= ~IFF_PROMISC;
 			} else
-				return on_off("promisc");
+				return on_off("promisc", *argv);
 		} else if (strcmp(*argv, "trailers") == 0) {
 			NEXT_ARG();
 			req->i.ifi_change |= IFF_NOTRAILERS;
@@ -375,7 +375,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "on") == 0) {
 				req->i.ifi_flags &= ~IFF_NOTRAILERS;
 			} else
-				return on_off("trailers");
+				return on_off("trailers", *argv);
 		} else if (strcmp(*argv, "arp") == 0) {
 			NEXT_ARG();
 			req->i.ifi_change |= IFF_NOARP;
@@ -384,7 +384,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "off") == 0) {
 				req->i.ifi_flags |= IFF_NOARP;
 			} else
-				return on_off("noarp");
+				return on_off("noarp", *argv);
 		} else if (strcmp(*argv, "vf") == 0) {
 			struct rtattr *vflist;
 			NEXT_ARG();
@@ -417,7 +417,7 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
 			} else if (strcmp(*argv, "off") == 0) {
 				req->i.ifi_flags &= ~IFF_DYNAMIC;
 			} else
-				return on_off("dynamic");
+				return on_off("dynamic", *argv);
 		} else if (matches(*argv, "type") == 0) {
 			NEXT_ARG();
 			*type = *argv;
@@ -532,8 +532,6 @@ static int iplink_modify(int cmd, unsigned int flags, int argc, char **argv)
 			return 0;
 		}
 	}
-
-	ll_init_map(&rth);
 
 	if (!(flags & NLM_F_CREATE)) {
 		if (!dev) {
@@ -852,7 +850,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "off") == 0) {
 				flags &= ~IFF_MULTICAST;
 			} else
-				return on_off("multicast");
+				return on_off("multicast", *argv);
 		} else if (strcmp(*argv, "allmulticast") == 0) {
 			NEXT_ARG();
 			mask |= IFF_ALLMULTI;
@@ -861,7 +859,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "off") == 0) {
 				flags &= ~IFF_ALLMULTI;
 			} else
-				return on_off("allmulticast");
+				return on_off("allmulticast", *argv);
 		} else if (strcmp(*argv, "promisc") == 0) {
 			NEXT_ARG();
 			mask |= IFF_PROMISC;
@@ -870,7 +868,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "off") == 0) {
 				flags &= ~IFF_PROMISC;
 			} else
-				return on_off("promisc");
+				return on_off("promisc", *argv);
 		} else if (strcmp(*argv, "trailers") == 0) {
 			NEXT_ARG();
 			mask |= IFF_NOTRAILERS;
@@ -879,7 +877,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "on") == 0) {
 				flags &= ~IFF_NOTRAILERS;
 			} else
-				return on_off("trailers");
+				return on_off("trailers", *argv);
 		} else if (strcmp(*argv, "arp") == 0) {
 			NEXT_ARG();
 			mask |= IFF_NOARP;
@@ -888,7 +886,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "off") == 0) {
 				flags |= IFF_NOARP;
 			} else
-				return on_off("noarp");
+				return on_off("noarp", *argv);
 		} else if (matches(*argv, "dynamic") == 0) {
 			NEXT_ARG();
 			mask |= IFF_DYNAMIC;
@@ -897,7 +895,7 @@ static int do_set(int argc, char **argv)
 			} else if (strcmp(*argv, "off") == 0) {
 				flags &= ~IFF_DYNAMIC;
 			} else
-				return on_off("dynamic");
+				return on_off("dynamic", *argv);
 		} else {
                         if (strcmp(*argv, "dev") == 0) {
 				NEXT_ARG();
