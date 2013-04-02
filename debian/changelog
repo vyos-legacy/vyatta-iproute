@@ -1,3 +1,226 @@
+iproute (20130221-vyatta+1) unstable; urgency=low
+
+  [ Nicolas Dichtel ]
+  * ip/ip6tunnel: fix help for TCLASS
+  * ip/ip6tunnel: reset encap limit flag on change
+  * ip/ip6tunnel: fix update of tclass and flowlabel
+
+  [ Stephen Hemminger ]
+  * Update kernel headers to 3.8-pre
+  * bridge: add if_bridge.h header
+
+  [ Cong Wang ]
+  * iproute2: add mdb sub-command to bridge
+
+  [ Andreas Henriksson ]
+  * iproute2: fix tc ematch manpage section
+
+  [ Nicolas Dichtel ]
+  * ip: add support of netconf messages
+  * ip: add support of 'ip link type ip6tnl'
+  * ip: add support of 'ip link type [ipip|sit]'
+
+  [ David L Stevens ]
+  * add DOVE extensions for iproute2
+
+  [ Cong Wang ]
+  * iproute2: implement add/del mdb entry
+  * iproute2: add support to monitor mdb entries too
+  * iproute2: update usage info of bridge monitor
+
+  [ Nicolas Dichtel ]
+  * ip/link_iptnl: fix indentation Logged in as shemminger
+  * ip: update mand pages and usage() for 'ip mroute'
+  * ip: update man pages for 'ip link'
+  * ip: term OPTIONS was used twice in 'ip route' man pages
+  * ip: use rtnelink to manage mroute
+
+  [ Zhi Yong Wu ]
+  * ip: add the type 'vxlan' in the output of "ip link help"
+
+  [ Nicolas Dichtel ]
+  * ip: add man pages for netconf
+  * ip: update man pages and usage() for 'ip monitor'
+
+  [ Mike Frysinger ]
+  * configure: move toolchain init to a function
+  * lib: include the Config file too
+  * configure: pull AR from the env too
+
+  [ Jan Engelhardt ]
+  * build: unbreak linakge of m_xt.so
+
+  [ Stephen Hemminger ]
+  * build: indent shell functions in configure
+  * configure: restore old behaviour
+  * bridge: update kernel headers
+
+  [ Cong Wang ]
+  * bridge: distinguish permanent and temporary mdb entries
+  * bridge: make `bridge mdb` output consistent with input
+  * bridge: update help
+
+  [ Strake ]
+  * include needed files
+
+  [ Mike Frysinger ]
+  * add man7 to subdirs list
+  * do not ignore errors in man subdirs
+
+  [ Jamal Hadi Salim ]
+  * iproute2: act_ipt fix xtables breakage
+
+  [ Mike Frysinger ]
+  * ipxfrm: use alloca to allocate stack space
+
+  [ Stephen Hemminger ]
+  * README: update mail address and download location
+
+  [ Eric W. Biederman ]
+  * iproute2: Don't propogate mounts out of ip
+  * iproute2: Normalize return codes in "ip netns"
+  * iproute2: Improve "ip netns add" failure error message
+  * iproute2: Make "ip netns delete" more likely to succeed
+  * iproute2: Fill in the ip-netns.8 manpage
+  * iproute2: Add "ip netns pids" and "ip netns identify"
+
+  [ Stephen Hemminger ]
+  * Makefile: make warnings into errors
+  * libnetlink: add caveat
+
+  [ David Ward ]
+  * ip/iptunnel: Extend TOS syntax
+
+  [ Nicolas Dichtel ]
+  * ipaddr: fix a typo in error msg about SIOCGIFTXQLEN
+
+  [ Johannes Naab ]
+  * iproute2: tc netem rate: allow negative packet/cell overhead
+
+  [ Nicolas Dichtel ]
+  * iplink: display the value of IFLA_PROMISCUITY
+
+  [ Stephen Hemminger ]
+  * ip: change format of promiscuity display
+
+  [ Benjamin Poirier ]
+  * Use pkg-config to obtain xtables.h path
+
+  [ Kees van Reeuwijk ]
+  * iproute2: clarification of various man8 pages
+  * iproute2: clarifications in the tc-hfsc.7 man page
+  * iproute2: add a missing return statement
+  * iproute2: clarifications in the libnetlink.3 man page
+  * iproute2: improved error messages
+
+  [ Stephen Hemminger ]
+  * ip: make local functions static
+  * lib: make string arguments const
+  * Makefile: turn on warnings about missing prototypes
+  * ip: handle flush with table > 2^31
+
+  [ Lutz Jaenicke ]
+  * rtnl_wilddump_request: fix alignment issue for embedded platforms
+
+  [ Kees van Reeuwijk ]
+  * iproute2: clearer error messages for fifo and tbf qdiscs
+
+  [ Stephen Hemminger ]
+  * v3.8.0
+
+  [ Hannes Frederic Sowa ]
+  * ss: show send queue length on unix domain sockets
+
+  [ Stephen Hemminger ]
+  * ss: use rta_getattr_u32
+
+  [ Hannes Frederic Sowa ]
+  * ss: show socket memory stats for unix sockets if requested
+
+  [ Vijay Subramanian ]
+  * Fix compilation error of m_ipt.c with -Werror enabled
+
+  [ Stephen Hemminger ]
+  * ip: fix ipv6 ntable on ppc64
+  * Update kernel headers to 3.9.0-rc1
+  * fix dependency on sizeof(__u64) == sizeof(unsigned long long)
+  * ipntable: more fixes for ppc64
+
+  [ David Ward ]
+  * ip/iptunnel: Fix incorrect syntax in man page
+  * iplink_vlan: Add flag for Multiple VLAN Registration Protocol (MVRP)
+
+  [ David Stevens ]
+  * generalize VXLAN forwarding tables
+
+  [ Stephen Hemminger ]
+  * Revert "generalize VXLAN forwarding tables"
+
+  [ Vlad Yasevich ]
+  * bridge: Add vlan support to fdb entries
+  * bridge: Add vlan configuration support
+  * bridge: Update bridge man pages to include vlan command
+
+  [ Stephen Hemminger ]
+  * bridge: cleanup usage message
+
+  [ Eric W. Biederman ]
+  * iproute2: Document the -D and -I options
+
+  [ roopa ]
+  * Fix -oneline output when alias present
+
+  [ Stephen Hemminger ]
+  * Fix build when shared libraries are disabled
+
+  [ Petr Šabata ]
+  * iproute2: Mention the 'up' argument in documentation
+
+  [ Stephen Hemminger ]
+  * ipmaddr: add whitespace around =
+  * ipaddress: minor white space cleanup
+
+  [ Vlad Yasevich ]
+  * bridge: Add support for setting bridge port attributes
+  * bridge: Add support for printing bridge port attributes
+  * man: Add documentation for the bridge link operation.
+
+  [ Stephen Hemminger ]
+  * bridge: add oneline option
+
+  [ Thomas Egerer ]
+  * ip xfrm state: Allow different selector family
+  * ip xfrm state: Allow different selector family
+
+  [ Stephen Hemminger ]
+  * tc-tbf: remove ancient references to Alpha
+  * ll_map: remove unused address fields
+  * ll_map: use net/if.h to get prototype
+
+  [ James Chapman ]
+  * iproute2: add l2spec_type param to l2tp add session
+  * iproute2: update ip-l2tp man page
+
+  [ David Ward ]
+  * ip/xfrm: Extend SPI validity checking
+  * ip/xfrm: Do not allow redundant algorithm combinations to be specified
+  * ip/xfrm: Improve transform protocol-specific parameter checking
+  * ip/xfrm: Do not print a zero-length algorithm key
+  * ip/xfrm: Command syntax should not expect a key for compression
+  * ip/xfrm: Improve usage text and documentation
+  * ip/xfrm: Improve error strings
+
+  [ Nicolas Dichtel ]
+  * libnetlink: check flag NLM_F_DUMP_INTR during dumps
+
+  [ Stephen Hemminger ]
+  * ll_map: add name and index hash
+  * ip: remove unnecessary ll_init_map
+  * Update kernel headers to 3.9-rc5
+  * Allow unused result warnings
+
+ -- Stephen Hemminger <shemming@brocade.com>  Tue, 02 Apr 2013 09:50:11 -0700
+
 iproute (20121211-vyatta+1) unstable; urgency=low
 
   [ Or Gerlitz ]
