@@ -1,3 +1,19 @@
+iproute (20130221-vyatta+2) unstable; urgency=low
+
+  [ Petr Sabata ]
+  * iproute2: Fix some manpage typos
+
+  [ Hubert Kario ]
+  * add short description of batch mode in tc man page
+
+  [ Stephen Hemminger ]
+  * utils: fix range checking for get_u32/get_u64 et all
+  * add linux/fs.h
+  * Revert "add linux/fs.h"
+  * ipnetns: fix build on older systems
+
+ -- Stephen Hemminger <shemming@brocade.com>  Wed, 17 Apr 2013 13:37:09 -0700
+
 iproute (20130221-vyatta+1) unstable; urgency=low
 
   [ Nicolas Dichtel ]
