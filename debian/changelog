@@ -1,3 +1,18 @@
+iproute (20130430-vyatta+1) unstable; urgency=low
+
+  [ Alexander Duyck ]
+  * libnetlink: Use ifinfomsg instead of rtgenmsg in rtnl_wilddump_req_filter
+
+  [ Stephen Hemminger ]
+  * v3.9.0
+
+  [ Alexander Duyck ]
+  * iproute2: act_ipt fix xtables breakage on older versions.
+
+  [ Stephen Hemminger ]
+
+ -- Stephen Hemminger <shemming@brocade.com>  Wed, 01 May 2013 20:58:33 -0700
+
 iproute (20130221-vyatta+2) unstable; urgency=low
 
   [ Petr Sabata ]
