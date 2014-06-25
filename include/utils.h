@@ -1,6 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__ 1
 
+#include <sys/types.h>
 #include <asm/types.h>
 #include <resolv.h>
 #include <stdlib.h>
@@ -18,6 +19,7 @@ extern int oneline;
 extern int timestamp;
 extern char * _SL_;
 extern int max_flush_loops;
+extern int batch_mode;
 
 #ifndef IPPROTO_ESP
 #define IPPROTO_ESP	50
@@ -149,6 +151,7 @@ int print_timestamp(FILE *fp);
 extern int cmdlineno;
 extern ssize_t getcmdline(char **line, size_t *len, FILE *in);
 extern int makeargs(char *line, char *argv[], int maxargs);
+extern int inet_get_addr(const char *src, __u32 *dst, struct in6_addr *dst6);
 
 struct iplink_req;
 int iplink_parse(int argc, char **argv, struct iplink_req *req,

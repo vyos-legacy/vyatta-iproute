@@ -44,7 +44,7 @@ static int usage(void)
 	return -1;
 }
 
-int tc_qdisc_modify(int cmd, unsigned flags, int argc, char **argv)
+static int tc_qdisc_modify(int cmd, unsigned flags, int argc, char **argv)
 {
 	struct qdisc_util *q = NULL;
 	struct tc_estimator est;
@@ -138,12 +138,13 @@ int tc_qdisc_modify(int cmd, unsigned flags, int argc, char **argv)
 		addattr_l(&req.n, sizeof(req), TCA_RATE, &est, sizeof(est));
 
 	if (q) {
-		if (!q->parse_qopt) {
+		if (q->parse_qopt) {
+			if (q->parse_qopt(q, argc, argv, &req.n))
+				return 1;
+		} else if (argc) {
 			fprintf(stderr, "qdisc '%s' does not support option parsing\n", k);
 			return -1;
 		}
-		if (q->parse_qopt(q, argc, argv, &req.n))
-			return 1;
 	} else {
 		if (argc) {
 			if (matches(*argv, "help") == 0)
@@ -277,7 +278,7 @@ int print_qdisc(const struct sockaddr_nl *who,
 }
 
 
-int tc_qdisc_list(int argc, char **argv)
+static int tc_qdisc_list(int argc, char **argv)
 {
 	struct tcmsg t;
 	char d[16];

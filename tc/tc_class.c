@@ -40,7 +40,7 @@ static void usage(void)
 	return;
 }
 
-int tc_class_modify(int cmd, unsigned flags, int argc, char **argv)
+static int tc_class_modify(int cmd, unsigned flags, int argc, char **argv)
 {
 	struct {
 		struct nlmsghdr 	n;
@@ -232,7 +232,7 @@ int print_class(const struct sockaddr_nl *who,
 }
 
 
-int tc_class_list(int argc, char **argv)
+static int tc_class_list(int argc, char **argv)
 {
 	struct tcmsg t;
 	char d[16];
@@ -240,6 +240,9 @@ int tc_class_list(int argc, char **argv)
 	memset(&t, 0, sizeof(t));
 	t.tcm_family = AF_UNSPEC;
 	memset(d, 0, sizeof(d));
+
+	filter_qdisc = 0;
+	filter_classid = 0;
 
 	while (argc > 0) {
 		if (strcmp(*argv, "dev") == 0) {

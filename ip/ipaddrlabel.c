@@ -86,10 +86,10 @@ int print_addrlabel(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg
 	if (ifal->ifal_index)
 		fprintf(fp, "dev %s ", ll_index_to_name(ifal->ifal_index));
 
-	if (tb[IFAL_LABEL] && RTA_PAYLOAD(tb[IFAL_LABEL]) == sizeof(int32_t)) {
-		int32_t label;
+	if (tb[IFAL_LABEL] && RTA_PAYLOAD(tb[IFAL_LABEL]) == sizeof(uint32_t)) {
+		uint32_t label;
 		memcpy(&label, RTA_DATA(tb[IFAL_LABEL]), sizeof(label));
-		fprintf(fp, "label %d ", label);
+		fprintf(fp, "label %u ", label);
 	}
 
 	fprintf(fp, "\n");
@@ -246,8 +246,6 @@ static int ipaddrlabel_flush(int argc, char **argv)
 
 int do_ipaddrlabel(int argc, char **argv)
 {
-	ll_init_map(&rth);
-
 	if (argc < 1) {
 		return ipaddrlabel_list(0, NULL);
 	} else if (matches(argv[0], "list") == 0 ||

@@ -50,7 +50,7 @@ static void explain1(char *arg)
 	fprintf(stderr, "Illegal \"%s\"\n", arg);
 }
 
-char *police_action_n2a(int action, char *buf, int len)
+static const char *police_action_n2a(int action, char *buf, int len)
 {
 	switch (action) {
 	case -1:
@@ -72,7 +72,7 @@ char *police_action_n2a(int action, char *buf, int len)
 	}
 }
 
-int police_action_a2n(char *arg, int *result)
+static int police_action_a2n(const char *arg, int *result)
 {
 	int res;
 
@@ -100,7 +100,7 @@ int police_action_a2n(char *arg, int *result)
 }
 
 
-int get_police_result(int *action, int *result, char *arg)
+static int get_police_result(int *action, int *result, char *arg)
 {
 	char *p = strchr(arg, '/');
 
@@ -322,9 +322,11 @@ int
 print_police(struct action_util *a, FILE *f, struct rtattr *arg)
 {
 	SPRINT_BUF(b1);
+	SPRINT_BUF(b2);
 	struct tc_police *p;
 	struct rtattr *tb[TCA_POLICE_MAX+1];
 	unsigned buffer;
+	unsigned int linklayer;
 
 	if (arg == NULL)
 		return 0;
@@ -360,6 +362,9 @@ print_police(struct action_util *a, FILE *f, struct rtattr *arg)
 	} else
 		fprintf(f, " ");
 	fprintf(f, "overhead %ub ", p->rate.overhead);
+	linklayer = (p->rate.linklayer & TC_LINKLAYER_MASK);
+	if (linklayer > TC_LINKLAYER_ETHERNET || show_details)
+		fprintf(f, "linklayer %s ", sprint_linklayer(linklayer, b2));
 	fprintf(f, "\nref %d bind %d\n",p->refcnt, p->bindcnt);
 
 	return 0;

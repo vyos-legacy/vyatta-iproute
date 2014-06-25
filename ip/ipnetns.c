@@ -13,6 +13,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #include "utils.h"
 #include "ip_common.h"
@@ -28,6 +29,19 @@
 #define MNT_DETACH	0x00000002	/* Just detach from the tree */
 #endif /* MNT_DETACH */
 
+/* sys/mount.h may be out too old to have these */
+#ifndef MS_REC
+#define MS_REC		16384
+#endif
+
+#ifndef MS_SLAVE
+#define MS_SLAVE	(1 << 19)
+#endif
+
+#ifndef MS_SHARED
+#define MS_SHARED	(1 << 20)
+#endif
+
 #ifndef HAVE_SETNS
 static int setns(int fd, int nstype)
 {
@@ -40,14 +54,13 @@ static int setns(int fd, int nstype)
 }
 #endif /* HAVE_SETNS */
 
-
-static void usage(void) __attribute__((noreturn));
-
-static void usage(void)
+static int usage(void)
 {
 	fprintf(stderr, "Usage: ip netns list\n");
 	fprintf(stderr, "       ip netns add NAME\n");
 	fprintf(stderr, "       ip netns delete NAME\n");
+	fprintf(stderr, "       ip netns identify PID\n");
+	fprintf(stderr, "       ip netns pids NAME\n");
 	fprintf(stderr, "       ip netns exec NAME cmd ...\n");
 	fprintf(stderr, "       ip netns monitor\n");
 	exit(-1);
@@ -130,26 +143,34 @@ static int netns_exec(int argc, char **argv)
 		return -1;
 	}
 	if (argc < 2) {
-		fprintf(stderr, "No cmd specified\n");
+		fprintf(stderr, "No command specified\n");
 		return -1;
 	}
+
 	name = argv[0];
 	cmd = argv[1];
 	snprintf(net_path, sizeof(net_path), "%s/%s", NETNS_RUN_DIR, name);
-	netns = open(net_path, O_RDONLY);
+	netns = open(net_path, O_RDONLY | O_CLOEXEC);
 	if (netns < 0) {
-		fprintf(stderr, "Cannot open network namespace: %s\n",
-			strerror(errno));
+		fprintf(stderr, "Cannot open network namespace \"%s\": %s\n",
+			name, strerror(errno));
 		return -1;
 	}
+
 	if (setns(netns, CLONE_NEWNET) < 0) {
-		fprintf(stderr, "seting the network namespace failed: %s\n",
-			strerror(errno));
+		fprintf(stderr, "seting the network namespace \"%s\" failed: %s\n",
+			name, strerror(errno));
 		return -1;
 	}
 
 	if (unshare(CLONE_NEWNS) < 0) {
 		fprintf(stderr, "unshare failed: %s\n", strerror(errno));
+		return -1;
+	}
+	/* Don't let any mounts propagate back to the parent */
+	if (mount("", "/", "none", MS_SLAVE | MS_REC, NULL)) {
+		fprintf(stderr, "\"mount --make-rslave /\" failed: %s\n",
+			strerror(errno));
 		return -1;
 	}
 	/* Mount a version of /sys that describes the network namespace */
@@ -165,10 +186,180 @@ static int netns_exec(int argc, char **argv)
 	/* Setup bind mounts for config files in /etc */
 	bind_etc(name);
 
+	fflush(stdout);
+
+	if (batch_mode) {
+		int status;
+		pid_t pid;
+
+		pid = fork();
+		if (pid < 0) {
+			perror("fork");
+			exit(1);
+		}
+
+		if (pid != 0) {
+			/* Parent  */
+			if (waitpid(pid, &status, 0) < 0) {
+				perror("waitpid");
+				exit(1);
+			}
+
+			if (WIFEXITED(status)) {
+				/* ip must return the status of the child,
+				 * but do_cmd() will add a minus to this,
+				 * so let's add another one here to cancel it.
+				 */
+				return -WEXITSTATUS(status);
+			}
+
+			exit(1);
+		}
+	}
+
 	if (execvp(cmd, argv + 1)  < 0)
-		fprintf(stderr, "exec of %s failed: %s\n",
+		fprintf(stderr, "exec of \"%s\" failed: %s\n",
 			cmd, strerror(errno));
-	exit(-1);
+	_exit(1);
+}
+
+static int is_pid(const char *str)
+{
+	int ch;
+	for (; (ch = *str); str++) {
+		if (!isdigit(ch))
+			return 0;
+	}
+	return 1;
+}
+
+static int netns_pids(int argc, char **argv)
+{
+	const char *name;
+	char net_path[MAXPATHLEN];
+	int netns;
+	struct stat netst;
+	DIR *dir;
+	struct dirent *entry;
+
+	if (argc < 1) {
+		fprintf(stderr, "No netns name specified\n");
+		return -1;
+	}
+	if (argc > 1) {
+		fprintf(stderr, "extra arguments specified\n");
+		return -1;
+	}
+
+	name = argv[0];
+	snprintf(net_path, sizeof(net_path), "%s/%s", NETNS_RUN_DIR, name);
+	netns = open(net_path, O_RDONLY);
+	if (netns < 0) {
+		fprintf(stderr, "Cannot open network namespace: %s\n",
+			strerror(errno));
+		return -1;
+	}
+	if (fstat(netns, &netst) < 0) {
+		fprintf(stderr, "Stat of netns failed: %s\n",
+			strerror(errno));
+		return -1;
+	}
+	dir = opendir("/proc/");
+	if (!dir) {
+		fprintf(stderr, "Open of /proc failed: %s\n",
+			strerror(errno));
+		return -1;
+	}
+	while((entry = readdir(dir))) {
+		char pid_net_path[MAXPATHLEN];
+		struct stat st;
+		if (!is_pid(entry->d_name))
+			continue;
+		snprintf(pid_net_path, sizeof(pid_net_path), "/proc/%s/ns/net",
+			entry->d_name);
+		if (stat(pid_net_path, &st) != 0)
+			continue;
+		if ((st.st_dev == netst.st_dev) &&
+		    (st.st_ino == netst.st_ino)) {
+			printf("%s\n", entry->d_name);
+		}
+	}
+	closedir(dir);
+	return 0;
+	
+}
+
+static int netns_identify(int argc, char **argv)
+{
+	const char *pidstr;
+	char net_path[MAXPATHLEN];
+	int netns;
+	struct stat netst;
+	DIR *dir;
+	struct dirent *entry;
+
+	if (argc < 1) {
+		fprintf(stderr, "No pid specified\n");
+		return -1;
+	}
+	if (argc > 1) {
+		fprintf(stderr, "extra arguments specified\n");
+		return -1;
+	}
+	pidstr = argv[0];
+
+	if (!is_pid(pidstr)) {
+		fprintf(stderr, "Specified string '%s' is not a pid\n",
+			pidstr);
+		return -1;
+	}
+
+	snprintf(net_path, sizeof(net_path), "/proc/%s/ns/net", pidstr);
+	netns = open(net_path, O_RDONLY);
+	if (netns < 0) {
+		fprintf(stderr, "Cannot open network namespace: %s\n",
+			strerror(errno));
+		return -1;
+	}
+	if (fstat(netns, &netst) < 0) {
+		fprintf(stderr, "Stat of netns failed: %s\n",
+			strerror(errno));
+		return -1;
+	}
+	dir = opendir(NETNS_RUN_DIR);
+	if (!dir) {
+		/* Succeed treat a missing directory as an empty directory */
+		if (errno == ENOENT)
+			return 0;
+
+		fprintf(stderr, "Failed to open directory %s:%s\n",
+			NETNS_RUN_DIR, strerror(errno));
+		return -1;
+	}
+
+	while((entry = readdir(dir))) {
+		char name_path[MAXPATHLEN];
+		struct stat st;
+
+		if (strcmp(entry->d_name, ".") == 0)
+			continue;
+		if (strcmp(entry->d_name, "..") == 0)
+			continue;
+
+		snprintf(name_path, sizeof(name_path), "%s/%s",	NETNS_RUN_DIR,
+			entry->d_name);
+
+		if (stat(name_path, &st) != 0)
+			continue;
+
+		if ((st.st_dev == netst.st_dev) &&
+		    (st.st_ino == netst.st_ino)) {
+			printf("%s\n", entry->d_name);
+		}
+	}
+	closedir(dir);
+	return 0;
+	
 }
 
 static int netns_delete(int argc, char **argv)
@@ -185,7 +376,7 @@ static int netns_delete(int argc, char **argv)
 	snprintf(netns_path, sizeof(netns_path), "%s/%s", NETNS_RUN_DIR, name);
 	umount2(netns_path, MNT_DETACH);
 	if (unlink(netns_path) < 0) {
-		fprintf(stderr, "Cannot remove %s: %s\n",
+		fprintf(stderr, "Cannot remove namespace file \"%s\": %s\n",
 			netns_path, strerror(errno));
 		return -1;
 	}
@@ -205,6 +396,7 @@ static int netns_add(int argc, char **argv)
 	char netns_path[MAXPATHLEN];
 	const char *name;
 	int fd;
+	int made_netns_run_dir_mount = 0;
 
 	if (argc < 1) {
 		fprintf(stderr, "No netns name specified\n");
@@ -217,17 +409,40 @@ static int netns_add(int argc, char **argv)
 	/* Create the base netns directory if it doesn't exist */
 	mkdir(NETNS_RUN_DIR, S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
 
+	/* Make it possible for network namespace mounts to propagate between
+	 * mount namespaces.  This makes it likely that a unmounting a network
+	 * namespace file in one namespace will unmount the network namespace
+	 * file in all namespaces allowing the network namespace to be freed
+	 * sooner.
+	 */
+	while (mount("", NETNS_RUN_DIR, "none", MS_SHARED | MS_REC, NULL)) {
+		/* Fail unless we need to make the mount point */
+		if (errno != EINVAL || made_netns_run_dir_mount) {
+			fprintf(stderr, "mount --make-shared %s failed: %s\n",
+				NETNS_RUN_DIR, strerror(errno));
+			return -1;
+		}
+
+		/* Upgrade NETNS_RUN_DIR to a mount point */
+		if (mount(NETNS_RUN_DIR, NETNS_RUN_DIR, "none", MS_BIND, NULL)) {
+			fprintf(stderr, "mount --bind %s %s failed: %s\n",
+				NETNS_RUN_DIR, NETNS_RUN_DIR, strerror(errno));
+			return -1;
+		}
+		made_netns_run_dir_mount = 1;
+	}
+
 	/* Create the filesystem state */
 	fd = open(netns_path, O_RDONLY|O_CREAT|O_EXCL, 0);
 	if (fd < 0) {
-		fprintf(stderr, "Could not create %s: %s\n",
+		fprintf(stderr, "Cannot not create namespace file \"%s\": %s\n",
 			netns_path, strerror(errno));
 		return -1;
 	}
 	close(fd);
 	if (unshare(CLONE_NEWNET) < 0) {
-		fprintf(stderr, "Failed to create a new network namespace: %s\n",
-			strerror(errno));
+		fprintf(stderr, "Failed to create a new network namespace \"%s\": %s\n",
+			name, strerror(errno));
 		goto out_delete;
 	}
 
@@ -240,7 +455,6 @@ static int netns_add(int argc, char **argv)
 	return 0;
 out_delete:
 	netns_delete(argc, argv);
-	exit(-1);
 	return -1;
 }
 
@@ -290,13 +504,19 @@ int do_netns(int argc, char **argv)
 		return netns_list(argc-1, argv+1);
 
 	if (matches(*argv, "help") == 0)
-		usage();
+		return usage();
 
 	if (matches(*argv, "add") == 0)
 		return netns_add(argc-1, argv+1);
 
 	if (matches(*argv, "delete") == 0)
 		return netns_delete(argc-1, argv+1);
+
+	if (matches(*argv, "identify") == 0)
+		return netns_identify(argc-1, argv+1);
+
+	if (matches(*argv, "pids") == 0)
+		return netns_pids(argc-1, argv+1);
 
 	if (matches(*argv, "exec") == 0)
 		return netns_exec(argc-1, argv+1);

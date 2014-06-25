@@ -152,64 +152,43 @@ int get_rate(unsigned *rate, const char *str)
 	if (p == str)
 		return -1;
 
-	if (*p == '\0') {
-		*rate = bps / 8.;	/* assume bits/sec */
-		return 0;
-	}
-
 	for (s = suffixes; s->name; ++s) {
 		if (strcasecmp(s->name, p) == 0) {
-			*rate = (bps * s->scale) / 8.;
-			return 0;
+			bps *= s->scale;
+			p += strlen(p);
+			break;
 		}
 	}
 
-	return -1;
-}
+	if (*p)
+		return -1; /* unknown suffix */
 
-int get_rate_and_cell(unsigned *rate, int *cell_log, char *str)
-{
-	char * slash = strchr(str, '/');
-
-	if (slash)
-		*slash = 0;
-
-	if (get_rate(rate, str))
+	bps /= 8; /* -> bytes per second */
+	*rate = bps;
+	/* detect if an overflow happened */
+	if (*rate != floor(bps))
 		return -1;
-
-	if (slash) {
-		int cell;
-		int i;
-
-		if (get_integer(&cell, slash+1, 0))
-			return -1;
-		*slash = '/';
-
-		for (i=0; i<32; i++) {
-			if ((1<<i) == cell) {
-				*cell_log = i;
-				return 0;
-			}
-		}
-		return -1;
-	}
 	return 0;
 }
 
-void print_rate(char *buf, int len, __u32 rate)
+void print_rate(char *buf, int len, __u64 rate)
 {
 	double tmp = (double)rate*8;
 	extern int use_iec;
 
 	if (use_iec) {
-		if (tmp >= 1000.0*1024.0*1024.0)
+		if (tmp >= 1000.0*1024.0*1024.0*1024.0)
+			snprintf(buf, len, "%.0fGibit", tmp/(1024.0*1024.0*1024.0));
+		else if (tmp >= 1000.0*1024.0*1024.0)
 			snprintf(buf, len, "%.0fMibit", tmp/(1024.0*1024.0));
 		else if (tmp >= 1000.0*1024)
 			snprintf(buf, len, "%.0fKibit", tmp/1024);
 		else
 			snprintf(buf, len, "%.0fbit", tmp);
 	} else {
-		if (tmp >= 1000.0*1000000.0)
+		if (tmp >= 1000.0*1000000000.0)
+			snprintf(buf, len, "%.0fGbit", tmp/1000000000.0);
+		else if (tmp >= 1000.0*1000000.0)
 			snprintf(buf, len, "%.0fMbit", tmp/1000000.0);
 		else if (tmp >= 1000.0 * 1000.0)
 			snprintf(buf, len, "%.0fKbit", tmp/1000.0);
@@ -218,7 +197,7 @@ void print_rate(char *buf, int len, __u32 rate)
 	}
 }
 
-char * sprint_rate(__u32 rate, char *buf)
+char * sprint_rate(__u64 rate, char *buf)
 {
 	print_rate(buf, SPRINT_BSIZE-1, rate);
 	return buf;
@@ -485,9 +464,19 @@ void print_tcstats2_attr(FILE *fp, struct rtattr *rta, char *prefix, struct rtat
 			q.drops, q.overlimits, q.requeues);
 	}
 
-	if (tbs[TCA_STATS_RATE_EST]) {
+	if (tbs[TCA_STATS_RATE_EST64]) {
+		struct gnet_stats_rate_est64 re = {0};
+
+		memcpy(&re, RTA_DATA(tbs[TCA_STATS_RATE_EST64]),
+		       MIN(RTA_PAYLOAD(tbs[TCA_STATS_RATE_EST64]),
+			   sizeof(re)));
+		fprintf(fp, "\n%srate %s %llupps ",
+			prefix, sprint_rate(re.bps, b1), re.pps);
+	} else if (tbs[TCA_STATS_RATE_EST]) {
 		struct gnet_stats_rate_est re = {0};
-		memcpy(&re, RTA_DATA(tbs[TCA_STATS_RATE_EST]), MIN(RTA_PAYLOAD(tbs[TCA_STATS_RATE_EST]), sizeof(re)));
+
+		memcpy(&re, RTA_DATA(tbs[TCA_STATS_RATE_EST]),
+		       MIN(RTA_PAYLOAD(tbs[TCA_STATS_RATE_EST]), sizeof(re)));
 		fprintf(fp, "\n%srate %s %upps ",
 			prefix, sprint_rate(re.bps, b1), re.pps);
 	}

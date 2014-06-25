@@ -1,9 +1,11 @@
 IPOBJ=ip.o ipaddress.o ipaddrlabel.o iproute.o iprule.o ipnetns.o \
     rtm_map.o iptunnel.o ip6tunnel.o tunnel.o ipneigh.o ipntable.o iplink.o \
-    ipmaddr.o ipmonitor.o ipmroute.o ipprefix.o iptuntap.o \
+    ipmaddr.o ipmonitor.o ipmroute.o ipprefix.o iptuntap.o iptoken.o \
     ipxfrm.o xfrm_state.o xfrm_policy.o xfrm_monitor.o \
     iplink_vlan.o link_veth.o link_gre.o iplink_can.o \
-    iplink_macvlan.o iplink_macvtap.o ipl2tp.o link_vti.o
+    iplink_macvlan.o iplink_macvtap.o ipl2tp.o link_vti.o \
+    iplink_vxlan.o tcp_metrics.o iplink_ipoib.o ipnetconf.o link_ip6tnl.o \
+    link_iptnl.o link_gre6.o
 
 RTMONOBJ=rtmon.o
 
@@ -20,7 +22,6 @@ TARGETS=ip rtmon
 all: $(TARGETS) $(SCRIPTS)
 
 ip: $(IPOBJ) $(LIBNETLINK)
-
 
 rtmon: $(RTMONOBJ)
 
