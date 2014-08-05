@@ -1,3 +1,631 @@
+iproute (20120801+vyos1+helium2) unstable; urgency=low
+
+  [ Li Wei ]
+  * iproute2: fix typo in help message.
+  * iproute2: configure: Add search path for 64bit library.
+
+  [ Stephen Hemminger ]
+  * Explain TC class id limits
+
+  [ Pavel Emelyanov ]
+  * iproute: Fix errno propagation from rtnl_talk
+
+  [ Stephen Hemminger ]
+  * Update can.h to 3.6-rc2
+
+  [ Rostislav Lisovy ]
+  * Ematch used to classify CAN frames according to their identifiers
+
+  [ Oliver Hartkopp ]
+  * iproute2: Add missing tc-ematch.8 for man page installation
+
+  [ John Fastabend ]
+  * iproute2: Add FDB print and update cmds for self and master
+
+  [ Stephen Hemminger ]
+  * Install all tc and ip sub pages
+
+  [ John Fastabend ]
+  * iproute2: build failure due to missing '\' in Makefile
+  * iproute2: bridge: remove replace and change options
+
+  [ Mathias Krause ]
+  * configure: remove TMPDIR on exit
+
+  [ Andreas Schwab ]
+  * iproute2: Fix various manpage formatting nits
+
+  [ Pavel Emelyanov ]
+  * iproute: Add magic cookie to route dump file
+  * iproute: Add route showdump command (v2)
+
+  [ Li Wei ]
+  * iproute2: tc.8: update UNITS section.
+
+  [ Julian Anastasov ]
+  * iproute2: add libgenl files
+  * iproute2: use libgenl in ipl2tp
+
+  [ Pavel Emelyanov ]
+  * iproute: Add ability to save, restore and show the interfaces'
+    addresses (resend)
+
+  [ John Fastabend ]
+  * iproute2: bridge: finish removing replace option in man pages
+
+  [ Stephen Hemminger ]
+  * man: make sure tc man page gets installed
+
+  [ Julian Anastasov ]
+  * iproute2: GENL: merge GENL_REQUEST and GENL_INITIALIZER
+
+  [ Stephen Hemminger ]
+  * Add support for AF_BRIDGE
+
+  [ Werner Fink ]
+  * Change how pdf doc's are created
+
+  [ Stephen Hemminger ]
+  * vxlan support
+  * update header files to 3.6
+  * v3.6.0
+  * bridge: manage VXLAN based forwarding tables
+  * l2tp: remove references to old bridge utils
+
+  [ Petr Písař ]
+  * iproute2: List interfaces without net address by default
+
+  [ Stephen Hemminger ]
+  * Update headers to 3.7-pre-rc
+
+  [ Matt Burgess ]
+  * iproute2-3.6.0 assumes presence of iptables
+
+  [ Nicolas Dichtel ]
+  * iproute2: inform user when a neighbor is removed
+
+  [ Julian Anastasov ]
+  * iproute2: add support for tcp_metrics
+
+  [ Stephen Hemminger ]
+  * vxlan: add support for port range
+  * vxlan: only send group address if defined
+  * Update kernel headers to 3.7-rc1
+
+  [ Or Gerlitz ]
+  * iplink: Added support for the kernel IPoIB RTNL ops
+
+  [ Stephen Hemminger ]
+  * iplink: add vxlan to man page
+
+  [ Vincent Bernat ]
+  * ip: fix "ip -6 route add ... nexthop"
+
+  [ Pavel Emelyanov ]
+  * ss: Rename some tcp- names into inet-
+  * ss: Split inet_show_netlink into parts
+  * ss: Support sock-diag
+  * ss: Get udp sockets info via sock-diag
+
+  [ Stephen Hemminger ]
+  * bridge: remove trailing whitespace
+  * bridge: use rta_getattr_xxx wrappers
+
+  [ Mike Frysinger ]
+  * allow pkg-config to be customized
+
+  [ Andreas Henriksson ]
+  * iproute2: avoid errors from double-installing manpages
+
+  [ Stephen Hemminger ]
+  * man: fix incorrect use of "it's"
+
+  [ Andreas Henriksson ]
+  * iproute2: drop libresolv
+
+  [ Nicolas Dichtel ]
+  * ip/ip6tunnel: fix help for TCLASS
+  * ip/ip6tunnel: reset encap limit flag on change
+  * ip/ip6tunnel: fix update of tclass and flowlabel
+
+  [ Wookey ]
+  * configure: respect $CC environment var override
+
+  [ Nicolas Dichtel ]
+  * ip/ip6tunnel: fix help for TCLASS
+  * ip/ip6tunnel: reset encap limit flag on change
+  * ip/ip6tunnel: fix update of tclass and flowlabel
+
+  [ Rostislav Lisovy ]
+  * tc: add canid ematch to ematch_map
+
+  [ Petr Sabata ]
+  * iproute2: ss - change default filter to include all socket types
+
+  [ Stephen Hemminger ]
+  * v3.7.0
+  * Update kernel headers to 3.8-pre
+  * bridge: add if_bridge.h header
+
+  [ Cong Wang ]
+  * iproute2: add mdb sub-command to bridge
+
+  [ Andreas Henriksson ]
+  * iproute2: fix tc ematch manpage section
+
+  [ Nicolas Dichtel ]
+  * ip: add support of netconf messages
+  * ip: add support of 'ip link type ip6tnl'
+  * ip: add support of 'ip link type [ipip|sit]'
+
+  [ David L Stevens ]
+  * add DOVE extensions for iproute2
+
+  [ Cong Wang ]
+  * iproute2: implement add/del mdb entry
+  * iproute2: add support to monitor mdb entries too
+  * iproute2: update usage info of bridge monitor
+
+  [ Nicolas Dichtel ]
+  * ip/link_iptnl: fix indentation Logged in as shemminger
+  * ip: update mand pages and usage() for 'ip mroute'
+  * ip: update man pages for 'ip link'
+  * ip: term OPTIONS was used twice in 'ip route' man pages
+  * ip: use rtnelink to manage mroute
+
+  [ Zhi Yong Wu ]
+  * ip: add the type 'vxlan' in the output of "ip link help"
+
+  [ Nicolas Dichtel ]
+  * ip: add man pages for netconf
+  * ip: update man pages and usage() for 'ip monitor'
+
+  [ Mike Frysinger ]
+  * configure: move toolchain init to a function
+  * lib: include the Config file too
+  * configure: pull AR from the env too
+
+  [ Jan Engelhardt ]
+  * build: unbreak linakge of m_xt.so
+
+  [ Stephen Hemminger ]
+  * build: indent shell functions in configure
+  * configure: restore old behaviour
+  * bridge: update kernel headers
+
+  [ Cong Wang ]
+  * bridge: distinguish permanent and temporary mdb entries
+  * bridge: make `bridge mdb` output consistent with input
+  * bridge: update help
+
+  [ Strake ]
+  * include needed files
+
+  [ Mike Frysinger ]
+  * add man7 to subdirs list
+  * do not ignore errors in man subdirs
+
+  [ Jamal Hadi Salim ]
+  * iproute2: act_ipt fix xtables breakage
+
+  [ Mike Frysinger ]
+  * ipxfrm: use alloca to allocate stack space
+
+  [ Stephen Hemminger ]
+  * README: update mail address and download location
+
+  [ Eric W. Biederman ]
+  * iproute2: Don't propogate mounts out of ip
+  * iproute2: Normalize return codes in "ip netns"
+  * iproute2: Improve "ip netns add" failure error message
+  * iproute2: Make "ip netns delete" more likely to succeed
+  * iproute2: Fill in the ip-netns.8 manpage
+  * iproute2: Add "ip netns pids" and "ip netns identify"
+
+  [ Stephen Hemminger ]
+  * Makefile: make warnings into errors
+  * libnetlink: add caveat
+
+  [ David Ward ]
+  * ip/iptunnel: Extend TOS syntax
+
+  [ Nicolas Dichtel ]
+  * ipaddr: fix a typo in error msg about SIOCGIFTXQLEN
+
+  [ Johannes Naab ]
+  * iproute2: tc netem rate: allow negative packet/cell overhead
+
+  [ Nicolas Dichtel ]
+  * iplink: display the value of IFLA_PROMISCUITY
+
+  [ Stephen Hemminger ]
+  * ip: change format of promiscuity display
+
+  [ Benjamin Poirier ]
+  * Use pkg-config to obtain xtables.h path
+
+  [ Kees van Reeuwijk ]
+  * iproute2: clarification of various man8 pages
+  * iproute2: clarifications in the tc-hfsc.7 man page
+  * iproute2: add a missing return statement
+  * iproute2: clarifications in the libnetlink.3 man page
+  * iproute2: improved error messages
+
+  [ Stephen Hemminger ]
+  * ip: make local functions static
+  * lib: make string arguments const
+  * Makefile: turn on warnings about missing prototypes
+  * ip: handle flush with table > 2^31
+
+  [ Lutz Jaenicke ]
+  * rtnl_wilddump_request: fix alignment issue for embedded platforms
+
+  [ Kees van Reeuwijk ]
+  * iproute2: clearer error messages for fifo and tbf qdiscs
+
+  [ Stephen Hemminger ]
+  * v3.8.0
+
+  [ Hannes Frederic Sowa ]
+  * ss: show send queue length on unix domain sockets
+
+  [ Stephen Hemminger ]
+  * ss: use rta_getattr_u32
+
+  [ Hannes Frederic Sowa ]
+  * ss: show socket memory stats for unix sockets if requested
+
+  [ Vijay Subramanian ]
+  * Fix compilation error of m_ipt.c with -Werror enabled
+
+  [ Stephen Hemminger ]
+  * ip: fix ipv6 ntable on ppc64
+  * Update kernel headers to 3.9.0-rc1
+  * fix dependency on sizeof(__u64) == sizeof(unsigned long long)
+  * ipntable: more fixes for ppc64
+
+  [ David Ward ]
+  * ip/iptunnel: Fix incorrect syntax in man page
+  * iplink_vlan: Add flag for Multiple VLAN Registration Protocol (MVRP)
+
+  [ David Stevens ]
+  * generalize VXLAN forwarding tables
+
+  [ Stephen Hemminger ]
+  * Revert "generalize VXLAN forwarding tables"
+
+  [ Vlad Yasevich ]
+  * bridge: Add vlan support to fdb entries
+  * bridge: Add vlan configuration support
+  * bridge: Update bridge man pages to include vlan command
+
+  [ Stephen Hemminger ]
+  * bridge: cleanup usage message
+
+  [ Eric W. Biederman ]
+  * iproute2: Document the -D and -I options
+
+  [ roopa ]
+  * Fix -oneline output when alias present
+
+  [ Stephen Hemminger ]
+  * Fix build when shared libraries are disabled
+
+  [ Petr Šabata ]
+  * iproute2: Mention the 'up' argument in documentation
+
+  [ Stephen Hemminger ]
+  * ipmaddr: add whitespace around =
+  * ipaddress: minor white space cleanup
+
+  [ Vlad Yasevich ]
+  * bridge: Add support for setting bridge port attributes
+  * bridge: Add support for printing bridge port attributes
+  * man: Add documentation for the bridge link operation.
+
+  [ Stephen Hemminger ]
+  * bridge: add oneline option
+
+  [ Thomas Egerer ]
+  * ip xfrm state: Allow different selector family
+  * ip xfrm state: Allow different selector family
+
+  [ Stephen Hemminger ]
+  * tc-tbf: remove ancient references to Alpha
+  * ll_map: remove unused address fields
+  * ll_map: use net/if.h to get prototype
+
+  [ James Chapman ]
+  * iproute2: add l2spec_type param to l2tp add session
+  * iproute2: update ip-l2tp man page
+
+  [ David Ward ]
+  * ip/xfrm: Extend SPI validity checking
+  * ip/xfrm: Do not allow redundant algorithm combinations to be
+    specified
+  * ip/xfrm: Improve transform protocol-specific parameter checking
+  * ip/xfrm: Do not print a zero-length algorithm key
+  * ip/xfrm: Command syntax should not expect a key for compression
+  * ip/xfrm: Improve usage text and documentation
+  * ip/xfrm: Improve error strings
+
+  [ Nicolas Dichtel ]
+  * libnetlink: check flag NLM_F_DUMP_INTR during dumps
+
+  [ Stephen Hemminger ]
+  * ll_map: add name and index hash
+  * ip: remove unnecessary ll_init_map
+  * Update kernel headers to 3.9-rc5
+
+  [ Petr Sabata ]
+  * iproute2: Fix some manpage typos
+
+  [ Hubert Kario ]
+  * add short description of batch mode in tc man page
+
+  [ Stephen Hemminger ]
+  * utils: fix range checking for get_u32/get_u64 et all
+  * add linux/fs.h
+  * Revert "add linux/fs.h"
+  * ipnetns: fix build on older systems
+
+  [ Alexander Duyck ]
+  * libnetlink: Use ifinfomsg instead of rtgenmsg in
+    rtnl_wilddump_req_filter
+
+  [ Stephen Hemminger ]
+  * v3.9.0
+
+  [ Alexander Duyck ]
+  * iproute2: act_ipt fix xtables breakage on older versions.
+
+  [ Kamil Rytarowski ]
+  * iproute2 patch against GCC 4.8.0
+
+  [ Nicolas Dichtel ]
+  * ip: add missing help about mode argument
+
+  [ Stephen Hemminger ]
+  * Update headers to 3.10
+
+  [ Daniel Borkmann ]
+  * ip: ipv6: add tokenized interface identifier support
+
+  [ Stephen Hemminger ]
+  * Add vxlan destination port option
+
+  [ David Stevens ]
+  * iproute2: generalize VXLAN forwarding tables
+
+  [ Eric Dumazet ]
+  * ss: add fastopen support
+
+  [ David L Stevens ]
+  * iproute2: support NTF_ROUTER flag in VXLAN fdb entries
+
+  [ Stephen Hemminger ]
+  * vxlan: nag user to set port value
+  * add BPF header files
+
+  [ Nicolas Dichtel ]
+  * ip/xfrm: all to set flag XFRM_SA_XFLAG_DONT_ENCAP_DSCP
+  * ipnetconf: by default dump all entries
+  * ss: allow to retrieve AF_PACKET info via netlink
+
+  [ Pavel Emelyanov ]
+  * ss: Show inet and unix sockets' shutdown state
+
+  [ Stephen Hemminger ]
+  * vxlan: remove dstport option
+
+  [ Rami Rosen ]
+  * ss: replace bfp with bpf in usage().
+
+  [ Nicolas Dichtel ]
+  * man: describe --bpf option of ss
+
+  [ Sriram Narasimhan ]
+  * iptuntap: allow creation of multi-queue tun/tap device
+
+  [ Stephen Hemminger ]
+  * man: get rid of useless reference to GNU style options
+
+  [ John Fastabend ]
+  * iproute2: bridge: fix 'bridge link' setlink/getlink parsing
+
+  [ Andreas Henriksson ]
+  * iproute2: fix build failure on sparc due to -Wformat and tv_usec
+
+  [ Andrey Vagin ]
+  * ip: set the close-on-exec flag for descriptors
+  * ss: handle socket diag request in a separate function
+  * ss: create a function to print info about netlink sockets
+  * ss: show destination address for netlink sockets
+  * ss: Get netlink sockets info via sock-diag (v2)
+
+  [ Eric Dumazet ]
+  * htb: report overhead attribute
+
+  [ Stephen Hemminger ]
+  * htb: fix indentation
+
+  [ Eric Dumazet ]
+  * get_rate: detect 32bit overflows
+
+  [ Stephen Hemminger ]
+  * update to 3.10-net-next headers
+
+  [ Rony Efraim ]
+  * Add VF link state control
+
+  [ Cong Wang ]
+  * add quickack option to ip route
+
+  [ Patric McHardy ]
+  * ip: iplink_vlan: add 802.1ad support
+
+  [ esr@thyrsus.com ]
+  * First set of manpage markup fixes
+
+  [ Eric Dumazet ]
+  * ss: add more TCP_INFO components
+
+  [ Adam Borowski ]
+  * ip: fix build failure if time_t is not long int
+
+  [ esr@thyrsus.com ]
+  * tc-stab.8: Fix synopsis errors, an invalid escape, and incorrect
+    English usge.
+
+  [ Amerigo Wang ]
+  * iptunnel: check SIT_ISATAP flag only for SIT tunnel
+
+  [ JunweiZhang ]
+  * ipbatch: fix use of 'ip netns exec'
+
+  [ Thomas Richter ]
+  * iproute2 vxlan documentation update for bridge command
+  * iproute2 vxlan documentation update for ip command
+
+  [ esr@thyrsus.com ]
+  * In tc-ematch.8, remove no-op .ti requests to prevent translation
+    warnings
+  * ip-rule.8: Fix presentational use of .SS.
+
+  [ Stephen Hemminger ]
+  * netns: follow return value conventions of the rest of the code
+  * ip: add batch mode to man page
+  * Make tc and ip batch mode consistent
+  * v3.10.0
+  * Update to 3.11-rc1 kernel headers
+
+  [ Atzm Watanabe ]
+  * vxlan: Allow setting destination to unicast address.
+
+  [ Nicolas Dichtel ]
+  * ipadress: fix display of IPv6 peer address
+  * ip: allow to specify mode for sit tunnels
+
+  [ Stephen Hemminger ]
+  * Remove -Werror
+  * Update kernel headers to net-next for 3.12
+
+  [ Stefan Tomanek ]
+  * ip link: fix display of interface groups
+  * ip rule: add route suppression options
+
+  [ Thomas Richter ]
+  * iproute vxlan add support for fdb replace command
+
+  [ Stephen Hemminger ]
+  * cleanup help message
+  * Fix spelling errors
+  * More minor spelling fixes
+
+  [ Martin Schwenke ]
+  * ip: Add label option to ip monitor
+
+  [ Stephen Hemminger ]
+  * tc: allow qdisc without options
+  * add ability to filter neighbour discovery by protocol
+
+  [ Richard Godbee ]
+  * iproute2: iproute.c: fix usage() spacing problems
+  * iproute2: spelling: noptmudisc -> nopmtudisc
+  * iproute2: ip-route.8.in: minor fixes
+
+  [ Lutz Jaenicke ]
+  * macvlan: fix typo in macvlan_print_opt()
+
+  [ Thomas Egerer ]
+  * ip/xfrm: Fix potential SIGSEGV when printing extra flags
+
+  [ Stephen Hemminger ]
+  * Update kernel headers to 3.11
+
+  [ Nicolas Dichtel ]
+  * ipnetns: fix ip batch mode when using 'netns exec'
+
+  [ Jesper Dangaard Brouer ]
+  * linklayer interface between kernel and tc/userspace
+
+  [ Stephen Hemminger ]
+  * v3.11.0
+  * Update to 3.11 net-next kernel headers
+  * nstat: add json output format
+
+  [ Eric Dumazet ]
+  * pkt_sched: fq: Fair Queue packet scheduler
+
+  [ Petr Písař ]
+  * iproute2: bridge: document mdb
+
+  [ Eric Dumazet ]
+  * tc: support TCA_STATS_RATE_EST64
+  * htb: add support for direct_qlen attribute
+
+  [ Stephen Hemminger ]
+  * Update to 3.12-rc1 headers
+  * nstat: revise json output
+  * ifstat: add json output format
+  * lnstat: add json output format
+  * lnstat, nstat, ifstat: update man pages
+
+  [ Petr Písař ]
+  * iproute2: bridge: Close file with bridge monitor file
+
+  [ Fan Du ]
+  * xfrm: use memcpy to suppress gcc phony buffer overflow warning.
+
+  [ Stephen Hemminger ]
+  * tc: add default action to kernel headers
+
+  [ Jamal Hadi Salim ]
+  * tc: introduce simple action
+  * action: typo nat fix
+
+  [ xeb@mail.ru ]
+  * iproute2: GRE over IPv6 tunnel support.
+
+  [ Stephen Hemminger ]
+  * ipv6 gre: add entry to ether types
+
+  [ xeb@mail.ru ]
+  * iproute2: ip6gre: update man pages
+
+  [ Christophe Gouault ]
+  * xfrm: enable to set non-wildcard mark 0 on SAs and SPs
+
+  [ Nicolas Dichtel ]
+  * iplink: update available type list
+
+  [ Stephen Hemminger ]
+  * Fix handling of qdis without options
+  * htb: remove old unused duplicate qdisc name
+  * update kernel headers
+
+  [ WANG Cong ]
+  * vxlan: add ipv6 support
+
+  [ Nigel Kukard ]
+  * Fix tc stats when using -batch mode
+
+  [ Hangbin Liu ]
+  * ipaddrlabel: use uint32_t instead of int32_t
+
+  [ Andreas Henriksson ]
+  * ss: avoid passing negative numbers to malloc
+
+  [ Sami Kerola ]
+  * ip: make -resolve addr to print names rather than addresses
+
+  [ Stephen Hemminger ]
+  * v3.12.0
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Tue, 05 Aug 2014 15:24:39 +0000
+
 iproute (20120801+vyos1+helium1) unstable; urgency=low
 
   * New branch
