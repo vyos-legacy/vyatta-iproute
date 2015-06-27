@@ -1,3 +1,10 @@
+iproute (20131122+vyos2+lithium4) unstable; urgency=low
+
+  [ Alex Harpin ]
+  * vyatta-iproute: add dh_gencontrol to enable development builds
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sat, 27 Jun 2015 19:53:06 +0100
+ 
 iproute (20131122+vyos2+lithium3) unstable; urgency=low
 
   * Force release
