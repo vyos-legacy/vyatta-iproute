@@ -25,3 +25,10 @@ override_dh_shlibdeps:
 override_dh_auto_build:
 	# $(MAKE) -C doc all txt
 	$(MAKE) KERNEL_INCLUDE=./include
+
+override_dh_gencontrol:
+	if [ -f "../.VYOS_DEV_BUILD" ]; then \
+		dh_gencontrol -- -v999.dev; \
+	else \
+		dh_gencontrol; \
+	fi
