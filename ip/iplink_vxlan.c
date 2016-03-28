@@ -21,18 +21,27 @@
 #include "utils.h"
 #include "ip_common.h"
 
+static void print_explain(FILE *f)
+{
+	fprintf(f, "Usage: ... vxlan id VNI [ { group | remote } ADDR ] [ local ADDR ]\n");
+	fprintf(f, "                 [ ttl TTL ] [ tos TOS ] [ dev PHYS_DEV ]\n");
+	fprintf(f, "                 [ dstport PORT ] [ srcport MIN MAX ]\n");
+	fprintf(f, "                 [ [no]learning ] [ [no]proxy ] [ [no]rsc ]\n");
+	fprintf(f, "                 [ [no]l2miss ] [ [no]l3miss ]\n");
+	fprintf(f, "                 [ ageing SECONDS ] [ maxaddress NUMBER ]\n");
+	fprintf(f, "                 [ [no]udpcsum ] [ [no]udp6zerocsumtx ] [ [no]udp6zerocsumrx ]\n");
+	fprintf(f, "                 [ [no]remcsumtx ] [ [no]remcsumrx ]\n");
+	fprintf(f, "                 [ [no]external ] [ gbp ]\n");
+	fprintf(f, "\n");
+	fprintf(f, "Where: VNI := 0-16777215\n");
+	fprintf(f, "       ADDR := { IP_ADDRESS | any }\n");
+	fprintf(f, "       TOS  := { NUMBER | inherit }\n");
+	fprintf(f, "       TTL  := { 1..255 | inherit }\n");
+}
+
 static void explain(void)
 {
-	fprintf(stderr, "Usage: ... vxlan id VNI [ { group | remote } ADDR ] [ local ADDR ]\n");
-	fprintf(stderr, "                 [ ttl TTL ] [ tos TOS ] [ dev PHYS_DEV ]\n");
-	fprintf(stderr, "                 [ port MIN MAX ] [ [no]learning ]\n");
-	fprintf(stderr, "                 [ [no]proxy ] [ [no]rsc ]\n");
-	fprintf(stderr, "                 [ [no]l2miss ] [ [no]l3miss ]\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Where: VNI := 0-16777215\n");
-	fprintf(stderr, "       ADDR := { IP_ADDRESS | any }\n");
-	fprintf(stderr, "       TOS  := { NUMBER | inherit }\n");
-	fprintf(stderr, "       TTL  := { 1..255 | inherit }\n");
+	print_explain(stderr);
 }
 
 static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
@@ -57,6 +66,15 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 	__u8 noage = 0;
 	__u32 age = 0;
 	__u32 maxaddr = 0;
+	__u16 dstport = 0;
+	__u8 udpcsum = 0;
+	__u8 udp6zerocsumtx = 0;
+	__u8 udp6zerocsumrx = 0;
+	__u8 remcsumtx = 0;
+	__u8 remcsumrx = 0;
+	__u8 metadata = 0;
+	__u8 gbp = 0;
+	int dst_port_set = 0;
 	struct ifla_vxlan_port_range range = { 0, 0 };
 
 	while (argc > 0) {
@@ -97,8 +115,11 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 		} else if (!matches(*argv, "dev")) {
 			NEXT_ARG();
 			link = if_nametoindex(*argv);
-			if (link == 0)
+			if (link == 0) {
+				fprintf(stderr, "Cannot find device \"%s\"\n",
+					*argv);
 				exit(-1);
+			}
 		} else if (!matches(*argv, "ttl") ||
 			   !matches(*argv, "hoplimit")) {
 			unsigned uval;
@@ -134,7 +155,8 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 				maxaddr = 0;
 			else if (get_u32(&maxaddr, *argv, 0))
 				invarg("max addresses", *argv);
-		} else if (!matches(*argv, "port")) {
+		} else if (!matches(*argv, "port") ||
+			   !matches(*argv, "srcport")) {
 			__u16 minport, maxport;
 			NEXT_ARG();
 			if (get_u16(&minport, *argv, 0))
@@ -144,6 +166,11 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 				invarg("max port", *argv);
 			range.low = htons(minport);
 			range.high = htons(maxport);
+		} else if (!matches(*argv, "dstport")){
+			NEXT_ARG();
+			if (get_u16(&dstport, *argv, 0))
+				invarg("dst port", *argv);
+			dst_port_set = 1;
 		} else if (!matches(*argv, "nolearning")) {
 			learning = 0;
 		} else if (!matches(*argv, "learning")) {
@@ -164,6 +191,32 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 			l3miss = 0;
 		} else if (!matches(*argv, "l3miss")) {
 			l3miss = 1;
+		} else if (!matches(*argv, "udpcsum")) {
+			udpcsum = 1;
+		} else if (!matches(*argv, "noudpcsum")) {
+			udpcsum = 0;
+		} else if (!matches(*argv, "udp6zerocsumtx")) {
+			udp6zerocsumtx = 1;
+		} else if (!matches(*argv, "noudp6zerocsumtx")) {
+			udp6zerocsumtx = 0;
+		} else if (!matches(*argv, "udp6zerocsumrx")) {
+			udp6zerocsumrx = 1;
+		} else if (!matches(*argv, "noudp6zerocsumrx")) {
+			udp6zerocsumrx = 0;
+		} else if (!matches(*argv, "remcsumtx")) {
+			remcsumtx = 1;
+		} else if (!matches(*argv, "noremcsumtx")) {
+			remcsumtx = 0;
+		} else if (!matches(*argv, "remcsumrx")) {
+			remcsumrx = 1;
+		} else if (!matches(*argv, "noremcsumrx")) {
+			remcsumrx = 0;
+		} else if (!matches(*argv, "external")) {
+			metadata = 1;
+		} else if (!matches(*argv, "noexternal")) {
+			metadata = 0;
+		} else if (!matches(*argv, "gbp")) {
+			gbp = 1;
 		} else if (matches(*argv, "help") == 0) {
 			explain();
 			return -1;
@@ -175,16 +228,31 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 		argc--, argv++;
 	}
 
-	if (!vni_set) {
+	if (metadata && vni_set) {
+		fprintf(stderr, "vxlan: both 'external' and vni cannot be specified\n");
+		return -1;
+	}
+
+	if (!metadata && !vni_set) {
 		fprintf(stderr, "vxlan: missing virtual network identifier\n");
 		return -1;
 	}
+
 	if ((gaddr && daddr) ||
 		(memcmp(&gaddr6, &in6addr_any, sizeof(gaddr6)) &&
 		 memcmp(&daddr6, &in6addr_any, sizeof(daddr6)))) {
 		fprintf(stderr, "vxlan: both group and remote cannot be specified\n");
 		return -1;
 	}
+
+	if (!dst_port_set) {
+		fprintf(stderr, "vxlan: destination port not specified\n"
+			"Will use Linux kernel default (non-standard value)\n");
+		fprintf(stderr,
+			"Use 'dstport 4789' to get the IANA assigned value\n"
+			"Use 'dstport 0' to get default and quiet this message\n");
+	}
+
 	addattr32(n, 1024, IFLA_VXLAN_ID, vni);
 	if (gaddr)
 		addattr_l(n, 1024, IFLA_VXLAN_GROUP, &gaddr, 4);
@@ -209,6 +277,13 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 	addattr8(n, 1024, IFLA_VXLAN_RSC, rsc);
 	addattr8(n, 1024, IFLA_VXLAN_L2MISS, l2miss);
 	addattr8(n, 1024, IFLA_VXLAN_L3MISS, l3miss);
+	addattr8(n, 1024, IFLA_VXLAN_UDP_CSUM, udpcsum);
+	addattr8(n, 1024, IFLA_VXLAN_UDP_ZERO_CSUM6_TX, udp6zerocsumtx);
+	addattr8(n, 1024, IFLA_VXLAN_UDP_ZERO_CSUM6_RX, udp6zerocsumrx);
+	addattr8(n, 1024, IFLA_VXLAN_REMCSUM_TX, remcsumtx);
+	addattr8(n, 1024, IFLA_VXLAN_REMCSUM_RX, remcsumrx);
+	addattr8(n, 1024, IFLA_VXLAN_COLLECT_METADATA, metadata);
+
 	if (noage)
 		addattr32(n, 1024, IFLA_VXLAN_AGEING, 0);
 	else if (age)
@@ -218,6 +293,12 @@ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
 	if (range.low || range.high)
 		addattr_l(n, 1024, IFLA_VXLAN_PORT_RANGE,
 			  &range, sizeof(range));
+	if (dstport)
+		addattr16(n, 1024, IFLA_VXLAN_PORT, htons(dstport));
+
+	if (gbp)
+		addattr_l(n, 1024, IFLA_VXLAN_GBP, NULL, 0);
+
 
 	return 0;
 }
@@ -290,8 +371,12 @@ static void vxlan_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
 	if (tb[IFLA_VXLAN_PORT_RANGE]) {
 		const struct ifla_vxlan_port_range *r
 			= RTA_DATA(tb[IFLA_VXLAN_PORT_RANGE]);
-		fprintf(f, "port %u %u ", ntohs(r->low), ntohs(r->high));
+		fprintf(f, "srcport %u %u ", ntohs(r->low), ntohs(r->high));
 	}
+
+	if (tb[IFLA_VXLAN_PORT])
+		fprintf(f, "dstport %u ",
+			ntohs(rta_getattr_u16(tb[IFLA_VXLAN_PORT])));
 
 	if (tb[IFLA_VXLAN_LEARNING] &&
 	    !rta_getattr_u8(tb[IFLA_VXLAN_LEARNING]))
@@ -332,8 +417,40 @@ static void vxlan_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
 	}
 
 	if (tb[IFLA_VXLAN_LIMIT] &&
-	    (maxaddr = rta_getattr_u32(tb[IFLA_VXLAN_LIMIT]) != 0))
+	    ((maxaddr = rta_getattr_u32(tb[IFLA_VXLAN_LIMIT])) != 0))
 		    fprintf(f, "maxaddr %u ", maxaddr);
+
+	if (tb[IFLA_VXLAN_UDP_CSUM] && rta_getattr_u8(tb[IFLA_VXLAN_UDP_CSUM]))
+		fputs("udpcsum ", f);
+
+	if (tb[IFLA_VXLAN_UDP_ZERO_CSUM6_TX] &&
+	    rta_getattr_u8(tb[IFLA_VXLAN_UDP_ZERO_CSUM6_TX]))
+		fputs("udp6zerocsumtx ", f);
+
+	if (tb[IFLA_VXLAN_UDP_ZERO_CSUM6_RX] &&
+	    rta_getattr_u8(tb[IFLA_VXLAN_UDP_ZERO_CSUM6_RX]))
+		fputs("udp6zerocsumrx ", f);
+
+	if (tb[IFLA_VXLAN_REMCSUM_TX] &&
+	    rta_getattr_u8(tb[IFLA_VXLAN_REMCSUM_TX]))
+		fputs("remcsumtx ", f);
+
+	if (tb[IFLA_VXLAN_REMCSUM_RX] &&
+	    rta_getattr_u8(tb[IFLA_VXLAN_REMCSUM_RX]))
+		fputs("remcsumrx ", f);
+
+	if (tb[IFLA_VXLAN_COLLECT_METADATA] &&
+	    rta_getattr_u8(tb[IFLA_VXLAN_COLLECT_METADATA]))
+		fputs("external ", f);
+
+	if (tb[IFLA_VXLAN_GBP])
+		fputs("gbp ", f);
+}
+
+static void vxlan_print_help(struct link_util *lu, int argc, char **argv,
+	FILE *f)
+{
+	print_explain(f);
 }
 
 struct link_util vxlan_link_util = {
@@ -341,4 +458,5 @@ struct link_util vxlan_link_util = {
 	.maxattr	= IFLA_VXLAN_MAX,
 	.parse_opt	= vxlan_parse_opt,
 	.print_opt	= vxlan_print_opt,
+	.print_help	= vxlan_print_help,
 };

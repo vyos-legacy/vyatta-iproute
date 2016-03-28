@@ -12,8 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
 /*
  * based on ip.c, iproute.c
@@ -81,7 +80,9 @@ int print_prefix(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
 		pfx = (struct in6_addr *)RTA_DATA(tb[PREFIX_ADDRESS]);
 
 		memset(abuf, '\0', sizeof(abuf));
-		fprintf(fp, "%s", rt_addr_n2a(family, sizeof(*pfx), pfx,
+		fprintf(fp, "%s", rt_addr_n2a(family,
+					      RTA_PAYLOAD(tb[PREFIX_ADDRESS]),
+					      pfx,
 					      abuf, sizeof(abuf)));
 	}
 	fprintf(fp, "/%u ", prefix->prefix_len);
@@ -106,4 +107,3 @@ int print_prefix(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
 
 	return 0;
 }
-

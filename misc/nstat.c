@@ -28,6 +28,7 @@
 #include <math.h>
 #include <getopt.h>
 
+#include <json_writer.h>
 #include <SNAPSHOT.h>
 
 int dump_zeros = 0;
@@ -35,6 +36,7 @@ int reset_history = 0;
 int ignore_history = 0;
 int no_output = 0;
 int json_output = 0;
+int pretty = 0;
 int no_update = 0;
 int scan_interval = 0;
 int time_constant = 0;
@@ -77,7 +79,6 @@ struct nstat_ent
 	struct nstat_ent *next;
 	char		 *id;
 	unsigned long long val;
-	unsigned long	   ival;
 	double		   rate;
 };
 
@@ -143,7 +144,6 @@ static void load_good_table(FILE *fp)
 		if ((n = malloc(sizeof(*n))) == NULL)
 			abort();
 		n->id = strdup(idbuf);
-		n->ival = (unsigned long)val;
 		n->val = val;
 		n->rate = rate;
 		n->next = db;
@@ -158,6 +158,15 @@ static void load_good_table(FILE *fp)
 	}
 }
 
+static int count_spaces(const char *line)
+{
+	int count = 0;
+	char c;
+
+	while ((c = *line++) != 0)
+		count += c == ' ' || c == '\n';
+	return count;
+}
 
 static void load_ugly_table(FILE *fp)
 {
@@ -169,10 +178,12 @@ static void load_ugly_table(FILE *fp)
 		char idbuf[sizeof(buf)];
 		int  off;
 		char *p;
+		int count1, count2, skip = 0;
 
 		p = strchr(buf, ':');
 		if (!p)
 			abort();
+		count1 = count_spaces(buf);
 		*p = 0;
 		idbuf[0] = 0;
 		strncat(idbuf, buf, sizeof(idbuf) - 1);
@@ -201,17 +212,19 @@ static void load_ugly_table(FILE *fp)
 		n = db;
 		if (fgets(buf, sizeof(buf), fp) == NULL)
 			abort();
+		count2 = count_spaces(buf);
+		if (count2 > count1)
+			skip = count2 - count1;
 		do {
 			p = strrchr(buf, ' ');
 			if (!p)
 				abort();
 			*p = 0;
-			if (sscanf(p+1, "%lu", &n->ival) != 1)
+			if (sscanf(p+1, "%llu", &n->val) != 1)
 				abort();
-			n->val = n->ival;
 			/* Trick to skip "dummy" trailing ICMP MIB in 2.4 */
-			if (strcmp(idbuf, "IcmpOutAddrMaskReps") == 0)
-				idbuf[5] = 0;
+			if (skip)
+				skip--;
 			else
 				n = n->next;
 		} while (p > buf + off + 2);
@@ -260,13 +273,15 @@ static void load_netstat(void)
 
 static void dump_kern_db(FILE *fp, int to_hist)
 {
+	json_writer_t *jw = json_output ? jsonw_new(fp) : NULL;
 	struct nstat_ent *n, *h;
-	const char *eol = "\n";
 
 	h = hist_db;
-	if (json_output)
-		fprintf(fp, "{ \"%s\":{", info_source);
-	else
+	if (jw) {
+		jsonw_pretty(jw, pretty);
+		jsonw_name(jw, info_source);
+		jsonw_start_object(jw);
+	} else
 		fprintf(fp, "#%s\n", info_source);
 
 	for (n=kern_db; n; n=n->next) {
@@ -286,26 +301,29 @@ static void dump_kern_db(FILE *fp, int to_hist)
 			}
 		}
 
-		if (json_output) {
-			fprintf(fp, "%s    \"%s\":%llu",
-				eol, n->id, val);
-			eol = ",\n";
-		} else
+		if (jw)
+			jsonw_uint_field(jw, n->id, val);
+		else
 			fprintf(fp, "%-32s%-16llu%6.1f\n", n->id, val, n->rate);
 	}
-	if (json_output)
-		fprintf(fp, "\n} }\n");
+
+	if (jw) {
+		jsonw_end_object(jw);
+		jsonw_destroy(&jw);
+	}
 }
 
 static void dump_incr_db(FILE *fp)
 {
+	json_writer_t *jw = json_output ? jsonw_new(fp) : NULL;
 	struct nstat_ent *n, *h;
-	const char *eol = "\n";
 
 	h = hist_db;
-	if (json_output)
-		fprintf(fp, "{ \"%s\":{", info_source);
-	else
+	if (jw) {
+		jsonw_pretty(jw, pretty);
+		jsonw_name(jw, info_source);
+		jsonw_start_object(jw);
+	} else
 		fprintf(fp, "#%s\n", info_source);
 
 	for (n=kern_db; n; n=n->next) {
@@ -328,16 +346,17 @@ static void dump_incr_db(FILE *fp)
 		if (!match(n->id))
 			continue;
 
-		if (json_output) {
-			fprintf(fp, "%s    \"%s\":%llu",
-				eol, n->id, val);
-			eol = ",\n";
-		} else
+		if (jw)
+			jsonw_uint_field(jw, n->id, val);
+		else
 			fprintf(fp, "%-32s%-16llu%6.1f%s\n", n->id, val,
 				n->rate, ovfl?" (overflow)":"");
 	}
-	if (json_output)
-		fprintf(fp, "\n} }\n");
+
+	if (jw) {
+		jsonw_end_object(jw);
+		jsonw_destroy(&jw);
+	}
 }
 
 static int children;
@@ -365,10 +384,10 @@ static void update_db(int interval)
 		for (h1 = h; h1; h1 = h1->next) {
 			if (strcmp(h1->id, n->id) == 0) {
 				double sample;
-				unsigned long incr = h1->ival - n->ival;
-				n->val += incr;
-				n->ival = h1->ival;
-				sample = (double)(incr*1000)/interval;
+				unsigned long long incr = h1->val - n->val;
+
+				n->val = h1->val;
+				sample = (double)incr * 1000.0 / interval;
 				if (interval >= scan_interval) {
 					n->rate += W*(sample-n->rate);
 				} else if (interval >= 1000) {
@@ -474,6 +493,7 @@ static void usage(void)
 "   -d, --scan=SECS	sample every statistics every SECS\n"
 "   -j, --json          format output in JSON\n"
 "   -n, --nooutput	do history only\n"
+"   -p, --pretty        pretty print\n"
 "   -r, --reset		reset history\n"
 "   -s, --noupdate	don\'t update history\n"
 "   -t, --interval=SECS	report average over the last SECS\n"
@@ -490,6 +510,7 @@ static const struct option longopts[] = {
 	{ "json", 0, 0, 'j' },
 	{ "reset", 0, 0, 'r' },
 	{ "noupdate", 0, 0, 's' },
+	{ "pretty", 0, 0, 'p' },
 	{ "interval", 1, 0, 't' },
 	{ "version", 0, 0, 'V' },
 	{ "zeros", 0, 0, 'z' },
@@ -504,7 +525,7 @@ int main(int argc, char *argv[])
 	int ch;
 	int fd;
 
-	while ((ch = getopt_long(argc, argv, "h?vVzrnasd:t:j",
+	while ((ch = getopt_long(argc, argv, "h?vVzrnasd:t:jp",
 				 longopts, NULL)) != EOF) {
 		switch(ch) {
 		case 'z':
@@ -534,6 +555,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'j':
 			json_output = 1;
+			break;
+		case 'p':
+			pretty = 1;
 			break;
 		case 'v':
 		case 'V':
@@ -625,7 +649,8 @@ int main(int argc, char *argv[])
 			}
 			if (uptime >= 0 && time(NULL) >= stb.st_mtime+uptime) {
 				fprintf(stderr, "nstat: history is aged out, resetting\n");
-				ftruncate(fileno(hist_fp), 0);
+				if (ftruncate(fileno(hist_fp), 0) < 0)
+					perror("nstat: ftruncate");
 			}
 		}
 
@@ -669,7 +694,8 @@ int main(int argc, char *argv[])
 			dump_incr_db(stdout);
 	}
 	if (!no_update) {
-		ftruncate(fileno(hist_fp), 0);
+		if (ftruncate(fileno(hist_fp), 0) < 0)
+			perror("nstat: ftruncate");
 		rewind(hist_fp);
 
 		json_output = 0;

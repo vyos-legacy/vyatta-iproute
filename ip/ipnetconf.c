@@ -40,7 +40,8 @@ static void usage(void)
 
 #define NETCONF_RTA(r)	((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct netconfmsg))))
 
-int print_netconf(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
+int print_netconf(const struct sockaddr_nl *who, struct rtnl_ctrl_data *ctrl,
+		  struct nlmsghdr *n, void *arg)
 {
 	FILE *fp = (FILE*)arg;
 	struct netconfmsg *ncm = NLMSG_DATA(n);
@@ -114,14 +115,25 @@ int print_netconf(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
 		fprintf(fp, "mc_forwarding %d ",
 			*(int *)RTA_DATA(tb[NETCONFA_MC_FORWARDING]));
 
+	if (tb[NETCONFA_PROXY_NEIGH])
+		fprintf(fp, "proxy_neigh %s ",
+			*(int *)RTA_DATA(tb[NETCONFA_PROXY_NEIGH])?"on":"off");
+
 	fprintf(fp, "\n");
 	fflush(fp);
 	return 0;
 }
 
-static void ipnetconf_reset_filter(void)
+static int print_netconf2(const struct sockaddr_nl *who,
+			  struct nlmsghdr *n, void *arg)
+{
+	return print_netconf(who, NULL, n, arg);
+}
+
+void ipnetconf_reset_filter(int ifindex)
 {
 	memset(&filter, 0, sizeof(filter));
+	filter.ifindex = ifindex;
 }
 
 static int do_show(int argc, char **argv)
@@ -132,7 +144,7 @@ static int do_show(int argc, char **argv)
 		char			buf[1024];
 	} req;
 
-	ipnetconf_reset_filter();
+	ipnetconf_reset_filter(0);
 	filter.family = preferred_family;
 	if (filter.family == AF_UNSPEC)
 		filter.family = AF_INET;
@@ -161,7 +173,10 @@ static int do_show(int argc, char **argv)
 			addattr_l(&req.n, sizeof(req), NETCONFA_IFINDEX,
 				  &filter.ifindex, sizeof(filter.ifindex));
 
-		rtnl_send(&rth, &req.n, req.n.nlmsg_len);
+		if (rtnl_send(&rth, &req.n, req.n.nlmsg_len) < 0) {
+			perror("Can not send request");
+			exit(1);
+		}
 		rtnl_listen(&rth, print_netconf, stdout);
 	} else {
 dump:
@@ -169,7 +184,7 @@ dump:
 			perror("Cannot send dump request");
 			exit(1);
 		}
-		if (rtnl_dump_filter(&rth, print_netconf, stdout) < 0) {
+		if (rtnl_dump_filter(&rth, print_netconf2, stdout) < 0) {
 			fprintf(stderr, "Dump terminated\n");
 			exit(1);
 		}

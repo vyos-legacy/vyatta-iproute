@@ -12,8 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
 /*
  * based on ipneigh.c
@@ -64,9 +63,9 @@ static void usage(void)
 static int ipntable_modify(int cmd, int flags, int argc, char **argv)
 {
 	struct {
-		struct nlmsghdr 	n;
+		struct nlmsghdr	n;
 		struct ndtmsg		ndtm;
-		char   			buf[1024];
+		char  			buf[1024];
 	} req;
 	char *namep = NULL;
 	char *threshsp = NULL;
@@ -314,7 +313,7 @@ static int ipntable_modify(int cmd, int flags, int argc, char **argv)
 			  RTA_PAYLOAD(parms_rta));
 	}
 
-	if (rtnl_talk(&rth, &req.n, 0, 0, NULL) < 0)
+	if (rtnl_talk(&rth, &req.n, NULL, 0) < 0)
 		exit(2);
 
 	return 0;
@@ -350,7 +349,7 @@ static const char *ntable_strtime_delta(__u32 msec)
 	return str;
 }
 
-int print_ntable(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
+static int print_ntable(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
 {
 	FILE *fp = (FILE*)arg;
 	struct ndtmsg *ndtm = NLMSG_DATA(n);
@@ -602,7 +601,7 @@ int print_ntable(const struct sockaddr_nl *who, struct nlmsghdr *n, void *arg)
 	return 0;
 }
 
-void ipntable_reset_filter(void)
+static void ipntable_reset_filter(void)
 {
 	memset(&filter, 0, sizeof(filter));
 }
