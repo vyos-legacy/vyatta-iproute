@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+DEB_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
+
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
