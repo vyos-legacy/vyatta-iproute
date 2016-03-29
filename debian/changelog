@@ -1,3 +1,9 @@
+iproute2 (4.4.0-1+vyos2+current1) unstable; urgency=medium
+
+  * 4.4.0-1
+
+ -- Kim Hagen <kim.sidney@gmail.com>  Tue, 29 Mar 2016 07:56:31 +0200
+
 iproute (20131122+vyos2+current1) unstable; urgency=medium
 
   * New branch
