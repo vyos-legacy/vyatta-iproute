@@ -28,6 +28,8 @@ override_dh_auto_build:
 	$(MAKE) KERNEL_INCLUDE=./include
 
 override_dh_gencontrol:
+	dh_gencontrol -piproute -- -v1:$(DEB_VERSION)
+	dh_gencontrol --remaining-packages
 	if [ -f "../.VYOS_DEV_BUILD" ]; then \
 		dh_gencontrol -- -v999.dev; \
 	else \
