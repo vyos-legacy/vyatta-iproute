@@ -191,7 +191,7 @@ static int tc_filter_modify(int cmd, unsigned int flags, int argc, char **argv,
 		return -1;
 	}
 
-	req.t.tcm_info = TC_H_MAKE(prio<<16, protocol);
+	req->t.tcm_info = TC_H_MAKE(prio<<16, protocol);
 
 	if (chain_index_set)
 		addattr32(&req->n, sizeof(*req), TCA_CHAIN, chain_index);
