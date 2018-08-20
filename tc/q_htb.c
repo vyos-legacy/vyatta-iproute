@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <syslog.h>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -59,8 +58,8 @@ static void explain1(char *arg)
     explain();
 }
 
-
-static int htb_parse_opt(struct qdisc_util *qu, int argc, char **argv, struct nlmsghdr *n)
+static int htb_parse_opt(struct qdisc_util *qu, int argc,
+			 char **argv, struct nlmsghdr *n, const char *dev)
 {
 	unsigned int direct_qlen = ~0U;
 	struct tc_htb_glob opt = {
@@ -99,17 +98,16 @@ static int htb_parse_opt(struct qdisc_util *qu, int argc, char **argv, struct nl
 		}
 		argc--; argv++;
 	}
-	tail = NLMSG_TAIL(n);
-	addattr_l(n, 1024, TCA_OPTIONS, NULL, 0);
+	tail = addattr_nest(n, 1024, TCA_OPTIONS);
 	addattr_l(n, 2024, TCA_HTB_INIT, &opt, NLMSG_ALIGN(sizeof(opt)));
 	if (direct_qlen != ~0U)
 		addattr_l(n, 2024, TCA_HTB_DIRECT_QLEN,
 			  &direct_qlen, sizeof(direct_qlen));
-	tail->rta_len = (void *) NLMSG_TAIL(n) - (void *) tail;
+	addattr_nest_end(n, tail);
 	return 0;
 }
 
-static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, struct nlmsghdr *n)
+static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, struct nlmsghdr *n, const char *dev)
 {
 	int ok = 0;
 	struct tc_htb_opt opt = {};
@@ -179,7 +177,12 @@ static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, str
 				fprintf(stderr, "Double \"ceil\" spec\n");
 				return -1;
 			}
-			if (get_rate64(&ceil64, *argv)) {
+			if (strchr(*argv, '%')) {
+				if (get_percent_rate64(&ceil64, *argv, dev)) {
+					explain1("ceil");
+					return -1;
+				}
+			} else if (get_rate64(&ceil64, *argv)) {
 				explain1("ceil");
 				return -1;
 			}
@@ -190,7 +193,12 @@ static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, str
 				fprintf(stderr, "Double \"rate\" spec\n");
 				return -1;
 			}
-			if (get_rate64(&rate64, *argv)) {
+			if (strchr(*argv, '%')) {
+				if (get_percent_rate64(&rate64, *argv, dev)) {
+					explain1("rate");
+					return -1;
+				}
+			} else if (get_rate64(&rate64, *argv)) {
 				explain1("rate");
 				return -1;
 			}
@@ -245,8 +253,7 @@ static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, str
 	}
 	opt.cbuffer = tc_calc_xmittime(ceil64, cbuffer);
 
-	tail = NLMSG_TAIL(n);
-	addattr_l(n, 1024, TCA_OPTIONS, NULL, 0);
+	tail = addattr_nest(n, 1024, TCA_OPTIONS);
 
 	if (rate64 >= (1ULL << 32))
 		addattr_l(n, 1124, TCA_HTB_RATE64, &rate64, sizeof(rate64));
@@ -257,7 +264,7 @@ static int htb_parse_class_opt(struct qdisc_util *qu, int argc, char **argv, str
 	addattr_l(n, 2024, TCA_HTB_PARMS, &opt, sizeof(opt));
 	addattr_l(n, 3024, TCA_HTB_RTAB, rtab, 1024);
 	addattr_l(n, 4024, TCA_HTB_CTAB, ctab, 1024);
-	tail->rta_len = (void *) NLMSG_TAIL(n) - (void *) tail;
+	addattr_nest_end(n, tail);
 	return 0;
 }
 
@@ -284,9 +291,10 @@ static int htb_print_opt(struct qdisc_util *qu, FILE *f, struct rtattr *opt)
 		if (RTA_PAYLOAD(tb[TCA_HTB_PARMS])  < sizeof(*hopt)) return -1;
 
 		if (!hopt->level) {
-			fprintf(f, "prio %d ", (int)hopt->prio);
+			print_int(PRINT_ANY, "prio", "prio %d ", (int)hopt->prio);
 			if (show_details)
-				fprintf(f, "quantum %d ", (int)hopt->quantum);
+				print_int(PRINT_ANY, "quantum", "quantum %d ",
+					  (int)hopt->quantum);
 		}
 
 		rate64 = hopt->rate.rate;
@@ -332,16 +340,21 @@ static int htb_print_opt(struct qdisc_util *qu, FILE *f, struct rtattr *opt)
 		gopt = RTA_DATA(tb[TCA_HTB_INIT]);
 		if (RTA_PAYLOAD(tb[TCA_HTB_INIT])  < sizeof(*gopt)) return -1;
 
-		fprintf(f, "r2q %d default %x direct_packets_stat %u",
-			gopt->rate2quantum, gopt->defcls, gopt->direct_pkts);
-		if (show_details)
-			fprintf(f, " ver %d.%d", gopt->version >> 16, gopt->version & 0xffff);
+		print_int(PRINT_ANY, "r2q", "r2q %d", gopt->rate2quantum);
+		print_uint(PRINT_ANY, "default", " default %u", gopt->defcls);
+		print_uint(PRINT_ANY, "direct_packets_stat",
+			   " direct_packets_stat %u", gopt->direct_pkts);
+		if (show_details) {
+			sprintf(b1, "%d.%d", gopt->version >> 16, gopt->version & 0xffff);
+			print_string(PRINT_ANY, "ver", " ver %s", b1);
+		}
 	}
 	if (tb[TCA_HTB_DIRECT_QLEN] &&
 	    RTA_PAYLOAD(tb[TCA_HTB_DIRECT_QLEN]) >= sizeof(__u32)) {
 		__u32 direct_qlen = rta_getattr_u32(tb[TCA_HTB_DIRECT_QLEN]);
 
-		fprintf(f, " direct_qlen %u", direct_qlen);
+		print_uint(PRINT_ANY, "direct_qlen", " direct_qlen %u",
+			   direct_qlen);
 	}
 	return 0;
 }

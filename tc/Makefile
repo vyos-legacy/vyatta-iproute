@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
 TCOBJ= tc.o tc_qdisc.o tc_class.o tc_filter.o tc_util.o tc_monitor.o \
        tc_exec.o m_police.o m_estimator.o m_action.o m_ematch.o \
        emp_ematch.yacc.o emp_ematch.lex.o
@@ -69,6 +70,7 @@ TCMODULES += q_hhf.o
 TCMODULES += q_clsact.o
 TCMODULES += e_bpf.o
 TCMODULES += f_matchall.o
+TCMODULES += q_cbs.o
 
 TCSO :=
 ifeq ($(TC_CONFIG_ATM),y)
@@ -78,6 +80,7 @@ endif
 ifneq ($(TC_CONFIG_NO_XT),y)
   ifeq ($(TC_CONFIG_XT),y)
     TCSO += m_xt.so
+    TCMODULES += em_ipt.o
     ifeq ($(TC_CONFIG_IPSET),y)
       TCMODULES += em_ipset.o
     endif
@@ -160,6 +163,12 @@ m_xt_old.so: m_xt_old.c
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -shared -fpic -o m_xt_old.so m_xt_old.c $$($(PKG_CONFIG) xtables --cflags --libs)
 
 em_ipset.o: CFLAGS += $$($(PKG_CONFIG) xtables --cflags)
+
+em_ipt.o: CFLAGS += $$($(PKG_CONFIG) xtables --cflags)
+
+ifeq ($(TC_CONFIG_XT),y)
+  LDFLAGS += $$($(PKG_CONFIG) xtables --libs)
+endif
 
 %.yacc.c: %.y
 	$(QUIET_YACC)$(YACC) $(YACCFLAGS) -o $@ $<

@@ -22,9 +22,10 @@
 #include <errno.h>
 
 #include "rt_names.h"
-#include "utils.h"
-#include "iproute_lwtunnel.h"
 #include "bpf_util.h"
+#include "utils.h"
+#include "ip_common.h"
+#include "ila_common.h"
 
 #include <linux/seg6.h>
 #include <linux/seg6_iptunnel.h>
@@ -93,20 +94,28 @@ static void print_srh(FILE *fp, struct ipv6_sr_hdr *srh)
 {
 	int i;
 
-	fprintf(fp, "segs %d [ ", srh->first_segment + 1);
+	if (is_json_context())
+		open_json_array(PRINT_JSON, "segs");
+	else
+		fprintf(fp, "segs %d [ ", srh->first_segment + 1);
 
 	for (i = srh->first_segment; i >= 0; i--)
-		fprintf(fp, "%s ",
-			rt_addr_n2a(AF_INET6, 16, &srh->segments[i]));
+		print_color_string(PRINT_ANY, COLOR_INET6,
+				   NULL, "%s ",
+				   rt_addr_n2a(AF_INET6, 16, &srh->segments[i]));
 
-	fprintf(fp, "] ");
+	if (is_json_context())
+		close_json_array(PRINT_JSON, NULL);
+	else
+		fprintf(fp, "] ");
 
 	if (sr_has_hmac(srh)) {
 		unsigned int offset = ((srh->hdrlen + 1) << 3) - 40;
 		struct sr6_tlv_hmac *tlv;
 
 		tlv = (struct sr6_tlv_hmac *)((char *)srh + offset);
-		fprintf(fp, "hmac 0x%X ", ntohl(tlv->hmackeyid));
+		print_0xhex(PRINT_ANY, "hmac",
+			    "hmac 0x%X ", ntohl(tlv->hmackeyid));
 	}
 }
 
@@ -147,7 +156,8 @@ static void print_encap_seg6(FILE *fp, struct rtattr *encap)
 		return;
 
 	tuninfo = RTA_DATA(tb[SEG6_IPTUNNEL_SRH]);
-	fprintf(fp, "mode %s ", format_seg6mode_type(tuninfo->mode));
+	print_string(PRINT_ANY, "mode",
+		     "mode %s ", format_seg6mode_type(tuninfo->mode));
 
 	print_srh(fp, tuninfo->srh);
 }
@@ -167,6 +177,7 @@ static const char *seg6_action_names[SEG6_LOCAL_ACTION_MAX + 1] = {
 	[SEG6_LOCAL_ACTION_END_S]		= "End.S",
 	[SEG6_LOCAL_ACTION_END_AS]		= "End.AS",
 	[SEG6_LOCAL_ACTION_END_AM]		= "End.AM",
+	[SEG6_LOCAL_ACTION_END_BPF]		= "End.BPF",
 };
 
 static const char *format_action_type(int action)
@@ -192,10 +203,30 @@ static int read_action_type(const char *name)
 	return SEG6_LOCAL_ACTION_UNSPEC;
 }
 
+static void print_encap_bpf_prog(FILE *fp, struct rtattr *encap,
+				 const char *str)
+{
+	struct rtattr *tb[LWT_BPF_PROG_MAX+1];
+	const char *progname = NULL;
+
+	parse_rtattr_nested(tb, LWT_BPF_PROG_MAX, encap);
+
+	if (tb[LWT_BPF_PROG_NAME])
+		progname = rta_getattr_str(tb[LWT_BPF_PROG_NAME]);
+
+	if (is_json_context())
+		print_string(PRINT_JSON, str, NULL,
+			     progname ? : "<unknown>");
+	else {
+		fprintf(fp, "%s ", str);
+		if (progname)
+			fprintf(fp, "%s ", progname);
+	}
+}
+
 static void print_encap_seg6local(FILE *fp, struct rtattr *encap)
 {
 	struct rtattr *tb[SEG6_LOCAL_MAX + 1];
-	char ifbuf[IFNAMSIZ];
 	int action;
 
 	parse_rtattr_nested(tb, SEG6_LOCAL_MAX, encap);
@@ -205,39 +236,45 @@ static void print_encap_seg6local(FILE *fp, struct rtattr *encap)
 
 	action = rta_getattr_u32(tb[SEG6_LOCAL_ACTION]);
 
-	fprintf(fp, "action %s ", format_action_type(action));
+	print_string(PRINT_ANY, "action",
+		     "action %s ", format_action_type(action));
 
 	if (tb[SEG6_LOCAL_SRH]) {
-		fprintf(fp, "srh ");
+		open_json_object("srh");
 		print_srh(fp, RTA_DATA(tb[SEG6_LOCAL_SRH]));
+		close_json_object();
 	}
 
 	if (tb[SEG6_LOCAL_TABLE])
-		fprintf(fp, "table %u ", rta_getattr_u32(tb[SEG6_LOCAL_TABLE]));
+		print_uint(PRINT_ANY, "table",
+			   "table %u ", rta_getattr_u32(tb[SEG6_LOCAL_TABLE]));
 
 	if (tb[SEG6_LOCAL_NH4]) {
-		fprintf(fp, "nh4 %s ",
-			rt_addr_n2a_rta(AF_INET, tb[SEG6_LOCAL_NH4]));
+		print_string(PRINT_ANY, "nh4",
+			     "nh4 %s ", rt_addr_n2a_rta(AF_INET, tb[SEG6_LOCAL_NH4]));
 	}
 
 	if (tb[SEG6_LOCAL_NH6]) {
-		fprintf(fp, "nh6 %s ",
-			rt_addr_n2a_rta(AF_INET6, tb[SEG6_LOCAL_NH6]));
+		print_string(PRINT_ANY, "nh6",
+			     "nh6 %s ", rt_addr_n2a_rta(AF_INET6, tb[SEG6_LOCAL_NH6]));
 	}
 
 	if (tb[SEG6_LOCAL_IIF]) {
 		int iif = rta_getattr_u32(tb[SEG6_LOCAL_IIF]);
 
-		fprintf(fp, "iif %s ",
-			if_indextoname(iif, ifbuf) ?: "<unknown>");
+		print_string(PRINT_ANY, "iif",
+			     "iif %s ", ll_index_to_name(iif));
 	}
 
 	if (tb[SEG6_LOCAL_OIF]) {
 		int oif = rta_getattr_u32(tb[SEG6_LOCAL_OIF]);
 
-		fprintf(fp, "oif %s ",
-			if_indextoname(oif, ifbuf) ?: "<unknown>");
+		print_string(PRINT_ANY, "oif",
+			     "oif %s ", ll_index_to_name(oif));
 	}
+
+	if (tb[SEG6_LOCAL_BPF])
+		print_encap_bpf_prog(fp, tb[SEG6_LOCAL_BPF], "endpoint");
 }
 
 static void print_encap_mpls(FILE *fp, struct rtattr *encap)
@@ -247,10 +284,10 @@ static void print_encap_mpls(FILE *fp, struct rtattr *encap)
 	parse_rtattr_nested(tb, MPLS_IPTUNNEL_MAX, encap);
 
 	if (tb[MPLS_IPTUNNEL_DST])
-		fprintf(fp, " %s ",
+		print_string(PRINT_ANY, "dst", " %s ",
 			format_host_rta(AF_MPLS, tb[MPLS_IPTUNNEL_DST]));
 	if (tb[MPLS_IPTUNNEL_TTL])
-		fprintf(fp, "ttl %u ",
+		print_uint(PRINT_ANY, "ttl", "ttl %u ",
 			rta_getattr_u8(tb[MPLS_IPTUNNEL_TTL]));
 }
 
@@ -261,48 +298,26 @@ static void print_encap_ip(FILE *fp, struct rtattr *encap)
 	parse_rtattr_nested(tb, LWTUNNEL_IP_MAX, encap);
 
 	if (tb[LWTUNNEL_IP_ID])
-		fprintf(fp, "id %llu ",
-			ntohll(rta_getattr_u64(tb[LWTUNNEL_IP_ID])));
+		print_u64(PRINT_ANY, "id", "id %llu ",
+			   ntohll(rta_getattr_u64(tb[LWTUNNEL_IP_ID])));
 
 	if (tb[LWTUNNEL_IP_SRC])
-		fprintf(fp, "src %s ",
-			rt_addr_n2a_rta(AF_INET, tb[LWTUNNEL_IP_SRC]));
+		print_color_string(PRINT_ANY, COLOR_INET,
+				   "src", "src %s ",
+				   rt_addr_n2a_rta(AF_INET, tb[LWTUNNEL_IP_SRC]));
 
 	if (tb[LWTUNNEL_IP_DST])
-		fprintf(fp, "dst %s ",
-			rt_addr_n2a_rta(AF_INET, tb[LWTUNNEL_IP_DST]));
+		print_color_string(PRINT_ANY, COLOR_INET,
+				   "dst", "dst %s ",
+				   rt_addr_n2a_rta(AF_INET, tb[LWTUNNEL_IP_DST]));
 
 	if (tb[LWTUNNEL_IP_TTL])
-		fprintf(fp, "ttl %d ", rta_getattr_u8(tb[LWTUNNEL_IP_TTL]));
+		print_uint(PRINT_ANY, "ttl",
+			   "ttl %u ", rta_getattr_u8(tb[LWTUNNEL_IP_TTL]));
 
 	if (tb[LWTUNNEL_IP_TOS])
-		fprintf(fp, "tos %d ", rta_getattr_u8(tb[LWTUNNEL_IP_TOS]));
-}
-
-static char *ila_csum_mode2name(__u8 csum_mode)
-{
-	switch (csum_mode) {
-	case ILA_CSUM_ADJUST_TRANSPORT:
-		return "adj-transport";
-	case ILA_CSUM_NEUTRAL_MAP:
-		return "neutral-map";
-	case ILA_CSUM_NO_ACTION:
-		return "no-action";
-	default:
-		return "unknown";
-	}
-}
-
-static int ila_csum_name2mode(char *name)
-{
-	if (strcmp(name, "adj-transport") == 0)
-		return ILA_CSUM_ADJUST_TRANSPORT;
-	else if (strcmp(name, "neutral-map") == 0)
-		return ILA_CSUM_NEUTRAL_MAP;
-	else if (strcmp(name, "no-action") == 0)
-		return ILA_CSUM_NO_ACTION;
-	else
-		return -1;
+		print_uint(PRINT_ANY, "tos",
+			   "tos %d ", rta_getattr_u8(tb[LWTUNNEL_IP_TOS]));
 }
 
 static void print_encap_ila(FILE *fp, struct rtattr *encap)
@@ -316,12 +331,24 @@ static void print_encap_ila(FILE *fp, struct rtattr *encap)
 
 		addr64_n2a(rta_getattr_u64(tb[ILA_ATTR_LOCATOR]),
 			   abuf, sizeof(abuf));
-		fprintf(fp, " %s ", abuf);
+		print_string(PRINT_ANY, "locator",
+			     " %s ", abuf);
 	}
 
 	if (tb[ILA_ATTR_CSUM_MODE])
-		fprintf(fp, " csum-mode %s ",
-			ila_csum_mode2name(rta_getattr_u8(tb[ILA_ATTR_CSUM_MODE])));
+		print_string(PRINT_ANY, "csum_mode",
+			     " csum-mode %s ",
+			     ila_csum_mode2name(rta_getattr_u8(tb[ILA_ATTR_CSUM_MODE])));
+
+	if (tb[ILA_ATTR_IDENT_TYPE])
+		print_string(PRINT_ANY, "ident_type",
+			     " ident-type %s ",
+			     ila_ident_type2name(rta_getattr_u8(tb[ILA_ATTR_IDENT_TYPE])));
+
+	if (tb[ILA_ATTR_HOOK_TYPE])
+		print_string(PRINT_ANY, "hook_type",
+			     " hook-type %s ",
+			     ila_hook_type2name(rta_getattr_u8(tb[ILA_ATTR_HOOK_TYPE])));
 }
 
 static void print_encap_ip6(FILE *fp, struct rtattr *encap)
@@ -331,35 +358,27 @@ static void print_encap_ip6(FILE *fp, struct rtattr *encap)
 	parse_rtattr_nested(tb, LWTUNNEL_IP6_MAX, encap);
 
 	if (tb[LWTUNNEL_IP6_ID])
-		fprintf(fp, "id %llu ",
-			ntohll(rta_getattr_u64(tb[LWTUNNEL_IP6_ID])));
+		print_u64(PRINT_ANY, "id", "id %llu ",
+			    ntohll(rta_getattr_u64(tb[LWTUNNEL_IP6_ID])));
 
 	if (tb[LWTUNNEL_IP6_SRC])
-		fprintf(fp, "src %s ",
-			rt_addr_n2a_rta(AF_INET6, tb[LWTUNNEL_IP6_SRC]));
+		print_color_string(PRINT_ANY, COLOR_INET6,
+				   "src", "src %s ",
+				   rt_addr_n2a_rta(AF_INET6, tb[LWTUNNEL_IP6_SRC]));
 
 	if (tb[LWTUNNEL_IP6_DST])
-		fprintf(fp, "dst %s ",
-			rt_addr_n2a_rta(AF_INET6, tb[LWTUNNEL_IP6_DST]));
+		print_color_string(PRINT_ANY, COLOR_INET6,
+				   "dst", "dst %s ",
+				   rt_addr_n2a_rta(AF_INET6, tb[LWTUNNEL_IP6_DST]));
 
 	if (tb[LWTUNNEL_IP6_HOPLIMIT])
-		fprintf(fp, "hoplimit %d ",
-			rta_getattr_u8(tb[LWTUNNEL_IP6_HOPLIMIT]));
+		print_u64(PRINT_ANY, "hoplimit",
+			   "hoplimit %u ",
+			   rta_getattr_u8(tb[LWTUNNEL_IP6_HOPLIMIT]));
 
 	if (tb[LWTUNNEL_IP6_TC])
-		fprintf(fp, "tc %d ", rta_getattr_u8(tb[LWTUNNEL_IP6_TC]));
-}
-
-static void print_encap_bpf_prog(FILE *fp, struct rtattr *encap,
-				 const char *str)
-{
-	struct rtattr *tb[LWT_BPF_PROG_MAX+1];
-
-	parse_rtattr_nested(tb, LWT_BPF_PROG_MAX, encap);
-	fprintf(fp, "%s ", str);
-
-	if (tb[LWT_BPF_PROG_NAME])
-		fprintf(fp, "%s ", rta_getattr_str(tb[LWT_BPF_PROG_NAME]));
+		print_uint(PRINT_ANY, "tc",
+			   "tc %u ", rta_getattr_u8(tb[LWTUNNEL_IP6_TC]));
 }
 
 static void print_encap_bpf(FILE *fp, struct rtattr *encap)
@@ -375,7 +394,8 @@ static void print_encap_bpf(FILE *fp, struct rtattr *encap)
 	if (tb[LWT_BPF_XMIT])
 		print_encap_bpf_prog(fp, tb[LWT_BPF_XMIT], "xmit");
 	if (tb[LWT_BPF_XMIT_HEADROOM])
-		fprintf(fp, "%d ", rta_getattr_u32(tb[LWT_BPF_XMIT_HEADROOM]));
+		print_uint(PRINT_ANY, "headroom",
+			   " %u ", rta_getattr_u32(tb[LWT_BPF_XMIT_HEADROOM]));
 }
 
 void lwt_print_encap(FILE *fp, struct rtattr *encap_type,
@@ -388,7 +408,7 @@ void lwt_print_encap(FILE *fp, struct rtattr *encap_type,
 
 	et = rta_getattr_u16(encap_type);
 
-	fprintf(fp, " encap %s ", format_encap_type(et));
+	print_string(PRINT_ANY, "encap", " encap %s ", format_encap_type(et));
 
 	switch (et) {
 	case LWTUNNEL_ENCAP_MPLS:
@@ -448,7 +468,10 @@ static struct ipv6_sr_hdr *parse_srh(char *segbuf, int hmac, bool encap)
 
 	i = srh->first_segment;
 	for (s = strtok(segbuf, ","); s; s = strtok(NULL, ",")) {
-		inet_get_addr(s, NULL, &srh->segments[i]);
+		inet_prefix addr;
+
+		get_addr(&addr, s, AF_INET6);
+		memcpy(&srh->segments[i], addr.data, sizeof(struct in6_addr));
 		i--;
 	}
 
@@ -527,11 +550,60 @@ static int parse_encap_seg6(struct rtattr *rta, size_t len, int *argcp,
 	return 0;
 }
 
+struct lwt_x {
+	struct rtattr *rta;
+	size_t len;
+};
+
+static void bpf_lwt_cb(void *lwt_ptr, int fd, const char *annotation)
+{
+	struct lwt_x *x = lwt_ptr;
+
+	rta_addattr32(x->rta, x->len, LWT_BPF_PROG_FD, fd);
+	rta_addattr_l(x->rta, x->len, LWT_BPF_PROG_NAME, annotation,
+		      strlen(annotation) + 1);
+}
+
+static const struct bpf_cfg_ops bpf_cb_ops = {
+	.ebpf_cb = bpf_lwt_cb,
+};
+
+static int lwt_parse_bpf(struct rtattr *rta, size_t len,
+			 int *argcp, char ***argvp,
+			 int attr, const enum bpf_prog_type bpf_type)
+{
+	struct bpf_cfg_in cfg = {
+		.type = bpf_type,
+		.argc = *argcp,
+		.argv = *argvp,
+	};
+	struct lwt_x x = {
+		.rta = rta,
+		.len = len,
+	};
+	struct rtattr *nest;
+	int err;
+
+	nest = rta_nest(rta, len, attr);
+	err = bpf_parse_and_load_common(&cfg, &bpf_cb_ops, &x);
+	if (err < 0) {
+		fprintf(stderr, "Failed to parse eBPF program: %s\n",
+			strerror(-err));
+		return -1;
+	}
+	rta_nest_end(rta, nest);
+
+	*argcp = cfg.argc;
+	*argvp = cfg.argv;
+
+	return 0;
+}
+
 static int parse_encap_seg6local(struct rtattr *rta, size_t len, int *argcp,
 				 char ***argvp)
 {
 	int segs_ok = 0, hmac_ok = 0, table_ok = 0, nh4_ok = 0, nh6_ok = 0;
-	int iif_ok = 0, oif_ok = 0, action_ok = 0, srh_ok = 0;
+	int iif_ok = 0, oif_ok = 0, action_ok = 0, srh_ok = 0, bpf_ok = 0;
 	__u32 action = 0, table, iif, oif;
 	struct ipv6_sr_hdr *srh;
 	char **argv = *argvp;
@@ -573,17 +645,17 @@ static int parse_encap_seg6local(struct rtattr *rta, size_t len, int *argcp,
 			NEXT_ARG();
 			if (iif_ok++)
 				duparg2("iif", *argv);
-			iif = if_nametoindex(*argv);
+			iif = ll_name_to_index(*argv);
 			if (!iif)
-				invarg("\"iif\" interface not found\n", *argv);
+				exit(nodev(*argv));
 			rta_addattr32(rta, len, SEG6_LOCAL_IIF, iif);
 		} else if (strcmp(*argv, "oif") == 0) {
 			NEXT_ARG();
 			if (oif_ok++)
 				duparg2("oif", *argv);
-			oif = if_nametoindex(*argv);
+			oif = ll_name_to_index(*argv);
 			if (!oif)
-				invarg("\"oif\" interface not found\n", *argv);
+				exit(nodev(*argv));
 			rta_addattr32(rta, len, SEG6_LOCAL_OIF, oif);
 		} else if (strcmp(*argv, "srh") == 0) {
 			NEXT_ARG();
@@ -608,6 +680,14 @@ static int parse_encap_seg6local(struct rtattr *rta, size_t len, int *argcp,
 			} else {
 				continue;
 			}
+		} else if (strcmp(*argv, "endpoint") == 0) {
+			NEXT_ARG();
+			if (bpf_ok++)
+				duparg2("endpoint", *argv);
+
+			if (lwt_parse_bpf(rta, len, &argc, &argv, SEG6_LOCAL_BPF,
+			    BPF_PROG_TYPE_LWT_SEG6LOCAL) < 0)
+				exit(-1);
 		} else {
 			break;
 		}
@@ -773,6 +853,34 @@ static int parse_encap_ila(struct rtattr *rta, size_t len,
 				     (__u8)csum_mode);
 
 			argc--; argv++;
+		} else if (strcmp(*argv, "ident-type") == 0) {
+			int ident_type;
+
+			NEXT_ARG();
+
+			ident_type = ila_ident_name2type(*argv);
+			if (ident_type < 0)
+				invarg("\"ident-type\" value is invalid\n",
+				       *argv);
+
+			rta_addattr8(rta, 1024, ILA_ATTR_IDENT_TYPE,
+				     (__u8)ident_type);
+
+			argc--; argv++;
+		} else if (strcmp(*argv, "hook-type") == 0) {
+			int hook_type;
+
+			NEXT_ARG();
+
+			hook_type = ila_hook_name2type(*argv);
+			if (hook_type < 0)
+				invarg("\"hook-type\" value is invalid\n",
+				       *argv);
+
+			rta_addattr8(rta, 1024, ILA_ATTR_HOOK_TYPE,
+				     (__u8)hook_type);
+
+			argc--; argv++;
 		} else {
 			break;
 		}
@@ -845,54 +953,6 @@ static int parse_encap_ip6(struct rtattr *rta, size_t len,
 	 */
 	*argcp = argc + 1;
 	*argvp = argv - 1;
-
-	return 0;
-}
-
-struct lwt_x {
-	struct rtattr *rta;
-	size_t len;
-};
-
-static void bpf_lwt_cb(void *lwt_ptr, int fd, const char *annotation)
-{
-	struct lwt_x *x = lwt_ptr;
-
-	rta_addattr32(x->rta, x->len, LWT_BPF_PROG_FD, fd);
-	rta_addattr_l(x->rta, x->len, LWT_BPF_PROG_NAME, annotation,
-		      strlen(annotation) + 1);
-}
-
-static const struct bpf_cfg_ops bpf_cb_ops = {
-	.ebpf_cb = bpf_lwt_cb,
-};
-
-static int lwt_parse_bpf(struct rtattr *rta, size_t len,
-			 int *argcp, char ***argvp,
-			 int attr, const enum bpf_prog_type bpf_type)
-{
-	struct bpf_cfg_in cfg = {
-		.argc = *argcp,
-		.argv = *argvp,
-	};
-	struct lwt_x x = {
-		.rta = rta,
-		.len = len,
-	};
-	struct rtattr *nest;
-	int err;
-
-	nest = rta_nest(rta, len, attr);
-	err = bpf_parse_common(bpf_type, &cfg, &bpf_cb_ops, &x);
-	if (err < 0) {
-		fprintf(stderr, "Failed to parse eBPF program: %s\n",
-			strerror(-err));
-		return -1;
-	}
-	rta_nest_end(rta, nest);
-
-	*argcp = cfg.argc;
-	*argvp = cfg.argv;
 
 	return 0;
 }

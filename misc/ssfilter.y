@@ -42,7 +42,7 @@ static void yyerror(char *s)
 %nonassoc '!'
 
 %%
-applet: null expr
+applet: null exprlist
         {
                 *yy_ret = $2;
                 $$ = $2;
@@ -51,6 +51,32 @@ applet: null expr
         ;
 null:   /* NOTHING */ { $$ = NULL; }
         ;
+exprlist: expr
+        | '!' expr
+        {
+                $$ = alloc_node(SSF_NOT, $2);
+        }
+        | '(' exprlist ')'
+        {
+                $$ = $2;
+        }
+        | exprlist '|' expr
+        {
+                $$ = alloc_node(SSF_OR, $1);
+                $$->post = $3;
+        }
+        | exprlist '&' expr
+        {
+                $$ = alloc_node(SSF_AND, $1);
+                $$->post = $3;
+        }
+        | exprlist expr
+        {
+                $$ = alloc_node(SSF_AND, $1);
+                $$->post = $2;
+        }
+        ;
+
 expr:	DCOND HOSTCOND
         {
 		$$ = alloc_node(SSF_DCOND, $2);
@@ -128,30 +154,6 @@ expr:	DCOND HOSTCOND
         {
                 $$ = alloc_node(SSF_S_AUTO, NULL);
         }
-        | expr '|' expr
-        {
-                $$ = alloc_node(SSF_OR, $1);
-	        $$->post = $3;
-        }
-        | expr expr
-        {
-                $$ = alloc_node(SSF_AND, $1);
-	        $$->post = $2;
-        }
-        | expr '&' expr
-
-        {
-                $$ = alloc_node(SSF_AND, $1);
-	        $$->post = $3;
-        }
-        | '!' expr
-        {
-                $$ = alloc_node(SSF_NOT, $2);
-        }
-        | '(' expr ')'
-        {
-                $$ = $2;
-        }
 ;
 %%
 
@@ -202,15 +204,23 @@ int yylex(void)
 				argc++;
 			} else if (yy_fp) {
 				while (tokptr == NULL) {
-					if (fgets(argbuf, sizeof(argbuf)-1, yy_fp) == NULL)
+					size_t len;
+
+					if (fgets(argbuf, sizeof(argbuf), yy_fp) == NULL)
 						return 0;
-					argbuf[sizeof(argbuf)-1] = 0;
-					if (strlen(argbuf) == sizeof(argbuf) - 1) {
-						fprintf(stderr, "Too long line in filter");
+
+					len = strnlen(argbuf, sizeof(argbuf));
+					if (len == 0) {
+						fprintf(stderr, "Invalid line\n");
 						exit(-1);
 					}
-					if (argbuf[strlen(argbuf)-1] == '\n')
-						argbuf[strlen(argbuf)-1] = 0;
+
+					if (len >= sizeof(argbuf) - 1) {
+						fprintf(stderr, "Too long line in filter\n");
+						exit(-1);
+					}
+					if (argbuf[len - 1] == '\n')
+						argbuf[len-1] = 0;
 					if (argbuf[0] == '#' || argbuf[0] == '0')
 						continue;
 					tokptr = argbuf;

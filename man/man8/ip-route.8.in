@@ -33,10 +33,18 @@ ip-route \- routing table management
 .BI from " ADDRESS " iif " STRING"
 .RB " ] [ " oif
 .IR STRING " ] [ "
+.B  mark
+.IR MARK " ] [ "
 .B  tos
 .IR TOS " ] [ "
 .B  vrf
-.IR NAME " ] "
+.IR NAME " ] [ "
+.B  ipproto
+.IR PROTOCOL " ] [ "
+.B  sport
+.IR NUMBER " ] [ "
+.B  dport
+.IR NUMBER " ] "
 
 .ti -8
 .BR "ip route" " { " add " | " del " | " change " | " append " | "\
@@ -123,7 +131,7 @@ replace " } "
 .B  cwnd
 .IR NUMBER " ] [ "
 .B  ssthresh
-.IR REALM " ] [ "
+.IR NUMBER " ] [ "
 .B  realms
 .IR REALM " ] [ "
 .B  rto_min
@@ -141,7 +149,9 @@ replace " } "
 .B  pref
 .IR PREF " ] [ "
 .B  expires
-.IR TIME " ]"
+.IR TIME " ] ["
+.B  fastopen_no_cookie
+.IR BOOL " ]"
 
 .ti -8
 .IR TYPE " := [ "
@@ -523,6 +533,10 @@ sysctl is set to 0.
 .TP
 .BI quickack " BOOL " "(3.11+ only)"
 Enable or disable quick ack for connections to this destination.
+
+.TP
+.BI fastopen_no_cookie " BOOL " "(4.15+ only)"
+Enable TCP Fastopen without a cookie for connections to this destination.
 
 .TP
 .BI congctl " NAME " "(3.20+ only)"
@@ -1028,8 +1042,25 @@ the device from which this packet is expected to arrive.
 force the output device on which this packet will be routed.
 
 .TP
+.BI mark " MARK"
+the firewall mark
+.RB ( "fwmark" )
+
+.TP
 .BI vrf " NAME"
 force the vrf device on which this packet will be routed.
+
+.TP
+.BI ipproto " PROTOCOL"
+ip protocol as seen by the route lookup
+
+.TP
+.BI sport " NUMBER"
+source port as seen by the route lookup
+
+.TP
+.BI dport " NUMBER"
+destination port as seen by the route lookup
 
 .TP
 .B connected
