@@ -1,2432 +1,1419 @@
-iproute2 (4.14.1-1+vyos2+current1) unstable; urgency=medium
+iproute2 (4.19.0-2) unstable; urgency=medium
 
-  * Update to 4.14.1
+  * Simplify debian/rules, just use dh tools.
+  * Set CBUILD_CFLAGS for dpkg-buildflags-missing
+  * Add gitlab-ci.yml for Salsa's CI
+  * Backport patches to let build use dpkg-buildpkg's CPPFLAGS.
+  * Backport patches to fix testsuite cleanup.
+    0008-Makefile-have-check-target-depend-on-all.patch
+    0009-testsuite-declare-dependency-between-TESTS-and-gener.patch
+    0010-testsuite-delete-dummy-interface-after-default-route-tes.patch
+    0011-testsuite-remove-gre-kmods-if-the-test-loads-them.patch
+  * autopkgtest: use built-in macro to install build-depends
+  * autopkgtest: simplify test script by just running make check
+  * autopkgtest: install kmod and sudo, needed by upstream tests
+  * autopkgtest: remove breaks-testbed tag
+  * Bump Standards-Version to 4.3.0, no changes.
 
- -- Christian Poessinger <christian@poessinger.com>  Wed, 21 Mar 2018 21:00:08 +0100
+ -- Luca Boccassi <bluca@debian.org>  Mon, 24 Dec 2018 15:29:30 +0100
 
-iproute2 (4.4.0-1+vyos2+current1) unstable; urgency=medium
+iproute2 (4.19.0-1) experimental; urgency=medium
 
-  * 4.4.0-1
+  [ Ondřej Nový ]
+  * d/changelog: Remove trailing whitespaces
 
- -- Kim Hagen <kim.sidney@gmail.com>  Tue, 29 Mar 2016 07:56:31 +0200
+  [ Luca Boccassi ]
+  * Merge tag 'upstream/4.19.0'
+  * Skip test suite at build time.
+  * Bump Standards-Version to 4.2.1, no changes.
 
-iproute (20131122+vyos2+current1) unstable; urgency=medium
+ -- Luca Boccassi <bluca@debian.org>  Fri, 26 Oct 2018 16:38:42 +0100
 
-  * New branch
+iproute2 (4.18.0-2) unstable; urgency=medium
 
- -- Kim Hagen <kim.sidney@gmail.com>  Sun, 24 Jan 2016 15:15:09 -0500
+  * Ship installed headers in the iproute2 package.
+    At the moment this inludes a single iproute2/bpf_elf.h header.
+    (Closes: #904122)
+  * Add "terse" DEB_BUILD_OPTIONS as per policy 4.2.0.
+    Build with make V=1 by default as the new policy requests.
+  * Set Rules-Requires-Root: no.
+  * Bump debhelper compat level to 10.
+  * Bump Standards-Version to 4.2.0.
 
-iproute (20131122+vyos2+lithium4) unstable; urgency=low
+ -- Luca Boccassi <bluca@debian.org>  Tue, 28 Aug 2018 16:55:44 +0100
 
-  [ Alex Harpin ]
-  * vyatta-iproute: add dh_gencontrol to enable development builds
+iproute2 (4.18.0-1) experimental; urgency=medium
 
- -- Alex Harpin <development@landsofshadow.co.uk>  Sat, 27 Jun 2015 19:53:06 +0100
- 
-iproute (20131122+vyos2+lithium3) unstable; urgency=low
+  * Add Brazilian Portuguese translation for Debconf template. Thanks
+    Adriano Rafael Gomes!
+    (Closes: #903355)
+  * Add Spanish translation for Debconf template. Thanks Jathan!
+    (Closes: #903864)
+  * Add German translation for Debconf template. Thanks Helge!
+    (Closes: #906173)
+  * Merge tag 'upstream/4.18.0'
 
-  * Force release
+ -- Luca Boccassi <bluca@debian.org>  Wed, 15 Aug 2018 11:44:27 +0100
 
- -- Alex Harpin <development@landsofshadow.co.uk>  Mon, 15 Dec 2014 21:13:04 +0000
- 
-iproute (20131122+vyos2+lithium2) unstable; urgency=low
+iproute2 (4.17.0-2) unstable; urgency=medium
 
-  * Update maintainer address.
+  * Upload to unstable.
 
- -- Daniil Baturin <dmbaturin@squeeze32devel.multi.eu>  Sat, 25 Oct 2014 17:33:42 +0200
+ -- Luca Boccassi <bluca@debian.org>  Tue, 03 Jul 2018 21:23:37 +0100
 
-iproute (20131122+vyos2+lithium1) unstable; urgency=low
+iproute2 (4.17.0-1) experimental; urgency=medium
 
-  * New branch
+  * Add Dutch translation for debconf template. Thanks Frans Spiesschaert!
+    (Closes: #899022)
+  * Add French translation for debconf template. Thanks Alban Vidal!
+    (Closes: #899320)
+  * Merge tag 'upstream/4.17.0'
+  * Drop patches merged upstream.
 
- -- Daniil Baturin <daniil@baturin.org>  Sat, 25 Oct 2014 22:10:52 +0700
+ -- Luca Boccassi <bluca@debian.org>  Sat, 09 Jun 2018 17:45:11 +0100
 
-iproute (20120801+vyos1+helium2) unstable; urgency=low
+iproute2 (4.16.0-4) unstable; urgency=medium
 
-  [ Li Wei ]
-  * iproute2: fix typo in help message.
-  * iproute2: configure: Add search path for 64bit library.
+  * Backport patch to fix regression in v6 automated parsing.
+    (Closes: #898840)
 
-  [ Stephen Hemminger ]
-  * Explain TC class id limits
+ -- Luca Boccassi <bluca@debian.org>  Wed, 16 May 2018 17:49:44 +0100
 
-  [ Pavel Emelyanov ]
-  * iproute: Fix errno propagation from rtnl_talk
+iproute2 (4.16.0-3) unstable; urgency=medium
 
-  [ Stephen Hemminger ]
-  * Update can.h to 3.6-rc2
+  * Add Russian translation for Debconf template. Thanks Lev Lamberov!
+    (Closes: #898164)
+  * Add Portuguese translation for Debconf template. Thanks Portuguese
+    Translation Team!
+    (Closes: #898292)
+  * iproute2.postinst: use setcap -r instead of empty set.
+    Thanks Mantas Mikulėnas!
+  * Backport patch to avoid dropping caps if NET_ADMIN is inherited to
+    avoid breaking applications that set ambient capabilities and then
+    fork and exec ip.
+    (Closes: #898015)
+  * Re-enable pristine-tar (note: needs v1.43).
 
-  [ Rostislav Lisovy ]
-  * Ematch used to classify CAN frames according to their identifiers
+ -- Luca Boccassi <bluca@debian.org>  Tue, 15 May 2018 09:46:01 +0100
 
-  [ Oliver Hartkopp ]
-  * iproute2: Add missing tc-ematch.8 for man page installation
+iproute2 (4.16.0-2) unstable; urgency=medium
 
-  [ John Fastabend ]
-  * iproute2: Add FDB print and update cmds for self and master
+  * Restrict iproute2 to linux-any
 
-  [ Stephen Hemminger ]
-  * Install all tc and ip sub pages
+ -- Luca Boccassi <bluca@debian.org>  Thu, 03 May 2018 14:33:22 +0100
 
-  [ John Fastabend ]
-  * iproute2: build failure due to missing '\' in Makefile
-  * iproute2: bridge: remove replace and change options
+iproute2 (4.16.0-1) experimental; urgency=medium
 
-  [ Mathias Krause ]
-  * configure: remove TMPDIR on exit
+  * Merge tag 'upstream/4.16.0' (Closes: #895719).
+  * Drop 0005-revert-flush-default.patch, fixed upstream.
+  * Build-Depend on libcap-dev and Depend on libcap-bin.
+    If capabilities are set on /bin/ip, they will now be dropped
+    immediately unless the command executed is ip vrf exec, in which case
+    they will be dropped after the VRF has been switched, before forking.
+  * Add capabilities to /bin/ip on postinst to fix ip vrf exec if the
+    new low-priority debconf iproute2/setcaps is set to true (false by
+    default).
+  * Bump Standards-Version to 4.1.4, no changes.
 
-  [ Andreas Schwab ]
-  * iproute2: Fix various manpage formatting nits
+ -- Luca Boccassi <bluca@debian.org>  Mon, 16 Apr 2018 14:44:50 +0100
 
-  [ Pavel Emelyanov ]
-  * iproute: Add magic cookie to route dump file
-  * iproute: Add route showdump command (v2)
+iproute2 (4.15.0-3) unstable; urgency=medium
 
-  [ Li Wei ]
-  * iproute2: tc.8: update UNITS section.
+  * Backport 0005-revert-flush-default.patch to fix ip route flush all
+    (Closes: #891511)
 
-  [ Julian Anastasov ]
-  * iproute2: add libgenl files
-  * iproute2: use libgenl in ipl2tp
+ -- Luca Boccassi <bluca@debian.org>  Mon, 12 Mar 2018 22:46:24 +0000
 
-  [ Pavel Emelyanov ]
-  * iproute: Add ability to save, restore and show the interfaces'
-    addresses (resend)
+iproute2 (4.15.0-2) unstable; urgency=medium
 
-  [ John Fastabend ]
-  * iproute2: bridge: finish removing replace option in man pages
+  * Update upstream git repository URL. (Closes: #888804)
 
-  [ Stephen Hemminger ]
-  * man: make sure tc man page gets installed
+ -- Luca Boccassi <bluca@debian.org>  Sun, 18 Feb 2018 11:46:22 +0000
 
-  [ Julian Anastasov ]
-  * iproute2: GENL: merge GENL_REQUEST and GENL_INITIALIZER
+iproute2 (4.15.0-1) experimental; urgency=medium
 
-  [ Stephen Hemminger ]
-  * Add support for AF_BRIDGE
+  * Fix FTCBFS: Pass HOSTCC and PKG_CONFIG variables via CROSS.
+    Thanks Helmut Grohne! (Closes: #888404)
+  * Merge tag 'upstream/4.15.0' (Closes: #561424 #661886 #877983).
+  * Drop 0005-fix-manpage-path.patch, fixed upstream.
+  * Drop 0006-fix-testsuite-broken-pipes.patch, merged upstream.
 
-  [ Werner Fink ]
-  * Change how pdf doc's are created
+ -- Luca Boccassi <bluca@debian.org>  Tue, 30 Jan 2018 14:51:52 +0000
 
-  [ Stephen Hemminger ]
-  * vxlan support
-  * update header files to 3.6
-  * v3.6.0
-  * bridge: manage VXLAN based forwarding tables
-  * l2tp: remove references to old bridge utils
+iproute2 (4.14.1-2) unstable; urgency=medium
 
-  [ Petr Písař ]
-  * iproute2: List interfaces without net address by default
+  * iproute2-doc: set it to Multiarch: foreign - no dependencies
+    and no mainteiner script, just contains text files.
+  * Do not override dpkg architecture variables if already set by
+    dpkg-buildpackage.
+    LW: debian-rules-sets-dpkg-architecture-variable
+  * Drop iproute and iproute-doc transitional packages, as they
+    have already shipped in Jessie and Stretch. (Closes: #878602)
+  * Drop build-dependencies that are no longer necessary since
+    upstream dropped all non-manpages docs. (Closes: #856473)
+  * Update Standards-Version to 4.1.3:
+    - dropped all "extra" priority packages
+    - build reproducible out-of-the-box since 4.14.0
+  * Add 0005-fix-manpage-path.patch to fix paths to documentation
+    files in the manpages. (Closes: #819131, #867875)
+  * Import autopkgtest (and 0006-fix-testsuite-broken-pipes.patch)
+    from Ubuntu. Thanks Christian Ehrhardt!
+  * Drop out-of-tree htb docs as they are not upstream and very,
+    very old. (Closes: #617650)
+  * Install the rdma binary. (Closes: #886231)
+  * Switch from Alioth to Salsa and update VCS metadata.
 
-  [ Stephen Hemminger ]
-  * Update headers to 3.7-pre-rc
+ -- Luca Boccassi <bluca@debian.org>  Wed, 24 Jan 2018 19:19:17 +0000
 
-  [ Matt Burgess ]
-  * iproute2-3.6.0 assumes presence of iptables
+iproute2 (4.14.1-1) unstable; urgency=medium
 
-  [ Nicolas Dichtel ]
-  * iproute2: inform user when a neighbor is removed
+  * Merge tag 'upstream/4.14.1'
+  * Drop 0002-txtdocs.patch, not needed anymore.
+  * Remove rules and matches for old iproute doc, removed upstream.
+  * B-D on zlib1g-dev as a workaround for #885071.
 
-  [ Julian Anastasov ]
-  * iproute2: add support for tcp_metrics
+ -- Luca Boccassi <bluca@debian.org>  Sat, 23 Dec 2017 14:55:10 +0100
 
-  [ Stephen Hemminger ]
-  * vxlan: add support for port range
-  * vxlan: only send group address if defined
-  * Update kernel headers to 3.7-rc1
+iproute2 (4.13.0-1) unstable; urgency=medium
 
-  [ Or Gerlitz ]
-  * iplink: Added support for the kernel IPoIB RTNL ops
+  * Merge tag 'upstream/4.13.0' (Closes: #879854)
+  * Drop 0003-fix-segfault-with-iptables-1.6.patch, merged upstream.
+  * Refresh 0001-Add-moo-feature.patch to remove fuzz from 4.13.0.
+  * Add myself to Uploaders.
 
-  [ Stephen Hemminger ]
-  * iplink: add vxlan to man page
+ -- Luca Boccassi <bluca@debian.org>  Sun, 17 Dec 2017 15:25:29 +0000
 
-  [ Vincent Bernat ]
-  * ip: fix "ip -6 route add ... nexthop"
+iproute2 (4.9.0-2.1) unstable; urgency=high
 
-  [ Pavel Emelyanov ]
-  * ss: Rename some tcp- names into inet-
-  * ss: Split inet_show_netlink into parts
-  * ss: Support sock-diag
-  * ss: Get udp sockets info via sock-diag
+  * Non-maintainer upload.
+  * Backport upstream commit 97a02cabef to fix segfault with iptables 1.6;
+    the xtables_globals structure needs to have its new member compat_rev
+    initialized. (Closes: #868059)
+  * Sync include/xtables.h from iptables to make sure the right offset is
+    used when accessing structure members defined in libxtables. One could
+    get “Extension does not know id …” otherwise. (See also: #868059)
 
-  [ Stephen Hemminger ]
-  * bridge: remove trailing whitespace
-  * bridge: use rta_getattr_xxx wrappers
+ -- Cyril Brulebois <cyril@debamax.com>  Wed, 22 Nov 2017 17:43:04 +0000
 
-  [ Mike Frysinger ]
-  * allow pkg-config to be customized
+iproute2 (4.9.0-2) unstable; urgency=medium
+
+  * Let uscan verify signature of upstream tarball
+  * Add debian/upstream/metadata
+  * Remove myself from uploaders
+  * Reinstate Alexander Wirt as primary maintainer
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 14 Sep 2017 11:01:46 +0200
+
+iproute2 (4.9.0-1) unstable; urgency=medium
+
+  * New upstream release, tested by Julian Wollrath.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 13 Dec 2016 16:57:50 +0100
+
+iproute2 (4.8.0-1) unstable; urgency=medium
+
+  * Fix debian/gbp.conf to import upstream tag on import-orig
+  * New upstream release.
+  * Ship upstream iproute2 docs in iproute2-doc package
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 26 Oct 2016 16:07:30 +0200
+
+iproute2 (4.6.0-4) unstable; urgency=medium
+
+  * Fix conflict resolution, really remove ifstat binary (Closes: #832573)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 16 Aug 2016 09:48:05 +0200
+
+iproute2 (4.6.0-3) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Laurent Bigonville ]
+  * debian/control: Downgrade transitional packages to Priority extra
 
   [ Andreas Henriksson ]
-  * iproute2: avoid errors from double-installing manpages
+  * Revert "Install ifstat executable and manpage" (Closes: #832573)
 
-  [ Stephen Hemminger ]
-  * man: fix incorrect use of "it's"
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 15 Aug 2016 17:36:13 +0200
+
+iproute2 (4.6.0-2) unstable; urgency=medium
+
+  * Team upload.
+  [ Julian Wollrath ]
+  * Bump standards version to 3.9.8 (no changes needed)
+  * Use at least debhelper version 9 (Closes: #672828)
+  * Add build-dep on libelf-dev (Closes: #812774)
+  * Add build-dep on libmnl-dev
+  * Install tipc and devlink executables (Closes: #803922)
+
+  [ Laurent Bigonville ]
+  * debian/iproute2.install, debian/iproute2.manpages: Rely on upstream build
+    system to install the files and do not pick them from the source directory
+  * debian/iproute2.install: Install the bash completion file
+  * debian/iproute2.manpages: Install the devlink and genl manpages not
+    installed by the upstream build system
+  * Install ifstat executable and manpage
+  * Run wrap-and-sort script
+  * debian/control: Update the Homepage URL
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 26 Jul 2016 18:43:10 +0200
+
+iproute2 (4.6.0-1) unstable; urgency=medium
+
+  [ Julian Wollrath ]
+  * Imported upstream version 4.6.0:
+    - Add build-dep on texlive-latex-extra for fullpage
+  * Remove debian/patches/f_u32
+  * Change VCS URLs to the canonical ones
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sat, 09 Jul 2016 13:17:22 +0200
+
+iproute2 (4.3.0-1) unstable; urgency=medium
+
+  * Add debian/gbp.conf
+  * Imported Upstream version 4.3.0
+  * Have quilt unfuzz debian/patches/0001-Add-moo-feature.patch
+  * Ship new generic netlink utility: genl
+  * Ship examples via debian/iproute2-doc.examples instead
+  * Add myself to debian/copyright
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 26 Nov 2015 18:34:59 +0100
+
+iproute2 (4.1.1-1) unstable; urgency=medium
+
+  * [be9f298] Imported Upstream version 4.1.1
+
+ -- Alexander Wirt <formorer@debian.org>  Mon, 17 Aug 2015 16:10:46 +0200
+
+iproute2 (4.0.0-1) unstable; urgency=medium
+
+  * [6dd90fb] Imported Upstream version 4.0.0
+  * [03b830b] Remove obsolete patch
+              0003-ip-link-Remove-unnecessary-device-checking
+  * [8c27170] Refresh patches
+  * [0c99cce] Bump standards version (no changes)
+
+ -- Alexander Wirt <formorer@debian.org>  Wed, 24 Jun 2015 10:01:45 +0200
+
+iproute2 (3.16.0-2) unstable; urgency=medium
+
+  * Cherry-pick upstream commit f1b66ff8
+    "ip link: Remove unnecessary device checking" (Closes: #757644)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 05 Sep 2014 07:47:42 -0700
+
+iproute2 (3.16.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 3.16.0
+    - a.k.a. snapshot 140804
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 05 Aug 2014 14:08:55 +0200
+
+iproute2 (3.15.0-2) unstable; urgency=medium
+
+  * Enable selinux support in ss (Closes: #751963)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 18 Jun 2014 14:27:57 +0200
+
+iproute2 (3.15.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 3.15.0
+    - bridge: Make filter_index match in signedness (Closes: #749155)
+    - fix print_ipt: segfault if more then one filter with action -j MARK.
+      (Closes: #710450)
+    - and more...
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 15 Jun 2014 11:17:11 +0200
+
+iproute2 (3.14.0-2) unstable; urgency=medium
+
+  * Add build-dependency on cm-super-minimal (Closes: #750565)
+  * Run wrap-and-sort
+  * Bump Standards-Version to 3.9.5
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 04 Jun 2014 18:26:32 +0200
+
+iproute2 (3.14.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 3.14.0
+    - htb: support 64bit rates (Closes: #731507)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 14 Apr 2014 19:13:42 +0200
+
+iproute2 (3.12.0-2) unstable; urgency=medium
+
+  * Add build-dependency on texlive-fonts-recommended (Closes: #738397)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 12 Feb 2014 22:18:40 +0100
+
+iproute2 (3.12.0-1) unstable; urgency=low
+
+  * Improve removal comment in transitional packages descriptions
+    (Closes: #708823)
+  * Imported Upstream version 3.12.0 (aka snapshot 20131122)
+    - ss now avoids negative numbers in malloc, partially fixes #511720
+    - gretap now listed in help output and manpage (Closes: #582675)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 26 Nov 2013 00:43:35 +0100
+
+iproute2 (3.11.0-1) unstable; urgency=low
+
+  * Imported Upstream version 3.11.0 (aka snapshot 20130903)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 04 Sep 2013 21:21:03 +0200
+
+iproute2 (3.10.0-1) unstable; urgency=low
+
+  * Imported Upstream version 3.10.0 (aka. snapshot 20130716)
+  * Let "gbp-pq rebase && gbp-pq export" drop upstreamed patches
+    - 0003-iproute2-fix-build-failure-on-sparc-due-to-Wformat-a.patch
+    - 0004-iproute2-patch-against-GCC-4.8.0.patch
+    - 0005-ip-fix-build-failure-if-time_t-is-not-long-int.patch
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 24 Jul 2013 12:23:53 +0200
+
+iproute2 (3.9.0-5) unstable; urgency=low
+
+  * Cherry-pick patch from upstream to fix build on x32.
+    Thanks to Adam Borowski (Closes: #714172)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 26 Jun 2013 21:04:16 +0200
+
+iproute2 (3.9.0-4) unstable; urgency=low
+
+  * Cherry-pick upstream patch to build with gcc 4.8.0 (Closes: #713998)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 24 Jun 2013 19:54:41 +0200
+
+iproute2 (3.9.0-3) unstable; urgency=low
+
+  * Cherry-pick sparc build failure fix from upstream (Closes: #711540)
+    - 0003-iproute2-fix-build-failure-on-sparc-due-to-Wformat-a.patch:
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 10 Jun 2013 11:59:42 +0200
+
+iproute2 (3.9.0-2) unstable; urgency=low
+
+  * Give up and just use an epoch for the transitional packages
+  * Add misc:Depends to transitional packages to please lintian
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 08 May 2013 14:27:12 +0200
+
+iproute2 (3.9.0-1) experimental; urgency=low
+
+  * debian/copyright: List additional copyright holders
+  * debian/copyright: say GPLv2 (only) as not all files are "or later".
+  * Imported Upstream version 3.9.0
+  * Please lintian with dummy copyright lines for transitional packages
+  * Bump standards-version to 3.9.4
+
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 03 May 2013 15:32:09 +0200
+
+iproute2 (3.8.0-2) experimental; urgency=low
+
+  * Add dummy copyright and changelog for iproute and iproute-doc
+    - bump iproute and iproute-doc packag version to 20130000-2 and
+      make their only content static to hopefully allow us to reupload
+      new versions of the package with the transitional packages still
+      on the same old version, to avoid having to bump it each time.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 21 Feb 2013 21:09:28 +0100
+
+iproute2 (3.8.0-1) experimental; urgency=low
+
+  * Imported Upstream version 3.8.0
+    - ip: handle flush with table > 2^31 (Closes: #700434)
+  * Refresh patches to apply without fuzz and offset
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 21 Feb 2013 20:16:18 +0100
+
+iproute2 (3.7.0-1) experimental; urgency=low
+
+  * Add additional meta-info to previous changelog entries
+  * Rename the package and adopt new versioning scheme! (Closes: #693575)
+    - iproute renamed to iproute2 to properly match upstream name.
+    - iproute-doc renamed to iproute2-doc
+    - iproute-dev dropped. It only shipped libnetlink static library
+      which is actively discuraged. See libmnl instead.
+    - add transitional packages iproute and iproute-doc.
+  * Add debian/watch file to track upstream releases
+  * Make iproute2 and iproute2-doc conflict and replace older equivalents
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 18 Feb 2013 19:04:12 +0100
+
+iproute (20121211-2) experimental; urgency=low
+
+  [ Kamal Mostafa ]
+  * Enable cross-compile support in debian/rules (Closes: #670660)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 12 Dec 2012 12:29:03 +0100
+
+iproute (20121211-1) experimental; urgency=low
+
+  * Imported Upstream version 3.7.0 (aka. snapshot 20121211)
+    - this version has the fix for cross-compile
+    - fixes it's vs its in manpages (Closes: #693043)
+  * Revert "List interfaces without net address by default"
+    - patch from upstream now part of latest release.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 12 Dec 2012 11:59:52 +0100
+
+iproute (20121001-2) experimental; urgency=low
+
+  * Generate recommends for optional module dependencies
+    This makes the optional module dependency on libxtables more
+    visible, to hopefully get iproute rebuilt whenever libxtables
+    bumps soname.
+    Thanks to iptables maintainer for splitting libxtables9 into
+    a separate package in version 1.4.16.3-2.
+  * 0001-iproute2-List-interfaces-without-net-address-by-defa.patch:
+    List interfaces without net address by default.
+    This fixes regression in iproute2-3.5.1 when `ip addr show' skipped
+    interfaces without network layer address.
+    Patch from upstream (git 7f747fd9377b8538ad).
+
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 09 Nov 2012 15:49:24 +0100
+
+iproute (20121001-1) experimental; urgency=low
+
+  * Imported Upstream version 3.6.0 (aka snapshot 20121001)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 02 Oct 2012 23:49:00 +0200
+
+iproute (20120813-1) experimental; urgency=low
+
+  * Add references to fixed bugs in changelog entry for 20120801-1
+  * Fix download url in debian/copyright
+  * Imported Upstream version 20120813
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 14 Aug 2012 17:11:20 +0200
+
+iproute (20120801-1) experimental; urgency=low
+
+  * Imported Upstream version 20120801 aka v3.5.0
+    - includes new tc codel support (Closes: #675942)
+    - support both del and delete in all cases (Closes: #673355)
+    - manpage fixes from Bjarni Ingi Gislason (Closes: #674704, #674706)
+  * debian/iproute.install: Install new bridge tool to /sbin
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 02 Aug 2012 02:03:07 +0200
+
+iproute (20120521-3) unstable; urgency=low
+
+  [ Helmut Grohne ]
+  * Mark iproute as Multi-Arch: foreign. (Closes: #676175)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 21 Jun 2012 12:33:31 +0200
+
+iproute (20120521-2) unstable; urgency=low
+
+  * Revert "Apply hardening build flags"
+    - hardening simply breaks iproute2 in too many ways.
+    (Closes: #674730, #674847) (Reopens: #672828)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 28 May 2012 12:31:29 +0200
+
+iproute (20120521-1) unstable; urgency=low
+
+  * Imported Upstream version 3.4 (aka snapshot 20120521)
+    - trivial fix of ip link syntax in manpage (Closes: #673171)
+  * Apply hardening build flags (Closes: #672828)
+  * debian/iproute.manpages: fix path to manpages.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 22 May 2012 14:21:27 +0200
+
+iproute (20120319-1) unstable; urgency=low
+
+  * Build-depend on pkg-config (Closes: #657062)
+  * Imported Upstream version 3.3.0 (aka snapshot 20120319)
+    This release includes, among other things, the following bug fixes:
+    - C++ compatible netlink headers (Closes: #658903)
+    - ip link sorted before l2tp (Closes: #656585)
+    - Improved tuntap documentation (Closes: #629630)
+    - Router advertisement decoding fix (Closes: #634170)
+    - tc iec rates decoding fix (Closes: #662979)
+    - Drop ip route monitor from help syntax and manpage (Closes: #537681)
+  * Revert "Add patch to avoid the need for libnl-dev build dependency"
+    - now included upstream.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 20 Mar 2012 16:51:52 +0100
+
+iproute (20120105-1) unstable; urgency=low
+
+  * Imported Upstream version 3.2 (aka snapshot 20120105)
+    * better manual pages
+    * L2TPv3 support
+    * improved RED options
+    * netem additions for loss models
+    * iptables integration fixes
+  * Don't install (outdated) RELNOTES, dropped upstream.
+  * Refresh debian patches
+  * Bump standards version
+  * debian/patches/ipl2tp-avoid-libnl.diff:
+    Add patch to avoid the need for libnl-dev build dependency
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 10 Jan 2012 12:59:15 +0100
+
+iproute (20111117-1) unstable; urgency=low
+
+  * Imported Upstream version 3.1.0 (aka snapshot 20111117)
+  * Update download location in debian/copyright
+    - tarballs now available from kernel.org
+  * Drop debian/patches/xt-v6.diff, fixed upstream.
+  * Refresh patches: debian/patches/moo.diff and txtdocs.diff
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 23 Nov 2011 22:15:38 +0100
+
+iproute (20110629-1) unstable; urgency=low
+
+  [ Alexander Wirt ]
+  * Install ss to /bin instead of /sbin.
 
   [ Andreas Henriksson ]
-  * iproute2: drop libresolv
+  * Imported Upstream version 2.6.39 (aka snapshot 20110629)
+    - tc filter: fix dport/sport in pretty print output (Closes: #627312)
+  * Finally drop the patch adding the wrr qdisc scheduler to tc
+  * Fix txtdocs patch to apply again
+  * Add patch to build against xtables version 6
 
-  [ Nicolas Dichtel ]
-  * ip/ip6tunnel: fix help for TCLASS
-  * ip/ip6tunnel: reset encap limit flag on change
-  * ip/ip6tunnel: fix update of tclass and flowlabel
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 04 Jul 2011 17:29:04 +0200
 
-  [ Wookey ]
-  * configure: respect $CC environment var override
+iproute (20110315-1) unstable; urgency=low
 
-  [ Nicolas Dichtel ]
-  * ip/ip6tunnel: fix help for TCLASS
-  * ip/ip6tunnel: reset encap limit flag on change
-  * ip/ip6tunnel: fix update of tclass and flowlabel
+  * Imported Upstream version 2.6.38 (snapshot 20110315)
 
-  [ Rostislav Lisovy ]
-  * tc: add canid ematch to ematch_map
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 07 Apr 2011 13:26:51 +0200
 
-  [ Petr Sabata ]
-  * iproute2: ss - change default filter to include all socket types
+iproute (20110107-2) unstable; urgency=low
 
-  [ Stephen Hemminger ]
-  * v3.7.0
-  * Update kernel headers to 3.8-pre
-  * bridge: add if_bridge.h header
+  * Upload to unstable.
 
-  [ Cong Wang ]
-  * iproute2: add mdb sub-command to bridge
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 07 Feb 2011 11:10:01 +0100
 
-  [ Andreas Henriksson ]
-  * iproute2: fix tc ematch manpage section
+iproute (20110107-1) experimental; urgency=low
 
-  [ Nicolas Dichtel ]
-  * ip: add support of netconf messages
-  * ip: add support of 'ip link type ip6tnl'
-  * ip: add support of 'ip link type [ipip|sit]'
+  * Imported Upstream version 2.6.35 (snapshot 20100804)
 
-  [ David L Stevens ]
-  * add DOVE extensions for iproute2
+    Changes since last release (2.6.34):
 
-  [ Cong Wang ]
-  * iproute2: implement add/del mdb entry
-  * iproute2: add support to monitor mdb entries too
-  * iproute2: update usage info of bridge monitor
+    Andreas Henriksson (1):
+          tc: make symbols loaded from tc action modules global.
 
-  [ Nicolas Dichtel ]
-  * ip/link_iptnl: fix indentation Logged in as shemminger
-  * ip: update mand pages and usage() for 'ip mroute'
-  * ip: update man pages for 'ip link'
-  * ip: term OPTIONS was used twice in 'ip route' man pages
-  * ip: use rtnelink to manage mroute
+    Arnd Hannemann (1):
+          iproute2: Add dsfield as alias for tos for ip rules
 
-  [ Zhi Yong Wu ]
-  * ip: add the type 'vxlan' in the output of "ip link help"
+    Ben Greear (1):
+          iproute2: Fix batch-mode for mrules.
 
-  [ Nicolas Dichtel ]
-  * ip: add man pages for netconf
-  * ip: update man pages and usage() for 'ip monitor'
+    Jan Engelhardt (1):
+          Add IFLA_STATS64 support
 
-  [ Mike Frysinger ]
-  * configure: move toolchain init to a function
-  * lib: include the Config file too
-  * configure: pull AR from the env too
+    Mike Frysinger (3):
+          tc: revert "echo" in install target
+          dnet: fix strict aliasing warnings
+          netem: fix installs of dist files
 
-  [ Jan Engelhardt ]
-  * build: unbreak linakge of m_xt.so
+    Patrick McHardy (1):
+          ip: add support for multicast rules
 
-  [ Stephen Hemminger ]
-  * build: indent shell functions in configure
-  * configure: restore old behaviour
-  * bridge: update kernel headers
+    Petr Lautrbach (1):
+          iproute: fix tc generating ipv6 priority filter
 
-  [ Cong Wang ]
-  * bridge: distinguish permanent and temporary mdb entries
-  * bridge: make `bridge mdb` output consistent with input
-  * bridge: update help
+    Stephen Hemminger (5):
+          Update kernel derived headers
+          Update ARP header type table
+          Fix NULL pointer reference when using basic match
+          Fix byte order of ether address match for u32
+          snapshot 100804
 
-  [ Strake ]
-  * include needed files
+    Steve Fink (1):
+          ss -p is much too slow
 
-  [ Mike Frysinger ]
-  * add man7 to subdirs list
-  * do not ignore errors in man subdirs
+    Ulrich Weber (3):
+          iproute2: filter routing entries based on clone flag
+          iproute2: use get_user_hz() for IPv6 print_route
+          iproute2: use int instead of long for RTAX_HOPLIMIT compare
 
-  [ Jamal Hadi Salim ]
-  * iproute2: act_ipt fix xtables breakage
+  * debian/source/format: use 3.0 (quilt)
+  * debian/patches: convert from dpatch to quilt style
+  * debian/patches/*.diff: refresh and use DEP-3 description
+  * debian/rules: drop dpatch usage.
+  * debian/control: drop dpatch build dependency.
+  * debian/README.source: replace with /usr/share/doc/quilt/README.source
+    - could have been dropped since we only use dpkg standard features...
 
-  [ Mike Frysinger ]
-  * ipxfrm: use alloca to allocate stack space
-
-  [ Stephen Hemminger ]
-  * README: update mail address and download location
-
-  [ Eric W. Biederman ]
-  * iproute2: Don't propogate mounts out of ip
-  * iproute2: Normalize return codes in "ip netns"
-  * iproute2: Improve "ip netns add" failure error message
-  * iproute2: Make "ip netns delete" more likely to succeed
-  * iproute2: Fill in the ip-netns.8 manpage
-  * iproute2: Add "ip netns pids" and "ip netns identify"
-
-  [ Stephen Hemminger ]
-  * Makefile: make warnings into errors
-  * libnetlink: add caveat
-
-  [ David Ward ]
-  * ip/iptunnel: Extend TOS syntax
-
-  [ Nicolas Dichtel ]
-  * ipaddr: fix a typo in error msg about SIOCGIFTXQLEN
-
-  [ Johannes Naab ]
-  * iproute2: tc netem rate: allow negative packet/cell overhead
-
-  [ Nicolas Dichtel ]
-  * iplink: display the value of IFLA_PROMISCUITY
-
-  [ Stephen Hemminger ]
-  * ip: change format of promiscuity display
-
-  [ Benjamin Poirier ]
-  * Use pkg-config to obtain xtables.h path
-
-  [ Kees van Reeuwijk ]
-  * iproute2: clarification of various man8 pages
-  * iproute2: clarifications in the tc-hfsc.7 man page
-  * iproute2: add a missing return statement
-  * iproute2: clarifications in the libnetlink.3 man page
-  * iproute2: improved error messages
-
-  [ Stephen Hemminger ]
-  * ip: make local functions static
-  * lib: make string arguments const
-  * Makefile: turn on warnings about missing prototypes
-  * ip: handle flush with table > 2^31
-
-  [ Lutz Jaenicke ]
-  * rtnl_wilddump_request: fix alignment issue for embedded platforms
-
-  [ Kees van Reeuwijk ]
-  * iproute2: clearer error messages for fifo and tbf qdiscs
-
-  [ Stephen Hemminger ]
-  * v3.8.0
-
-  [ Hannes Frederic Sowa ]
-  * ss: show send queue length on unix domain sockets
-
-  [ Stephen Hemminger ]
-  * ss: use rta_getattr_u32
-
-  [ Hannes Frederic Sowa ]
-  * ss: show socket memory stats for unix sockets if requested
-
-  [ Vijay Subramanian ]
-  * Fix compilation error of m_ipt.c with -Werror enabled
-
-  [ Stephen Hemminger ]
-  * ip: fix ipv6 ntable on ppc64
-  * Update kernel headers to 3.9.0-rc1
-  * fix dependency on sizeof(__u64) == sizeof(unsigned long long)
-  * ipntable: more fixes for ppc64
-
-  [ David Ward ]
-  * ip/iptunnel: Fix incorrect syntax in man page
-  * iplink_vlan: Add flag for Multiple VLAN Registration Protocol (MVRP)
-
-  [ David Stevens ]
-  * generalize VXLAN forwarding tables
-
-  [ Stephen Hemminger ]
-  * Revert "generalize VXLAN forwarding tables"
-
-  [ Vlad Yasevich ]
-  * bridge: Add vlan support to fdb entries
-  * bridge: Add vlan configuration support
-  * bridge: Update bridge man pages to include vlan command
-
-  [ Stephen Hemminger ]
-  * bridge: cleanup usage message
-
-  [ Eric W. Biederman ]
-  * iproute2: Document the -D and -I options
-
-  [ roopa ]
-  * Fix -oneline output when alias present
-
-  [ Stephen Hemminger ]
-  * Fix build when shared libraries are disabled
-
-  [ Petr Šabata ]
-  * iproute2: Mention the 'up' argument in documentation
-
-  [ Stephen Hemminger ]
-  * ipmaddr: add whitespace around =
-  * ipaddress: minor white space cleanup
-
-  [ Vlad Yasevich ]
-  * bridge: Add support for setting bridge port attributes
-  * bridge: Add support for printing bridge port attributes
-  * man: Add documentation for the bridge link operation.
-
-  [ Stephen Hemminger ]
-  * bridge: add oneline option
-
-  [ Thomas Egerer ]
-  * ip xfrm state: Allow different selector family
-  * ip xfrm state: Allow different selector family
-
-  [ Stephen Hemminger ]
-  * tc-tbf: remove ancient references to Alpha
-  * ll_map: remove unused address fields
-  * ll_map: use net/if.h to get prototype
-
-  [ James Chapman ]
-  * iproute2: add l2spec_type param to l2tp add session
-  * iproute2: update ip-l2tp man page
-
-  [ David Ward ]
-  * ip/xfrm: Extend SPI validity checking
-  * ip/xfrm: Do not allow redundant algorithm combinations to be
-    specified
-  * ip/xfrm: Improve transform protocol-specific parameter checking
-  * ip/xfrm: Do not print a zero-length algorithm key
-  * ip/xfrm: Command syntax should not expect a key for compression
-  * ip/xfrm: Improve usage text and documentation
-  * ip/xfrm: Improve error strings
-
-  [ Nicolas Dichtel ]
-  * libnetlink: check flag NLM_F_DUMP_INTR during dumps
-
-  [ Stephen Hemminger ]
-  * ll_map: add name and index hash
-  * ip: remove unnecessary ll_init_map
-  * Update kernel headers to 3.9-rc5
-
-  [ Petr Sabata ]
-  * iproute2: Fix some manpage typos
-
-  [ Hubert Kario ]
-  * add short description of batch mode in tc man page
-
-  [ Stephen Hemminger ]
-  * utils: fix range checking for get_u32/get_u64 et all
-  * add linux/fs.h
-  * Revert "add linux/fs.h"
-  * ipnetns: fix build on older systems
-
-  [ Alexander Duyck ]
-  * libnetlink: Use ifinfomsg instead of rtgenmsg in
-    rtnl_wilddump_req_filter
-
-  [ Stephen Hemminger ]
-  * v3.9.0
-
-  [ Alexander Duyck ]
-  * iproute2: act_ipt fix xtables breakage on older versions.
-
-  [ Kamil Rytarowski ]
-  * iproute2 patch against GCC 4.8.0
-
-  [ Nicolas Dichtel ]
-  * ip: add missing help about mode argument
-
-  [ Stephen Hemminger ]
-  * Update headers to 3.10
-
-  [ Daniel Borkmann ]
-  * ip: ipv6: add tokenized interface identifier support
-
-  [ Stephen Hemminger ]
-  * Add vxlan destination port option
-
-  [ David Stevens ]
-  * iproute2: generalize VXLAN forwarding tables
-
-  [ Eric Dumazet ]
-  * ss: add fastopen support
-
-  [ David L Stevens ]
-  * iproute2: support NTF_ROUTER flag in VXLAN fdb entries
-
-  [ Stephen Hemminger ]
-  * vxlan: nag user to set port value
-  * add BPF header files
-
-  [ Nicolas Dichtel ]
-  * ip/xfrm: all to set flag XFRM_SA_XFLAG_DONT_ENCAP_DSCP
-  * ipnetconf: by default dump all entries
-  * ss: allow to retrieve AF_PACKET info via netlink
-
-  [ Pavel Emelyanov ]
-  * ss: Show inet and unix sockets' shutdown state
-
-  [ Stephen Hemminger ]
-  * vxlan: remove dstport option
-
-  [ Rami Rosen ]
-  * ss: replace bfp with bpf in usage().
-
-  [ Nicolas Dichtel ]
-  * man: describe --bpf option of ss
-
-  [ Sriram Narasimhan ]
-  * iptuntap: allow creation of multi-queue tun/tap device
-
-  [ Stephen Hemminger ]
-  * man: get rid of useless reference to GNU style options
-
-  [ John Fastabend ]
-  * iproute2: bridge: fix 'bridge link' setlink/getlink parsing
-
-  [ Andreas Henriksson ]
-  * iproute2: fix build failure on sparc due to -Wformat and tv_usec
-
-  [ Andrey Vagin ]
-  * ip: set the close-on-exec flag for descriptors
-  * ss: handle socket diag request in a separate function
-  * ss: create a function to print info about netlink sockets
-  * ss: show destination address for netlink sockets
-  * ss: Get netlink sockets info via sock-diag (v2)
-
-  [ Eric Dumazet ]
-  * htb: report overhead attribute
-
-  [ Stephen Hemminger ]
-  * htb: fix indentation
-
-  [ Eric Dumazet ]
-  * get_rate: detect 32bit overflows
-
-  [ Stephen Hemminger ]
-  * update to 3.10-net-next headers
-
-  [ Rony Efraim ]
-  * Add VF link state control
-
-  [ Cong Wang ]
-  * add quickack option to ip route
-
-  [ Patric McHardy ]
-  * ip: iplink_vlan: add 802.1ad support
-
-  [ esr@thyrsus.com ]
-  * First set of manpage markup fixes
-
-  [ Eric Dumazet ]
-  * ss: add more TCP_INFO components
-
-  [ Adam Borowski ]
-  * ip: fix build failure if time_t is not long int
-
-  [ esr@thyrsus.com ]
-  * tc-stab.8: Fix synopsis errors, an invalid escape, and incorrect
-    English usge.
-
-  [ Amerigo Wang ]
-  * iptunnel: check SIT_ISATAP flag only for SIT tunnel
-
-  [ JunweiZhang ]
-  * ipbatch: fix use of 'ip netns exec'
-
-  [ Thomas Richter ]
-  * iproute2 vxlan documentation update for bridge command
-  * iproute2 vxlan documentation update for ip command
-
-  [ esr@thyrsus.com ]
-  * In tc-ematch.8, remove no-op .ti requests to prevent translation
-    warnings
-  * ip-rule.8: Fix presentational use of .SS.
-
-  [ Stephen Hemminger ]
-  * netns: follow return value conventions of the rest of the code
-  * ip: add batch mode to man page
-  * Make tc and ip batch mode consistent
-  * v3.10.0
-  * Update to 3.11-rc1 kernel headers
-
-  [ Atzm Watanabe ]
-  * vxlan: Allow setting destination to unicast address.
-
-  [ Nicolas Dichtel ]
-  * ipadress: fix display of IPv6 peer address
-  * ip: allow to specify mode for sit tunnels
-
-  [ Stephen Hemminger ]
-  * Remove -Werror
-  * Update kernel headers to net-next for 3.12
-
-  [ Stefan Tomanek ]
-  * ip link: fix display of interface groups
-  * ip rule: add route suppression options
-
-  [ Thomas Richter ]
-  * iproute vxlan add support for fdb replace command
-
-  [ Stephen Hemminger ]
-  * cleanup help message
-  * Fix spelling errors
-  * More minor spelling fixes
-
-  [ Martin Schwenke ]
-  * ip: Add label option to ip monitor
-
-  [ Stephen Hemminger ]
-  * tc: allow qdisc without options
-  * add ability to filter neighbour discovery by protocol
-
-  [ Richard Godbee ]
-  * iproute2: iproute.c: fix usage() spacing problems
-  * iproute2: spelling: noptmudisc -> nopmtudisc
-  * iproute2: ip-route.8.in: minor fixes
-
-  [ Lutz Jaenicke ]
-  * macvlan: fix typo in macvlan_print_opt()
-
-  [ Thomas Egerer ]
-  * ip/xfrm: Fix potential SIGSEGV when printing extra flags
-
-  [ Stephen Hemminger ]
-  * Update kernel headers to 3.11
-
-  [ Nicolas Dichtel ]
-  * ipnetns: fix ip batch mode when using 'netns exec'
-
-  [ Jesper Dangaard Brouer ]
-  * linklayer interface between kernel and tc/userspace
-
-  [ Stephen Hemminger ]
-  * v3.11.0
-  * Update to 3.11 net-next kernel headers
-  * nstat: add json output format
-
-  [ Eric Dumazet ]
-  * pkt_sched: fq: Fair Queue packet scheduler
-
-  [ Petr Písař ]
-  * iproute2: bridge: document mdb
-
-  [ Eric Dumazet ]
-  * tc: support TCA_STATS_RATE_EST64
-  * htb: add support for direct_qlen attribute
-
-  [ Stephen Hemminger ]
-  * Update to 3.12-rc1 headers
-  * nstat: revise json output
-  * ifstat: add json output format
-  * lnstat: add json output format
-  * lnstat, nstat, ifstat: update man pages
-
-  [ Petr Písař ]
-  * iproute2: bridge: Close file with bridge monitor file
-
-  [ Fan Du ]
-  * xfrm: use memcpy to suppress gcc phony buffer overflow warning.
-
-  [ Stephen Hemminger ]
-  * tc: add default action to kernel headers
-
-  [ Jamal Hadi Salim ]
-  * tc: introduce simple action
-  * action: typo nat fix
-
-  [ xeb@mail.ru ]
-  * iproute2: GRE over IPv6 tunnel support.
-
-  [ Stephen Hemminger ]
-  * ipv6 gre: add entry to ether types
-
-  [ xeb@mail.ru ]
-  * iproute2: ip6gre: update man pages
-
-  [ Christophe Gouault ]
-  * xfrm: enable to set non-wildcard mark 0 on SAs and SPs
-
-  [ Nicolas Dichtel ]
-  * iplink: update available type list
-
-  [ Stephen Hemminger ]
-  * Fix handling of qdis without options
-  * htb: remove old unused duplicate qdisc name
-  * update kernel headers
-
-  [ WANG Cong ]
-  * vxlan: add ipv6 support
-
-  [ Nigel Kukard ]
-  * Fix tc stats when using -batch mode
-
-  [ Hangbin Liu ]
-  * ipaddrlabel: use uint32_t instead of int32_t
-
-  [ Andreas Henriksson ]
-  * ss: avoid passing negative numbers to malloc
-
-  [ Sami Kerola ]
-  * ip: make -resolve addr to print names rather than addresses
-
-  [ Stephen Hemminger ]
-  * v3.12.0
-
-  [ Daniil Baturin ]
-
- -- Daniil Baturin <daniil@baturin.org>  Tue, 05 Aug 2014 15:24:39 +0000
-
-iproute (20120801+vyos1+helium1) unstable; urgency=low
-
-  * New branch
-
- -- Daniil Baturin <daniil@baturin.org>  Sat, 15 Feb 2014 14:47:34 +0100
-
-iproute (20120801-vyatta+2+hydrogen1) unstable; urgency=low
-
-  * New branch
-
- -- Daniil Baturin <daniil@baturin.org>  Sat, 16 Nov 2013 23:30:48 +0100
-
-iproute (20120801-vyatta+2+daisy1) unstable; urgency=low
-
-  * new branch
-
- -- James Davidson <james.davidson@vyatta.com>  Sat, 27 Oct 2012 12:01:12 -0700
-
-iproute (20120801-vyatta+2) unstable; urgency=low
-
-  * new branch
-
- -- John Southworth <john.southworth@vyatta.com>  Fri, 12 Oct 2012 19:32:47 -0700
-
-iproute (20120801-vyatta+1) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Refactor ipaddr_list_or_flush
-  * Remove reference to multipath algorithms in usage
-
-  [ Ben Hutchings ]
-  * ss: Report MSS from internal TCP information
-
-  [ Stephen Hemminger ]
-  * man8: build cleanup
-  * Add bridge command
-  * v3.5.0
-  * Update to 3.6.0-pre headers
-
-  [ Saurabh Mohan ]
-  * VTI support for ip tunnel
-
-  [ Saurabh ]
-  * iproute2: VTI support for ip link command.
-
-  [ Rostislav Lisovy ]
-  * add can.h
-
-  [ Eric Dumazet ]
-  * ss: report SK_MEMINFO_BACKLOG
-
-  [ Jiri Pirko ]
-  * iplink: add support for num[tr]xqueues
-
-  [ Xose Vazquez Perez ]
-  * Fix Makefile's
-
-  [ Mike Frysinger ]
-  * Fix regression with 'ip address show'
-
-  [ Florian Westphal ]
-  * tc: add ipset ematch
-  * add ematch man page
-
-  [ Chris Webb ]
-  * Correct the bridge command name in help messages
-
-  [ Dan Kenigsberg ]
-  * utils: invarg: msg precedes the faulty arg
-
-  [ Stephen Hemminger ]
-  * Fix formatting of ip.8 family man page
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 17 Aug 2012 15:34:57 -0700
-
-iproute (20120521-vyatta+6) unstable; urgency=low
-
-  [ Li Wei ]
-  * tc: man: Fix incorrect parameter format in prio.
-  * tc: prio: Perform more strict check on priomap.
-
-  [ Hiroaki SHIMODA ]
-  * tc: u32: Fix icmp_code off.
-  * tc: u32: Fix firstfrag filter.
-
-  [ Li Wei ]
-  * tc: filter: validate filter priority in userspace.
-  * tc: man: add 'delete' command.
-  * tc: man: change man page and comment to confirm to code's behavior.
-  * tc-bfifo: man: Add parameter value range.
-
-  [ Stephen Hemminger ]
-  * Enable hardening
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 13 Jul 2012 11:02:01 -0700
-
-iproute (20120521-vyatta+5) unstable; urgency=low
-
-  * Don't build documentation
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 18 Jun 2012 13:41:40 -0700
-
-iproute (20120521-vyatta+4) unstable; urgency=low
-
-  * rebuild again
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 18 Jun 2012 10:42:40 -0700
-
-iproute (20120521-vyatta+3) unstable; urgency=low
-
-  * force rebuild
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Sat, 16 Jun 2012 10:58:29 -0700
-
-iproute (20120521-vyatta+2) unstable; urgency=low
-
-  * Update to current debian build infrastructure
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 15 Jun 2012 16:10:58 -0700
-
-iproute (20120319-vyatta+4) unstable; urgency=low
-
-  [ Jorge Boncompte [DTI2] ]
-  * iproute: show metrics as an unsigned value
-
-  [ Stephen Hemminger ]
-  * Convert to use rta_getattr_ functions
-
-  [ Eric Dumazet ]
-  * Fix ss if INET_DIAG not enabled in kernel
-
-  [ Florian Westphal ]
-  * tc: man: choke counts packets, not bytes
-
-  [ Stephen Hemminger ]
-  * Merge in 3.3-rc2 kernel headers
-
-  [ Rose, Gregory V ]
-  * iproute2: Add netlink attribute to filter dump requests
-
-  [ Christoph J. Thompson ]
-  * iproute2 - Don't hardcode the path to config files
-  * iproute2 - Split up cflags
-  * iproute2 - Split up manual page installation
-  * iproute2 - Fix up and simplify variables pointing to install directories
-
-  [ Chris Elston ]
-  * iproute2: allow IPv6 addresses for l2tp local and remote parameters
-
-  [ Stephen Hemminger ]
-  * Revert "iproute2: allow IPv6 addresses for l2tp local and remote parameters"
-
-  [ Shan Wei ]
-  * ss: use new INET_DIAG_SKMEMINFO option to get more memory information 
-
-  [ James Chapman ]
-  * iproute2: add ip-l2tp man page
-
-  [ Vijay Subramanian ]
-  * Update man8 Makefile
-
-  [ Andreas Henriksson ]
-  * iproute2: trivial fix of ip link syntax in manpage
-
-  [ Stephen Hemminger ]
-  * v3.4.0
-
-  [ Andreas Henriksson ]
-  * iproute2: man page and /bin/ip disagree on del vs delete
-
-  [ Stephen Hemminger ]
-  * Update headers to 3.5 merge window
-  * Remove derived man pages
-
-  [ Vijay Subramanian ]
-  * Update tc-netem manpage to add ecn capability
-  * tc-netem: Add support for ECN packet marking
-
-  [ Eric Dumazet ]
-  * tc_codel: Controlled Delay AQM
-  * fq_codel: Fair Queue Codel AQM
-
-  [ Chris Elston ]
-  * iproute2: allow IPv6 addresses for l2tp local and remote parameters
-
-  [ Vijay Subramanian ]
-  * tc-codel: Add manpage
-  * tc-codel: Update usage text
-
-  [ Jan Ceuleers ]
-  * tc-codel: Fix typos in manpage
-
-  [ Bjarni Ingi Gislason ]
-  * tc(8): Negative indent and missing "-" after an escape
-  * tc-drr(8): tab unquoted in a argument to a macro
-
-  [ Jan Ceuleers ]
-  * Add reference to tc-codel(8) to the SEE ALSO section
-
-  [ Eric Dumazet ]
-  * ip: speedup ip link
-
-  [ Vijay Subramanian ]
-  * tc-fq_codel: Add manpage
-  * tc: Update manpage
-
-  [ Stephen Hemminger ]
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Fri, 15 Jun 2012 15:32:17 -0700
-
-iproute (20120319-vyatta+3) unstable; urgency=low
-
-  * Vti support for ip tunnel cmd.
-
- -- Saurabh Mohan <saurabh.mohan@vyatta.com>  Thu, 17 May 2012 18:19:45 -0700
-
-iproute (20120319-vyatta+2) unstable; urgency=low
-
-  [ João Valverde ]
-  * ipl2tp: allow setting session interface name
-
-  [ Stephen Hemminger ]
-  * Add ability to set link state with ip
-  * Make link mode case independent
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 05 Apr 2012 15:14:34 -0700
-
-iproute (20120319-vyatta+1) unstable; urgency=low
-
-  * gre: allow 0 as a legal key value
-  * ip: allow set and display of link mode parameter
-  * v3.3.0
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 19 Mar 2012 20:03:05 -0700
-
-iproute (20120105-vyatta+4) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Fix ip-monitor manual page what-is entry
-
-  [ Anton Danilov ]
-  * csum action, fix typo
-
-  [ Kenyon Ralph ]
-  * Update ip address manual page
-
-  [ Stephen Hemminger ]
-  * update to 3.3-rc7 kernel headers
-
-  [ Florian Westphal ]
-  * ip: xfrm: report nat-t/encapsulation portmapping updates
-
-  [ Stephen Hemminger ]
-  * Fix rta_getattr_u32 wrapper and add getattr_u8
-  * gre: allow 0 as a legal key value
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Thu, 15 Mar 2012 18:39:51 -0700
-
-iproute (20120105-vyatta+3) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Add cast to rta_getattr_str
-  * red: add missing include math.h
-
-  [ Greg Rose ]
-  * iproute2: Add VF spoofchk command description to ip-link.8 man page
-
-  [ Tony Zelenoff ]
-  * Modify neighbour proxy show
-  * Adjust man page for new functionality
-
-  [ Stephen Hemminger ]
-  * Don't put configure files in /tmp
-  * dhcp-client-script: don't use /tmp
-
-  [ Matt Tierney ]
-  * ss: Close file descriptors in tcp_show_netlink.
-
-  [ Stephen Hemminger ]
-  * ss: simplify code
-  * arpd: allow configuring polling interval
-  * ipaddress: cleanup code for link stats64
-
-  [ Petr Sabata ]
-  * iproute2: tc - mqprio formatted print fix
-
-  [ Yegor Yefremov ]
-  * iproute2: cleanup dependencies
-
-  [ Andreas Henriksson ]
-  * iproute: fix tc -iec display of Mibit rates
-
-  [ Stephen Hemminger ]
-  * Keep cscope around after make clean
-  * iproute: allow changing gretap parameters
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Wed, 14 Mar 2012 10:33:29 -0700
-
-iproute (20120105-vyatta+2) unstable; urgency=low
-
-  * new branch
-
- -- Deepti Kulkarni <deepti@vyatta.com>  Sat, 03 Mar 2012 02:24:28 -0800
-
-iproute (20120105-vyatta+1) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Update to 3.1-rc9 kernel headers
-
-  [ Thomas Jarosch ]
-  * Fix unterminated readlink() buffer usage
-
-  [ Stephen Hemminger ]
-  * ip: fix exit codes
-
-  [ Mike Frysinger ]
-  * tc: fix parallel build file with lex/yacc
-
-  [ Michal Soltys ]
-  * HFSC (7) & (8) documentation + assorted changes
-  * HFS manpage changes
-
-  [ Stephen Hemminger ]
-  * cleanup ematch yacc files
-
-  [ Petr Šabata ]
-  * Display closed UDP sockets on 'ss -ul'
-
-  [ Stephen Hemminger ]
-  * v3.1.0
-  * Update to 3.2.0-rc2 headers
-
-  [ Thomas Jarosch ]
-  * tc: Remove unused variable 'res'.
-  * tc: Use correct variable type for get_distribution() result
-
-  [ Eric Dumazet ]
-  * ss: report ecnseen
-
-  [ Greg Rose ]
-  * iproute2: Add new command to ip link to enable/disable VF spoof check
-
-  [ Eric Dumazet ]
-  * red: give a hint about burst value
-  * red: make burst optional
-
-  [ Hagen Paul Pfeifer ]
-  * netem: add man-page
-
-  [ Eric Dumazet ]
-  * red: harddrop support and cleanups
-
-  [ Florian Westphal ]
-  * tc: man: add man page for stochastic fair blue
-
-  [ Stephen Hemminger ]
-  * Split up ip man page
-  * Update to latest 3.2 kernel headers
-  * netem: fix man page
-  * netem: add support for 4 state and GE loss model
-  * libnetlink: change rtnl_send() to take void *
-  * libnetlink: add more attribute functions
-
-  [ Eric Dumazet ]
-  * netem: fix a typo in explain()
-
-  [ Stephen Hemminger ]
-  * libnetlink: remove unused junk callback
-  * libnetlink: add attribute access inline functions
-  * l2tp: Add l2tp support
-
-  [ Jan Engelhardt ]
-  * iproute2: avoid use of implicit declarations
-
-  [ Stephen Hemminger ]
-  * ematch: fix warning about yyerror and const
-  * ematch: fix warning about unused input()
-  * README cleanup's
-
-  [ Jan Engelhardt ]
-  * iproute2: proper detection of libxtables position and flags
-  * iproute2: fix calling up the xt action
-
-  [ Stephen Hemminger ]
-  * v3.2.0
-  * iplt2p: remove unused libnl headers
-  * Fix man page whatis entry errors
-  * Update to kernel v3.3 headers
-  * Update to 3.3 headers (with inet_diag fix)
-
-  [ Vijay Subramanian ]
-  * netem: Add missing '}' in man page
-
-  [ Masatake YAMATO ]
-  * using NLM_F_DUMP flag constant in libnetlink.c
-
-  [ Hagen Paul Pfeifer ]
-  * utils: add s32 parser
-  * tc: netem rate shaping and cell extension
-
-  [ Stephen Hemminger ]
-  * netem: add rate extension to man page
-
-  [ Eric Dumazet ]
-  * red: Add adaptative algo Logged in as shemminger
-  * red: fix adaptive spelling
-  * sfq: add optional RED on top of SFQ
-  * choke: support TCA_CHOKE_MAX_P
-  * gred: support TCA_GRED_MAX_P attribute
-
-  [ Stephen Hemminger ]
-  * ip: make 'ip l' be 'ip link'
-
-  [ Vijay Subramanian ]
-  * netem: Fail cleanly if user input is wrong
-
-  [ nick black ]
-  * Update ip manpage
-
-  [ Pavel Emelyanov ]
-  * iproute: Dump unix sockets via netlink
-
-  [ Stephen Hemminger ]
-  * Fix unix socket diagnostic build
-
-  [ Vijay Subramanian ]
-  * netem: Fix up grammatical errors in man page
-  * netem: Fix 'reorder' section of man page
-
-  [ Eric Dumazet ]
-  * tc-red: update man page
-  * tc-sfq: update man page
-  * ss: should support CONFIG_INET_UDP_DIAG=n kernels
-
-  [ Stephen Hemminger ]
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 31 Jan 2012 14:57:18 -0800
-
-iproute (20111010-vyatta+1) unstable; urgency=low
-
-  [ Bin Li ]
-  * ip: fix typo in ip link manual page
-
-  [ Florian Westphal ]
-  * tc: man: add man page for choke scheduler
-  * tc: man: update sfq man page
-
-  [ Stephen Hemminger ]
-  * Add LLDP to ethernet type table
-
-  [ Dan McGee ]
-  * iproute2: Remove ChangeLog
-
-  [ Florian Westphal ]
-  * tc: filter: fix default 'protocol all' on little-endian platforms
-
-  [ Dan McGee ]
-  * Make iproute2 configure script more flexible
-
-  [ Stephen Hemminger ]
-  * Update headers to 3.0.4
-
-  [ Eric W. Biederman ]
-  * iproute2: Auto-detect the presence of setns in libc
-  * iproute2: Fail "ip netns add" on existing network namespaces.
-
-  [ Dan McGee ]
-  * iptuntap: avoid double open
-  * genl: remove unused code
-  * ensure uptime is initialized if /proc/uptime cannot be opened
-  * xt: only unset fields if m is non NULL
-
-  [ Stephen Hemminger ]
-  * Add ntable to ip man page
-
-  [ Petr Sabata ]
-  * iproute2: ss - fix missing parameters
-  * iproute2: lnstat - fix typos
-  * iproute2: arpd - fix usage and manpage options
-
-  [ Sridhar Samudrala ]
-  * iproute2: Fix usage and man page for 'ip link'
-
-  [ Thomas Jarosch ]
-  * Fix pipe I/O stream descriptor leak in init_service_resolver()
-
-  [ Jiri Benc ]
-  * iproute2: fix changing of ip6ip6 tunnel parameters
-
-  [ Thomas Jarosch ]
-  * Fix file descriptor leak on error in rtnl_hash_initialize()
-  * Fix wrong comparison in cmp_print_eopt()
-  * Fix wrong sanity check in choke_parse_opt()
-  * Fix memory leak of lname variable in get_target_name()
-  * Add missing closedir() call in do_show()
-  * Fix file descriptor leak on error in iproute_flush_cache()
-  * Fix file descriptor leak on error in read_viftable()
-  * Fix file descriptor leak on error in read_mroute_list()
-  * Fix file descriptor leak in do_tunnels_list()
-  * Fix file descriptor leak on error in read_igmp()
-
-  [ Stephen Hemminger ]
-  * ip: fix man page warnings
-  * v3.0.0
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 10 Oct 2011 09:05:02 -0700
-
-iproute (20110629-vyatta+1) unstable; urgency=low
-
-  [ John Fastabend ]
-  * iproute2: improve mqprio inputs for queue offsets and counts
-
-  [ Eric Dumazet ]
-  * ip: Support IFLA_TXQLEN in ip link command
-
-  [ Stephen Hemminger ]
-  * tc filter: fix dport/sport in pretty print output
-
-  [ Eric Dumazet ]
-  * ss: fix autobound filter
-
-  [ Stephen Hemminger ]
-  * ip: addrlabel fix set never used warning
-  * ip: iproute fix set never used warning
-  * tc: fix set never used warning in red
-  * libnetlink: fix set never used warning
-  * Fix set-never-used warning in ifstat
-  * ss: check result of readlink
-  * skbedit: fix set-never-used warning
-  * xt match: fix set-never-used warning
-  * v2.6.39
-
-  [ Gilles Espinasse ]
-  * iproute2: fix minor typo in comments
-
-  [ David Ward ]
-  * xfrm: Update documentation
-
-  [ Petr Sabata ]
-  * iproute2: Remove unreachable code
-
-  [ Andreas Henriksson ]
-  * iproute2: Fix building xt module against xtables version 6
-
-  [ Stephen Hemminger ]
   * Update .gitignore
-  * Update kernel headers to 3.0
-  * Fix test for EOF on continuation line
+  * debian/patches/fix-ip-route-get.diff: fix failing route matching.
+  * debian/copyright: Update download location
+  * packaging: automatically unapply patches after build
+  * packaging: ignore if stamp-build and stamp-doc doesn't exist on
+    clean
+  * packaging: clean up generated txt docs when cleaning unpatched
+  * packaging: bump debhelper compatibility and dependency to v8
+  * packaging: switch debian/rules to dh
+  * debian/control: bump to policy 3.9.1
+  * remove manual symlinking of manpages
 
-  [ Eric W. Biederman ]
-  * iproute2: Add processless network namespace support
+  * Imported Upstream version 2.6.37 (snapshot 20110107)
 
-  [ Stephen Hemminger ]
-  * Remove redundant limits.h
-  * Add QFQ scheduler
+    Changes since last release (2.6.35):
 
-  [ Christoph Biedl ]
-  * ip: fix display of prefix cache info
+    Andreas Schwab (1):
+          iproute2: remove useless use of buffer
+
+    Ben Greear (2):
+          iproute2: Fix filtering related to flushing IP addresses.
+          Allow 'ip addr flush' to loop more than 10 times
+
+    Changli Gao (1):
+          iproute2: tc: f_flow: add key rxhash
+
+    Dan Smith (1):
+          Add ip route save/restore
+
+    Eric Dumazet (2):
+          ip: add RTA_MARK support
+          iproute2: add 64bit support to ifstat
+
+    Gerrit Renker (1):
+          tc-red: typo in man page
+
+    Gregoire Baron (1):
+          tc: add ACT_CSUM action support (csum)
+
+    Mike Frysinger (1):
+          m_xt: stop using xtables_set_revision()
+
+    Octavian Purdila (1):
+          iproute2: initialize the ll_map only once
+
+    Petr Sabata (3):
+          ss(8) improvements by Jiri Popelka <jpopelka@redhat.com>
+          ss: Change "do now" to "do not" in ss(8), -n option
+          ip: Few typo and grammar errors fixes for ip(8) manpage
+
+    Sridhar Samudrala (1):
+          Support 'mode' parameter when creating macvtap device
+
+    Stephen Hemminger (11):
+          Snapshot for 2.6.35.1
+          Update kernel headers to 2.6.36-rc2
+          Use correct rt_link_statistics
+          Fix GRED options clearing
+          Update to 2.6.36 headers
+          Workaround for repeated distclean
+          Use standard routines for interface name to index etc
+          Increase size of ifindex hash heads
+          Cleanup ll_map
+          Update to 2.6.37-rc8 headers
+          v2.6.37
+
+    Timo Teräs (2):
+          iproute2: treat gre key as number
+          iproute2: support xfrm upper protocol gre key
+
+    Ulrich Weber (2):
+          iproute2: dont filter cached routes on iproute_get
+          iproute2: display xfrm socket policy direction
+
+  * Revert "debian/patches/fix-ip-route-get.diff" - fixed upstream.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 12 Jan 2011 10:56:53 +0100
+
+iproute (20100519-3) unstable; urgency=low
+
+  [ Alexander Wirt ]
+  * Add README.source
 
   [ Andreas Henriksson ]
-  * iproute2: Remove "monitor" from "ip route help" output
-
-  [ Stephen Hemminger ]
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 09 Aug 2011 10:18:44 -0700
-
-iproute (20110317-vyatta3) unstable; urgency=low
-
-  * new branch
-
- -- Deepti Kulkarni <deepti@vyatta.com>  Thu, 07 Jul 2011 20:52:27 -0700
-
-iproute (20110317-vyatta2) unstable; urgency=low
-
-  * Revert "Fix matching on ethernet src/dst address"
-  * u32 match copy from upstream
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Fri, 10 Jun 2011 10:29:16 -0700
-
-iproute (20110317-vyatta1) unstable; urgency=low
-
-  [ Petr Sabata ]
-  * ss(8) improvements by Jiri Popelka <jpopelka@redhat.com>
-
-  [ Mike Frysinger ]
-  * m_xt: stop using xtables_set_revision()
-
-  [ Timo Teräs ]
-  * iproute2: treat gre key as number
-  * iproute2: support xfrm upper protocol gre key
-
-  [ Changli Gao ]
-  * iproute2: tc: f_flow: add key rxhash
-
-  [ Andreas Schwab ]
-  * iproute2: remove useless use of buffer
-
-  [ Sridhar Samudrala ]
-  * Support 'mode' parameter when creating macvtap device
-
-  [ Ben Greear ]
-  * Allow 'ip addr flush' to loop more than 10 times
-
-  [ Gregoire Baron ]
-  * tc: add ACT_CSUM action support (csum)
-
-  [ Dan Smith ]
-  * Add ip route save/restore
-
-  [ Petr Sabata ]
-  * ss(8) improvements by Jiri Popelka <jpopelka@redhat.com>
-
-  [ Mike Frysinger ]
-  * m_xt: stop using xtables_set_revision()
-
-  [ Timo Teräs ]
-  * iproute2: treat gre key as number
-  * iproute2: support xfrm upper protocol gre key
-
-  [ Changli Gao ]
-  * iproute2: tc: f_flow: add key rxhash
-
-  [ Andreas Schwab ]
-  * iproute2: remove useless use of buffer
-
-  [ Sridhar Samudrala ]
-  * Support 'mode' parameter when creating macvtap device
-
-  [ Ben Greear ]
-  * Allow 'ip addr flush' to loop more than 10 times
-
-  [ Gregoire Baron ]
-  * tc: add ACT_CSUM action support (csum)
-
-  [ Dan Smith ]
-  * Add ip route save/restore
-
-  [ Petr Sabata ]
-  * ss: Change "do now" to "do not" in ss(8), -n option
-
-  [ Gerrit Renker ]
-  * tc-red: typo in man page
-
-  [ Stephen Hemminger ]
-  * Increase size of ifindex hash heads
-
-  [ Octavian Purdila ]
-  * iproute2: initialize the ll_map only once
-
-  [ Stephen Hemminger ]
-  * Cleanup ll_map
-
-  [ Petr Sabata ]
-  * ip: Few typo and grammar errors fixes for ip(8) manpage
-
-  [ Stephen Hemminger ]
-  * Update to 2.6.37-rc8 headers
-  * v2.6.37
-  * Update to lasest kernel headers
-
-  [ Roopa Prabhu ]
-  * iproute2: add VF_PORT support
-
-  [ Stephen Hemminger ]
-  * Revert "iproute2: add VF_PORT support"
-  * CHOKe scheduler
-  * update to net-next (2.6.39) headers
-
-  [ Vlad Dogaru ]
-  * iproute2: support listing devices by group
-  * iproute2: support device group semantics
-  * iproute2: support device group semantics
-
-  [ Joy Latten ]
-  * xfrm security context support
-  * xfrm security context support
-  * xfrm security context support
-
-  [ Gerrit Renker ]
-  * utils: get_jiffies always uses base=0
-  * iproute: fix unit conversion of rtt/rttvar/rto_min
-  * iproute: rename 'get_jiffies' since it uses msecs
-
-  [ Eric Dumazet ]
-  * sfq: add divisor support
-
-  [ Vlad Dogaru ]
-  * iproute2: fix man page whitespace
-
-  [ Nicolas Dichtel ]
-  * iproute2: allow to specify truncation bits on auth algo
-
-  [ Jiri Pirko ]
-  * iplink: implement setting of master devic
-
-  [ Stephen Hemminger ]
-  * Remove #ifdef's
-
-  [ Nicolas Dichtel ]
-  * iproute2: add support of flag XFRM_STATE_ALIGN4
-
-  [ Diego Elio Pettenò ]
-  * Remove -L flags from link
-
-  [ Stephen Hemminger ]
-  * v2.6.38
-
-  [ Sridhar Samudrala ]
-  * macvlan/macvtap: support 'passthru' mode
-
-  [ Joy Latten ]
-  * xfrm security context support
-  * xfrm security context support
-  * xfrm security context support
-
-  [ Gerrit Renker ]
-  * utils: get_jiffies always uses base=0
-  * iproute: fix unit conversion of rtt/rttvar/rto_min
-  * iproute: rename 'get_jiffies' since it uses msecs
-
-  [ Vlad Dogaru ]
-  * iproute2: fix man page whitespace
-
-  [ Nicolas Dichtel ]
-  * iproute2: allow to specify truncation bits on auth algo
-
-  [ Stephen Hemminger ]
-  * v2.6.38.1
-
-  [ Vlad Dogaru ]
-  * iproute2: support listing devices by group
-
-  [ Stephen Hemminger ]
-  * update to 2.6.39-rc3 headers
-  * Add no-strict-aliasing to genl
-  * Add checks for fgets() when reading proc
-  * Fix snprintf with non format
-  * Fix warning in u32 from assignment in conditional
-
-  [ Brandon Philips ]
-  * ip: fix memory leak in ipmaddr.c
-
-  [ Stephen Hemminger ]
-  * Update email address of netem
-  * Add README.devel
-
-  [ Juliusz Chroboczek ]
-  * tc : SFB flow scheduler
-
-  [ Brandon Philips ]
-  * doc: add pdf targets
-
-  [ John Fastabend ]
-  * iproute2: tc add mqprio qdisc support
-
-  [ Stephen Hemminger ]
-  * Update README information
-
-  [ Ulrich Weber ]
-  * iproute2: parse flag XFRM_POLICY_ICMP
-
-  [ Stephen Hemminger ]
-  * Use INIT_NETDEV_GROUP
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 13 Apr 2011 09:26:16 -0700
-
-iproute (20100804-vyatta6) unstable; urgency=low
-
-  * new branch
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 28 Dec 2010 20:42:11 +0000
-
-iproute (20100804-vyatta5) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Update kernel headers to 2.6.36-rc2
-
-  [ Eric Dumazet ]
-  * ip: add RTA_MARK support
-
-  [ Stephen Hemminger ]
-  * Use correct rt_link_statistics
-
-  [ Eric Dumazet ]
-  * iproute2: add 64bit support to ifstat
-
-  [ Stephen Hemminger ]
-  * Fix GRED options clearing
-
-  [ Ulrich Weber ]
-  * iproute2: display xfrm socket policy direction
-
-  [ Stephen Hemminger ]
-  * Update to 2.6.36 headers
-  * Workaround for repeated distclean
-  * Use standard routines for interface name to index etc
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Nov 2010 12:17:45 -0800
-
-iproute (20100804-vyatta4) unstable; urgency=low
-
-  [ Ben Greear ]
-  * iproute2: Fix filtering related to flushing IP addresses.
-
-  [ Ulrich Weber ]
-  * iproute2: dont filter cached routes on iproute_get
-
-  [ Stephen Hemminger ]
-  * Snapshot for 2.6.35.1
-  * Workaround for repeated distclean
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 18 Nov 2010 15:30:54 -0800
-
-iproute (20100804-vyatta3) unstable; urgency=low
-
-  * UNRELEASED
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Thu, 02 Sep 2010 18:26:04 -0700
-
-iproute (20100804-vyatta2) unstable; urgency=low
-
-  * remove doc package from build
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Mon, 30 Aug 2010 19:25:06 -0700
-
-iproute (20100804-vyatta1) unstable; urgency=low
-
-  * Add dependency on libcap2-bin
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 24 Aug 2010 14:06:15 -0700
-
-iproute (20100329-vyatta3) unstable; urgency=low
+  * tc: make symbols loaded from tc action modules global. (Closes: #584898)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 06 Jul 2010 12:02:39 +0200
+
+iproute (20100519-2) unstable; urgency=low
+
+  * Describe upstream changes between v2.6.33..v2.6.34 in debian
+    changelog. (Closes: #582667)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 24 May 2010 11:22:20 +0200
+
+iproute (20100519-1) unstable; urgency=low
+
+  * New upstream release.
+    + Detect 6rd kernel missing support / 6rd tunnel scope
+    + iproute2: detect iptables modules dir in configure.
+    + iproute2: add option to build m_xt as a tc module (v3)
+    + fix build issues with flex ver 2.5
+    + ip: document initcwnd
+    + iproute2: rework SR-IOV VF support
+    + Add 'ip tuntap' support.
+    + iproute2: fix addrlabel interface names handling
+    + tc: add new queue discipline: head drop fifo
+    + xfrm: policy by mark
+    + xfrm: Introduce xfrm by mark
+    + xfrm: add support for SA by mark
+    + ip: correctly report tunnel link type
+    + Continue after errors in -batch
+    + Update headers for 2.6.33-net-next
+    + Fix line numbering on batch commands
+    + Workaround missing ALIGN() macro
+    + Remove mirred debug message
+    + Workaround missing ALIGN() macro.
+    + Update ip.8 man page to describe route table id values
+    + Update kernel headers to 2.6.34 final version
+    + Add documentation for ip link add/delete sub-commands
+    + ip: add documentation for initrwnd
+    + v2.6.34
+    + Update man page to indicate current options
+    + ip: Add support for setting and showing SR-IOV virtual funtion
+         link params
+    + libnetlink: Modify the parser to track first duplicated
+         attributes
+    + iproute2: netlink support for bus-error reporting and counters
+    + gaiconf: /etc/gai.conf configuration helper.
+    + skbedit: use get_u32 for parsing mark
+    + Add initrwnd to iproute2
+
+  * drop debian/patches/disable-ifstat.dpatch:
+    - ifstat is not installed anyway, no need for this patch.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 20 May 2010 10:19:14 +0200
+
+iproute (20100224-5) unstable; urgency=low
+
+  * Add patch (applied upstream): build m_xt as a tc module
+  * Install /usr/lib/tc/m_ipt.so symlink (to m_xt.so)
+  * Exclude m_ipt.so / m_xt.so from dh_shlibdeps
+  * Add note about tc filter action ipt needs iptables installed
+    to README.Debian.
+    (the above changes closes: #576953)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 18 Apr 2010 18:51:12 +0200
+
+iproute (20100224-4) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: add option to build m_xt as a tc module (v3)
+  * Use multi-line build-depends.
+  * Add iptables-dev build dependency
+    - needed to detect which tc ipt/xt module to build.
+    - also makes autodetecting IPT_LIB_DIR possible....
+  * Revert "explicitly set IPT_LIB_DIR=/lib/xtables when building."
+  * Add patch by Alexandre Cassen (Closes: #575970)
 
   [ Alexandre Cassen ]
   * Detect 6rd kernel missing support / 6rd tunnel scope
 
-  [ Stephen Hemminger ]
-  * Update ip.8 man page to describe route table id values
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 07 Apr 2010 21:36:57 +0200
 
-  [ Bart Trojanowski ]
-  * fix build issues with flex ver 2.5
+iproute (20100224-3) unstable; urgency=low
 
-  [ Florian Westphal ]
-  * iproute2: fix addrlabel interface names handling
+  * The "Brown paper bag" release, sorry.
+  * explicitly set IPT_LIB_DIR=/lib/xtables when building.
+    - the configure script auto-detection won't work in clean
+      build environments since we don't have a build-depedency
+      on iptables!
+  * Fix tc/Makefile to include the "" in the IPT_LIB_DIR define.
 
-  [ Stephen Hemminger ]
-  * Update kernel headers to 2.6.34 final version
-  * Add documentation for ip link add/delete sub-commands
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 11 Mar 2010 21:18:27 +0100
 
-  [ Chris Wright ]
-  * iproute2: rework SR-IOV VF support
+iproute (20100224-2) unstable; urgency=low
 
-  [ Brian Bloniarz ]
-  * ip: document initcwnd
+  * Drop debian/patches/tc_modules.dpatch
+    - /lib/iptables isn't correct anymore.
+  * Try to automatically detect correct iptables modules directory
+    in configure script.
+  * Bump Standards-Version and add ${misc:Depends}
 
-  [ Stephen Hemminger ]
-  * ip: add documentation for initrwnd
-  * v2.6.34
-  * Update kernel derived headers
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 11 Mar 2010 20:35:56 +0100
 
-  [ Jan Engelhardt ]
-  * Add IFLA_STATS64 support
+iproute (20100224-1) unstable; urgency=low
 
-  [ Patrick McHardy ]
-  * ip: add support for multicast rules
+  * New upstream release v2.6.33
+    - Really dropped equalize command since kernel never supported it.
+      (Closes: #149897)
 
-  [ Ulrich Weber ]
-  * iproute2: filter routing entries based on clone flag
-  * iproute2: use get_user_hz() for IPv6 print_route
-  * iproute2: use int instead of long for RTAX_HOPLIMIT compare
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 25 Feb 2010 12:36:02 +0100
 
-  [ Ben Greear ]
-  * iproute2: Fix batch-mode for mrules.
+iproute (20091226-1) unstable; urgency=low
 
-  [ Arnd Hannemann ]
-  * iproute2: Add dsfield as alias for tos for ip rules
+  * New upstream release v2.6.31
+    - dropped equalize command since kernel never supported it.
+      (Closes: #149897)
+    - avoid segfault on incorrect lladdr. (Closes: #526329)
+    - fix manpage typo. (Closes: #539830)
+    - support xtables >= 1.4.5 api. (Closes: #532727, #559022)
+    - ss help to stdout (Closes: #545008)
+    - add -fPIC to lib/Makefile (Closes: #547602)
+    - fix parsing of interfaces for mroute. (Closes: #550097)
+    - don't fail flush with secondary addresses. (Closes: #532152)
+  * hoplimit.dpatch: dropped in favor of other/improved version
+    merged upstream.
+  * Update lynx build-dependency to include lynx-cur
+  * Add patch to avoid using bashisms in configure script.
 
-  [ Mike Frysinger ]
-  * tc: revert "echo" in install target
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 01 Jan 2010 22:48:45 +0100
 
-  [ Petr Lautrbach ]
-  * iproute: fix tc generating ipv6 priority filter
+iproute (20090324-1) unstable; urgency=low
 
-  [ Mike Frysinger ]
-  * dnet: fix strict aliasing warnings
+  * New upstream release v2.6.29-1 (includes "Fix headers needed for gre")
+    - fixed to link against xtables rather then ipt. (Closes: #510924)
+  * Make sure clean drops any potential left-over files from WRR qdisc patch.
+  * Bump standards version to policy 3.8.1, no changes needed.
 
-  [ Stephen Hemminger ]
-  * Update ARP header type table
-  * Fix NULL pointer reference when using basic match
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 26 Mar 2009 12:36:10 +0100
 
-  [ Mike Frysinger ]
-  * netem: fix installs of dist files
-
-  [ Steve Fink ]
-  * ss -p is much too slow
-
-  [ Stephen Hemminger ]
-  * Fix matching on ethernet src/dst address
+iproute (20090115-1) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * tc: make symbols loaded from tc action modules global.
+  * debian/rules: Make stamp-doc target depend on patch target.
+    - package fails to build binary-indep because of missing txt target
+      in doc/Makefile if invoked manually. Reported by Dean Gaudet.
+  * New upstream release v2.6.27 (aka 081027, tagged but no tarballs).
+    - old ipv4 abbrevation compatibility restored. (Closes: #497011)
+    - make it possible to use tunnel names matching "help", if specified
+      with explicit "name" parameter before name. (Closes: #497278)
+    - add new ip link parameters in usage text when running on
+      a kernel that supports them. (Closes: #504064)
+    - only print "Nothing to flush" when told to show stats. (Closes: #492196)
+  * New upstream release v2.6.28 (aka 090115).
 
-  [ Stephen Hemminger ]
-  * Fix byte order of ether address match for u32
-  * Set capabilities on tc and ip executables
-  * snapshot 100804
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 20 Aug 2008 23:01:17 +0200
 
-  [ An-Cheng Huang ]
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 20 Aug 2010 08:42:58 -0700
-
-iproute (20100329-vyatta2) unstable; urgency=low
-
-  * UNRELEASED
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Thu, 22 Jul 2010 17:20:45 -0700
-
-iproute (20100329-vyatta1) unstable; urgency=low
-
-  [ David Woodhouse ]
-  * Add 'ip tuntap' support.
-
-  [ Alexandre Cassen ]
-  * IPv6: 6rd iproute2 support
-
-  [ Stephen Hemminger ]
-  * iproute2-10224
-
-  [ Hagen Paul Pfeifer ]
-  * tc: add new queue discipline: head drop fifo
-
-  [ laurent chavey ]
-  * Add initrwnd to iproute2
-
-  [ Stephen Hemminger ]
-  * Update headers for 2.6.33-net-next
-  * Fix line numbering on batch commands
-
-  [ Williams, Mitch A ]
-  * Update man page to indicate current options
-  * ip: Add support for setting and showing SR-IOV virtual funtion link
-    params
-  * libnetlink: Modify the parser to track first duplicated attributes
-
-  [ jamal ]
-  * skbedit: use get_u32 for parsing mark
-
-  [ Jamal Hadi Salim ]
-  * xfrm: policy by mark
-  * xfrm: Introduce xfrm by mark
-  * xfrm: add support for SA by mark
-
-  [ Wolfgang Grandegger ]
-  * iproute2: netlink support for bus-error reporting and counters
-
-  [ Michele Petrazzo - Unipex ]
-  * Continue after errors in -batch
-
-  [ YOSHIFUJI Hideaki / 吉藤英明 ]
-  * gaiconf: /etc/gai.conf configuration helper.
-
-  [ Jan Engelhardt ]
-  * ip: correctly report tunnel link type
+iproute (20080725-2) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: detect iptables modules dir in configure.
+  * Oops, only set Priority: important on the binary iproute package, the
+    -dev and -doc packages should still be optional.
 
-  [ Stephen Hemminger ]
-  * Update to 2.6.34-rc2 headers
-  * Workaround missing ALIGN() macro
-  * Remove mirred debug message
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 27 Jul 2008 14:38:07 +0200
 
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Mon, 29 Mar 2010 17:39:23 -0700
-
-iproute (20100205-vyatta3) unstable; urgency=low
-
-  * UNRELEASED
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Wed, 17 Feb 2010 16:10:37 -0800
-
-iproute (20100205-vyatta2) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * iproute2-100205
+iproute (20080725-1) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: drop equalize support
+  * New upstream release, v2.6.26 a.k.a. snapshot 080725.
+  * Actually bump Priority in debian/control, which we claimed to do in
+    20071016-3. The real bumping is apparently done by the ftpmaster though.
+    (See: #487533)
+  * Fix syntax errors in ip(8) manpage.
 
-  [ Brian Haley ]
-  * ip: print "temporary" for IPv6 temp addresses
+  [ Alexander Wirt ]
+  * bump standards version (no changes)
 
-  [ Stephen Hemminger ]
+ -- Alexander Wirt <formorer@debian.org>  Sun, 27 Jul 2008 14:02:50 +0200
 
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 09 Feb 2010 11:12:47 -0800
-
-iproute (20100205-vyatta1) unstable; urgency=low
-
-  [ David Ward ]
-  * iproute2: Support 20-byte link layer address in idxmap
-
-  [ Stephen Hemminger ]
-  * Remove Changes: comments
-
-  [ Gilad Ben-Yossef ]
-  * iproute2 add hoplimit parsing and update usage and documentation
-
-  [ David Ward ]
-  * iproute2: Add ll_index_to_addr function
-
-  [ Brian Haley ]
-  * ipv6: Add IFA_F_DADFAILED flag
-
-  [ Mark Borst ]
-  * iproute: "ip mroute show" doesn't show all output interfaces
+iproute (20080417-1) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: use -fPIC in lib/
+  * New upstream release, v2.6.25 a.k.a. snapshot 20080417.
+    - Initial documentation for xfrm (Partially fixes #451337)
+    - Fixes manpage error caught by lintian!
+  * Fix typos (syntax error) in ip(8) manpage.
+    - Introduced by upstream, caught by lintian yet again!
+  * Don't ship useless headers in iproute-dev (Closes: #467557)
+  * Cherry-pick "Fix bad hash calculation because of signed address" from
+    upstream. (Closes: #480173)
 
-  [ Patrick McHardy ]
-  * f_fw: fix compat mode
+  [ Justin B Rye ]
+  * Update package description (Closes: #464521)
 
-  [ Andreas Henriksson ]
-  * iproute: make ss --help output to stdout
-  * Keep the old tc/ipt/xt module for compatibility.
-  * Add new (iptables 1.4.5 compatible) tc/ipt/xt module.
+  [ Alexander Wirt ]
+  * Fix typo in short package description.
 
-  [ Simon Horman ]
-  * flush secondary addresses before primary ones
+ -- Alexander Wirt <formorer@debian.org>  Sun, 11 May 2008 11:18:29 +0200
 
-  [ Stephen Hemminger ]
-  * Fix warning about strtod() return value
-  * Fix warning about sprintf() and NSTAT_HIST
-
-  [ Andreas Henriksson ]
-  * Slightly improve the configure script.
-
-  [ Stephen Hemminger ]
-  * iproute2-091226
-  * Update exported kernel headers
-
-  [ Patrick McHardy ]
-  * iplink_vlan: add support for VLAN loose binding flag
-
-  [ Jamal Hadi Salim ]
-  * skbedit: Add support to mark packets
-
-  [ Patrick McHardy ]
-  * iprule: add oif classification support
-
-  [ Brian Haley ]
-  * Add dadfailed option to ip command
-
-  [ Arnd Bergmann ]
-  * iproute2/iplink: add macvlan options for bridge mode
-
-  [ Mike Frysinger ]
-  * tc: respect LDFLAGS for %.so targets
+iproute (20080108-1) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: avoid using bashisms in configure script.
+  * New upstream release v2.6.24-080108
+  * Drop debian/patches merged upstream.
+    fix_ss_typo.dpatch ip.8-typo ip_address libnetlink_typo.dpatch
+    manpages-typo.dpatch tcb_htb_typo.dpatch tc_cbq_details_typo.dpatch
+    ip_route_usage.dpatch remove_tc_filters_reference.dpatch
+  * Drop some of the unused debian/patches.
+    esfq-support.dpatch heap_corruptionfix tc_sample_fix
+  * Split out direct source edit and put in debian/patches instead for:
+    - disabling build of ifstat (disable-ifstat.dpatch)
+    - building txt documentation (txtdocs.dpatch)
+    - hoplimit option (hoplimit.dpatch)
+  * Add patch to document the "promote secondaries" option. (#429689)
+  * Update debian/rules for arch-indep (iproute-doc). (Closes: #459652)
+  * Drop debian/man/rtmon.8 (use upstreams version instead).
 
-  [ Alex Badea ]
-  * ip xfrm state: parse and print "icmp" and "af-unspec" flags
-  * ip xfrm policy: allow different tmpl family
+  [ Alexander Wirt ]
+  * Update maintainer address
+  * Remove Andreas Barth from uploaders - aba: Thanks for your work!
 
-  [ Florian Westphal ]
-  * tc: man: add limit parameter to tc-sfq man page
-  * tc: man: SO_PRIORITY is described in socket documentation, not tc
-    one
-  * tc: red, gred, tbf: more helpful error messages
-  * tc: remove stale code
-  * tc: man: add man page for drr scheduler
+ -- Alexander Wirt <formorer@debian.org>  Sat, 19 Jan 2008 09:22:11 +0100
 
-  [ Stephen Hemminger ]
-  * Fix spelling errors in changelog
+iproute (20071016-3) unstable; urgency=low
 
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Fri, 05 Feb 2010 12:07:28 -0800
-
-iproute (20091117-vyatta1) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * add include/linux/if_arp.h
-  * Update kernel headers to 2.6.31
-
-  [ Eric Dumazet ]
-  * ss: correct display of sk pointer
-  * ss: adds a space before congestion string
-
-  [ Stephen Hemminger ]
-  * Update to 2.6.32 kernel headers
-  * Consolidate fprintf statements
-
-  [ Sven Anders ]
-  * Fix flushing code - rtnl_send_check
-
-  [ Patrick McHardy ]
-  * iproute uses too small of a receive buffer
-
-  [ Mike Frysinger ]
-  * arpd/ifstat/nstat/rtacct: use daemon()
-  * support static-only systems
-
-  [ Stephen Hemminger ]
-  * Add static-syms.h to ignore
-
-  [ Mike Frysinger ]
-  * tc: remove dlfcn.h from files that don't need it
-
-  [ Stephen Hemminger ]
-  * Add more files to gitignore
-
-  [ Mike Frysinger ]
-  * Ignore GDB related files
-
-  [ Stephen Hemminger ]
-  * iproute2-091117
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 17 Nov 2009 10:07:35 -0800
-
-iproute (20090115-vyatta10) unstable; urgency=low
-
-  * Build with new iptables-dev
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Tue, 03 Nov 2009 08:54:09 -0800
-
-iproute (20090115-vyatta9) unstable; urgency=low
+  [ Alexander Wirt ]
+  * Prevent q_atm from being scanned by dh_shlibdeps
+  * Bump priority to important (Closes: #414086)
+  * Make iproute-doc architecture all
 
   [ Andreas Henriksson ]
-  * iproute: typo in ip manpage
+  * Revert "fix dotted-quad support patch to work on big-endian",
+    and cherry-pick official upstream fix.
+  * Revert "TC action parsing bug fix" (Closes: #458539)
+  * Add synonyms for ip rule options to ip(8) manpage,
+    and drop ip_rule_usage.dpatch (Closes: #433507)
+  * Add routel and routef man page. (Closes: #325290)
 
-  [ Mike Frysinger ]
-  * tc/q_atm.so: respect LDFLAGS
+ -- Alexander Wirt <formorer@debian.org>  Fri, 04 Jan 2008 23:04:36 +0100
 
-  [ Stephen Hemminger ]
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 06 Aug 2009 14:51:35 -0700
-
-iproute (20090115-vyatta8) unstable; urgency=low
-
-  * Fix flushing of large number of entries
-  * update kernel headers to 2.6.31-rc5
-  * Fix typo in IPPROTO_DCCP
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 06 Aug 2009 14:42:25 -0700
-
-iproute (20090115-vyatta7) unstable; urgency=low
-
-  * UNRELEASED
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Fri, 29 May 2009 18:33:44 -0700
-
-iproute (20090115-vyatta6) unstable; urgency=low
-
-  * fix handling of GRED DPs args
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 26 May 2009 15:58:39 -0700
-
-iproute (20090115-vyatta5) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Add IPV6 match pretty print
-  * Allow default DP of zero in gred
+iproute (20071016-2) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * Bug#526329: iproute: Segfault on garbage lladdr
+  * fix incompatibility with older kernels (Closes: #457161)
+    (Cherry picked from upstream)
 
-  [ Denys Fedoryshchenko ]
-  * Filter class output by classid
+ -- Alexander Wirt <formorer@debian.org>  Thu, 20 Dec 2007 23:05:25 +0100
 
-  [ Sascha Hlusiak ]
-  * iproute2: ISATAP potential router list
-
-  [ Wolfgang Grandegger ]
-  * iproute2: Fixes an issue with cross-compilation
-  * iproute2: Support for the CAN netlink
-
-  [ Stephen Hemminger ]
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Tue, 26 May 2009 15:52:02 -0700
-
-iproute (20090115-vyatta4) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Add support for IFALIAS
-  * Handle default hoplimit
-  * Use sanatized headers from 2.6.29
-  * Update snapshot
-  * Fix headers needed for gre
-
-  [ jamal ]
-  * ip: Allow for easier debug of buggy devices that don't send their
-    names
-
-  [ Petr Jediný ]
-  * Changing commandline help text to be more uniform...
-
-  [ Stephen Hemminger ]
-  * remove duplicate limits.h
-
-  [ Varun Chandramohan ]
-  * Add Monitor Support For Neigh Table
-  * Enable Type Labels For "ip monitor all"
+iproute (20071016-1) unstable; urgency=low
 
   [ Andreas Henriksson ]
-  * iproute2: drop equalize support.
-
-  [ Sascha Hlusiak ]
-  * iptunnel: allow ISATAP with stateless autoconf
-
-  [ Srivats P ]
-  * ip6tunnel: Fix no default display of ip4ip6 tunnels
-
-  [ Oliver Hartkopp ]
-  * Add support Controller Area Network
-
-  [ Olaf Rempel ]
-  * iproute2-2.6.14-051107: missing arpd directory
-
-  [ Stephen Hemminger ]
-  * Remove goto chain
-
-  [ Oliver Hartkopp ]
-  * iproute2: add vcan to ip link help text
-
-  [ Thomas Graf ]
-  * cgroup support
-
-  [ Thomas Egerer ]
-  * Fix display of xfrm
-
-  [ Stephen Hemminger ]
-  * Add u32 extension to match on ether source/destination
-  * fix changelog errors
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 15 Apr 2009 15:56:57 -0700
-
-iproute (20090115-vyatta3) unstable; urgency=low
-
-  * Need newer version of iptables-dev
-  * Force configure after clean
-  * Force check for libxtables
-  * Need to clean out leftover yacc/lex temporary
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 18 Mar 2009 17:46:41 -0700
-
-iproute (20090115-vyatta2) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Update headers to 2.6.28
-
-  [ Herbert Xu ]
-  * ip: gre: Add GRE configuration support through rtnl_link
-  * Update version of IP gre
-
-  [ Olivier Fourdan ]
-  * ip maddr show” on an infiniband address causes a stack corruption
-
-  [ Alexander Duyck ]
-  * add support for skbedit action
-  * add support for multiq qdisc
-
-  [ Benedikt Gollatz ]
-  * When the preferred lifetime of a prefix assigned by IPv6
-    autoconfiguration
-
-  [ Denys Fedoryshchenko ]
-  * Fix tc/m_ipt memory leaks
-
-  [ Stephen Hemminger ]
-  * Fix leftovers from earlier change
-  * Fix compile warnings
-  * Update snapshot
-
-  [ Patrick McHardy ]
-  * iproute: add DRR support
-
-  [ Stephen Hemminger ]
-  * fix uninitialized memory in tc_skbedit
-
-  [ Jamal Hadi Salim ]
-  * Breakage noticed when debian upgraded to xtables (iptables > 1.4.1)
-
-  [ Denys Fedoryschenko ]
-  * Fix memory leak in local options
-
-  [ Stephen Hemminger ]
-  * Add missing limits.h
-  * Add DHCP as routing protocol
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Wed, 18 Mar 2009 13:38:49 -0700
-
-iproute (20090115-vyatta1) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Update to 2.6.27 API
-  * update version id
-  * Restore old address parsing but with checking
-  * Compatiable network abbreviation support
-  * Fix help text for ip link
-  * tc filter help should just print usage
-  * Fix duplicate return
-  * Add DSCP values for RFC2597
-  * Merge in upstream 2.6.28 version
-
-  [ An-Cheng Huang ]
-  * "files" file should be removed before package build
-  * update maintainer information
-  * add support for development build
-
-  [ Patrick McHardy ]
-  * Refuse "ip link add/replace" without device type parameter
-  * Support "ip link add help" for rtnl_link API
-  * iflink_vlan: support GVRP flag
-  * cls_flow: add perturbation support
-
-  [ Andreas Henriksson ]
-  * Allow he in tunnel name
-  * iproute: DESTDIR vs LIBDIR.
-  * ip a flush: unnecessarily chatty when there's nothing to flush
-  * ip: abbreviation of network-prefix is no longer possible with ip
-    route
-
-  [ Herbert Xu ]
-  * ip: xfrm: Add AEAD support
-
-  [ Li Yewang ]
-  * distinguish the inet and inet6 domain when loading the tcp_diag
-    module
-  * Fix the error of "ss -f inet -t"
-
-  [ Jussi Kivilinna ]
-  * add generic size table for qdiscs
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Thu, 15 Jan 2009 12:54:50 -0800
-
-iproute (20081027-vyatta3) unstable; urgency=low
-
-  [ Mark O'Brien ]
-  * 3.2.0
-
- -- Stephen Hemminger <stephen.hemminger@vyatta.com>  Thu, 15 Jan 2009 12:47:18 -0800
-
-iproute (20081027-vyatta2) unstable; urgency=low
-
-  * add support for development build
-  * update maintainer information
-  * "files" file should be removed before package build
-
-	  3.2.0
-
-  [ Mark O'Brien ]
-
- -- An-Cheng Huang <ancheng@vyatta.com>  Wed, 07 Jan 2009 19:10:01 -0800
-
-iproute (20081027-vyatta1) unstable; urgency=low
-
-  [ Rick Balocca ]
-  * Fix date in version string
-
-  * Merge in 2.6.27 upstream version
-
-  [ rbalocca ]
-  * Ignore derived files
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 27 Oct 2008 11:13:30 -0700
-
-iproute (20081024-vyatta1) unstable; urgency=low
-
-  [ Stephen Hemminger ]
-  * Fix some control file noise
-
-  [ Andreas Henriksson ]
-  * fix syntax errors in ip(8) manpage.
-
-  [ Denys Fedoryshchenko ]
-  * long/ulong iproute-git fix
-
-  [ Stephen Hemminger ]
-  * More file renames from package rename
-  * Rename package from vyatta-iproute to iproute
-  * Fix up version string changes
-  * Update snapshot
-
-  [ Rafael Almeida ]
-  * Fixed installation when changing DESTDIR
-
-  [ Varun Chandramohan ]
-  * Display Correct Error For Addrlabel Info
-
-  [ Stephen Hemminger ]
-  * Update headers to 2.6.26
-  * Add warning message when MAX_FIELDS reached
-  * Fix array out of bounds problem
-
-  [ Yu Zhiguo ]
-  * Fix generic_proc_open() of command 'nstat' and 'rtacct'
-
-  [ Bertrand Jacquin ]
-  * netem: fix cross-compiling failure
-
-  [ Benjamin Thery ]
-  * iproute2: add support for IFLA_NET_NS_PID in ip link
-
-  [ Patrick McHardy ]
-  * tc: don't set protococol field on filter delete
-
-  [ Stephen Hemminger ]
-  * timers are in user hz
-  * Neighbor cache timer is in user hz
-  * use correct hz for rto,ato
-  * Update to 2.6.26-rc6 headers
-  * ematch related bugfix and cleanup
-  * Use inet_pton to read ipv4 addresses
-
-  [ Mark O'Brien ]
-
- -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 25 Nov 2008 19:07:44 -0800
-
-iproute (20080725-vyatta1) unstable; urgency=low
-
-    * Change name from vyatta-iproute back to iproute
-    * Merge in upstream version
-
- -- Stephen Hemminger <shemminger@vyatta.com>  Mon, 1 Jul 2008 11:13:30 -0700
-
-vyatta-iproute (0.11) unstable; urgency=low
-
-	  3.1.1
-  [ Mark O'Brien ]
-
-
-  [ rbalocca ]
-  * Ignore more derived files
-  * Remove unneeded parameter to doc make
-
-  [ Mark O'Brien ]
-
- -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Sat, 28 Jun 2008 11:22:18 -0700
-
-vyatta-iproute (0.10) unstable; urgency=low
-
-	  3.1.0
-  [ Mark O'Brien ]
-
-
-  [ Andreas Henriksson ]
-  * Add routel and routef man page.
-
-  [ Herbert Xu ]
-  * xfrm: Allow replay setting
-
-  [ jamal ]
-  * Infrastructure for pretty printing
-  * Expose the filter protocol
-
-  [ Stephen Hemminger ]
-  * Change formatting of u32 back to default
-  * Fix bad hash calculation because of signed address
+  * New upstream release (v2.6.23 aka snapshot 071016) (Closes: #445944)
+    - time2tick overflow patch applied upstream (Closes: #175462)
+    - tc ematch cmp/nbyte help patch applied upstream (Closes: #438653)
+    - mpath support dropped upstream (Closes: #428440, #428442)
+    - new manpages included upstream (Closes: #438994)
+    - linux header files updated to v2.6.23 (Closes: #409047)
+  * Drop patches which has been applied upstream or deprecated by
+    upstream changes.
+    - debian/patches/lartc applied upstream.
+    - debian/patches/netbug_fix deprecated, upstream dropped netbug script.
+    - debian/patches/empty_linkname.dpatch deprecated, fixed upstream.
+  * Add .dpatch suffix to wrr-qdisc patch to make dpatch-edit-patch work.
+  * Update patches to apply:
+    - wrr-qdisc, moo, ip_route_usage
+  * Don't install removed netbug script.
+  * Fix corruption when using batch files with comments and broken
+    lines. (cherry-picked from upstream. Closes: #398912)
+  * Update build-dependencies:
+    - libdb4.3-dev -> libdb-dev. (Closes: #442653)
+    - linux-kernel-headers -> linux-libc-dev.
+  * Drop debian/patches/ip_address_flush_loop.dpatch,
+    instead we'll use Daniel Silverstones patch imported from Ubuntu.
+  * Add Homepage and Vcs-{Browser,Git} fields to debian/control.
+  * Remove dead/leftover code from tc/q_htb.c, include/linux/pkt_sched.h
+  * Remove outdated README.Debian.
+  * Drop our own (buggy) RTAX_INITCWND support, in favor of upstreams.
+  * fix dotted-quad support patch to work on big-endian.
+    (upstream applied a broken patch, which we cherry-picked for #357172)
+
+  [ Ben Finney ]
+  * Add dh_md5sums to generate md5sums control file (Closes: #439439)
+
+  [ Justin Pryzby ]
+  * ss(8) manpage formatting breaks EXAMPLE (Closes: #443071)
 
   [ Daniel Silverstone ]
   * Avoid infinite loop in ip addr flush.
 
-  [ Andreas Henriksson ]
-  * document promote_secondaries
-  * Fix typos (syntax error) in ip(8) manpage.
-
-  [ Stephen Hemminger ]
-  * Update version
-
-  [ Patrick McHardy ]
-  * Fix classifier help
-
-  [ Jesper Dangaard Brouer ]
-  * ATM cell alignment.
-
-  [ Stephen Hemminger ]
-  * In police, fix uninitialized "overhead" variable.
-
-  [ Marcela Maslanova ]
-  * man ip.8 miss xfrm option
-
-  [ Björn Steinbrink ]
-  * ss: Fix return value checks for net_*_open
-
-  [ Stephen Hemminger ]
-  * Update kernel headers to 2.6.25-rc7
-
-  [ Jesper Dangaard Brouer ]
-  * police, implement overhead parameter parsing.
-  * CBQ, doc usage of overhead parameter.
-  * CBQ, implement overhead parameter parsing.
-  * CBQ use matches() function instead of strcmp().
-  * TBF overhead parameter parsing.
-
-  [ Mike Frysinger ]
-  * Do not strip binaries with
-
-  [ YOSHIFUJI Hideaki / 吉藤英明 ]
-  * Add missing description about ISATAP and IPv6 tunnels in ip(8)
-    manpage.
-  * Add more aliases for tunnel subcommand.
-
-  [ Stephen Hemminger ]
-  * IP link state show enhancements
-  * Update address of FSF in license
-  * revert earlier mistake ALGO_NAME is okay
-  * Add default value to /etc/iproute2/rt_dsfield
-
-  [ Marcela Maslanova ]
-  * I found out when I was writing manual page, that options ALGO_NAME
-    and
-
-  [ Andreas Henriksson ]
-  * iproute2: fix ip manpage typo (syntax error)
-
-  [ Stephen Hemminger ]
-  * missing dport in f_u32 output
-  * decode the output of u32 matches
-  * get rid of warning from misnamed prototype
-  * break excessively long lines
-  * Revert "rlim qdisc support"
-
-  [ Varun Chandramohan ]
-  * Add missing prefix bit length for addrlabel
-
-  [ YOSHIFUJI Hideaki / 吉藤英明 ]
-  * Add addrlabel sub-command.
-
-  [ PJ Waskiewicz ]
-  * Update various classifiers' help output for expected CLASSID syntax
-
-  [ Stephen Hemminger ]
-  * add include/linux/hdlc/ioctl.h
-  * minor typo fixes
-  * Protocol field on tc_filter is required
-  * add support for matching AOE and CAN ether types
-  * reharmonize headers with pre-freeze 2.6.25
-  * fix typos in help message for meta match
-  * ignore emacs backup files
-  * Change where vlan option shows up in help
-
-  [ Patrick McHardy ]
-  * cls_flow: add vlan-tag support
-
-  [ Stephen Hemminger ]
-  * harmonize headers with upcoming 2.6.25
-
-  [ Patrick McHardy ]
-  * Add flow classifier support
-  * Add support for SFQ xstats
-
-  [ Mark O'Brien ]
-
- -- Mark O'Brien <mobrien@firebolt.vyatta.com>  Tue, 17 Jun 2008 09:26:55 -0700
-
-vyatta-iproute (0.9) unstable; urgency=low
-
-  3.0.5
-
-
- -- Mark O'Brien <mobrien@vyatta.com>  Tue, 06 May 2008 12:43:24 -0700
-
-vyatta-iproute (0.8) unstable; urgency=low
-
-  3.0.4
-
-
- -- Mark O'Brien <mobrien@vyatta.com>  Mon, 05 May 2008 16:40:44 -0700
-
-vyatta-iproute (0.7) unstable; urgency=low
-
-  3.0.3
-  [ Mark O'Brien ]
-
-
-  [ rbalocca ]
-  * Indicate the VC4.0.2 release candidate in the changelog
-
-  [ Mark O'Brien ]
-
- -- Mark O'Brien <mobrien@vyatta.com>  Tue, 29 Apr 2008 16:42:28 -0700
-
-vyatta-iproute (0.6) unstable; urgency=low
-
-  VC4.0.2
-
-
- -- Mark O'Brien <mobrien@vyatta.com>  Sat, 19 Apr 2008 11:56:12 -0700
-
-vyatta-iproute (0.5) unstable; urgency=low
-
-  VC4.0.2 release candidate
-
-
- -- Mark O'Brien <mobrien@vyatta.com>  Wed, 16 Apr 2008 09:50:14 -0700
-
-vyatta-iproute (0.4) unstable; urgency=low
-
-  3.0.2
-
-  * 3.0.1
-
- -- Mark O'Brien <mobrien@vyatta.com>  Fri, 04 Apr 2008 18:00:53 -0700
-
-vyatta-iproute (0.3) unstable; urgency=low
-
-  VC4.0.1
-  [ Mark O'Brien ]
-
-
   [ Alexander Wirt ]
-  * Fix various typos and nitpicks
-  * Add parameters to usage help text.
+  * Add Andreas Henriksson to uploaders
+  * Bump standards version
+  * Support dotted-quad netmasks in iproute (Closes: #357172) (Cherry picked
+    from upstream)
 
-  [ Andreas Barth ]
-  * Remove bogus reference to tc-filters(8) from tc(8) manpage.
+ -- Alexander Wirt <formorer@debian.org>  Sun, 16 Dec 2007 14:30:31 +0100
 
-  [ Andreas Henriksson ]
-  * Fix corruption when using batch files with comments and broken
-    lines.
-  * iproute2: support dotted-quad netmask notation.
-  * iproute2: revert syntax help text mistake.
-  * iproute2: add synonyms for ip rule options to ip(8) manpage.
-  * iproute2: revert syntax help text mistake.
-  * iproute2: add synonyms for ip rule options to ip(8) manpage.
+iproute (20070313-1) unstable; urgency=low
 
-  [ Denys Fedoryshchenko ]
-  * iptables compatiablity
+  * New upstream release
+  * Make iproute-doc a suggest (Closes: #424967)
+  * Add tc_cbq_details_typo.dpatch (Closes: #387083)
+  * Add libnetlink_typo.dpatch (Closes: #396124)
+  * Add tcb_htb_typo.dpatch (Closes: #396317)
+  * Remove references to non-existing tc-filters manpage (Closes:
+    #298715)
+  * Fix bad phrased sentence in ss manpage (Closes: #401552)
 
-  [ François Delawarde ]
-  * tc mask patch
+ -- Alexander Wirt <formorer@debian.org>  Sun, 10 Jun 2007 19:36:48 +0200
 
-  [ Herbert Xu ]
-  * Fix typo in tunnel code (o_key vs. i_key).
-  * Add NAT action
-  * Add NAT action
+iproute (20061002-4) unstable; urgency=low
 
-  [ Jesper Dangaard Brouer ]
-  * Overhead calculation is now done in the kernel.
-  * Cleanup: tc_calc_rtable().
-  * Change the rate table calc of transmit cost to use upper bound
-    value.
+  * Add distribution tables (used by netem).
+    (Closes: #408313)
 
-  [ Patrick McHardy ]
-  * iproute 2.6.23 incompatibility
+ -- Alexander Wirt <formorer@debian.org>  Wed, 24 Jan 2007 22:55:26 +0100
 
-  [ Pavel Emelyanov ]
-  * iplink_parse() routine
+iproute (20061002-3) unstable; urgency=low
 
-  [ Stephen Hemminger ]
-  * 2.6.24-rc3 headers
-  * Merge header file changes from net-2.6.25
-  * Fix breakage from netfilter/ip_tables header change.
-  * Fix breakage from netfilter/ip_tables header change.
-  * Fix off by one in nested attribute management.
-  * rlim qdisc support
-  * Fix dotted quad for bit order
-  * netem potential dist table overflow
-  * veth: use kernel header file
-  * snapshot target
-  * veth.h move to linux/
-  * Manual page fixes
-  * add decode of match rules
-  * snapshot 31 Dec 2007
-  * Use netinet/tcp.h (with correction) rather than kernel headers
-  * Update header files from net-2.6.25
-  * add include/netinet/tcp.h
-  * Revert "TC action parsing bug fix"
-  * Revert "TC action parsing bug fix"
-  * release v2.6.24-080108
-  * fix typo in ip batch error message
-  * update headers to current net-2.6.25
-  * vlan meta tag match
-  * libnetlink: don't spin forever on receive error
-  * remove extra newline from perror() calls
-  * poll for errors after rtnl_send
-  * whitespace typo in tc_common.h
-  * fix problem caused by rtnl_send checks
-  * Add default value to /etc/iproute2/rt_dsfield
-  * Update address of FSF in license
-  * update from VPL1 to GPLv2
+  * Added a patch from Nikolai Kondrashov that fixes unknown
+    symbols in ip_common.h. (Closes: #397584)
 
-  [ Templin, Fred L ]
-  * iproute2-2.6.23: RFC4214 Support (v2.5)
+ -- Alexander Wirt <formorer@debian.org>  Thu, 14 Dec 2006 20:11:55 +0100
 
-  [ Tomas Janousek ]
-  * Correct documentation regarding PROMISC and ALLMULTI.
+iproute (20061002-2) unstable; urgency=medium
 
-  [ Vitaliy Gusev ]
-  * Fix lost export-dynamic
-  * veth device link management
+  * Add manpage for ss, rtmon  and lnstat (Thanks to Michael Prokop for that)
+  * Fix metric output of iproute (backported from git)
+    (http://bugs.archlinux.org/task/5669)
+  * medium as this bug breaks other packages such as vpnc
 
-  [ YOSHIFUJI Hideaki / 吉藤英明 ]
-  * rto_min value display overflow
+ -- Alexander Wirt <formorer@debian.org>  Thu, 19 Oct 2006 06:39:05 +0200
 
-  [ rbalocca ]
-  * SNAPSHOT.h is a derived file that needs to be created
+iproute (20061002-1) unstable; urgency=low
 
-  [ Mark O'Brien ]
+  * New upstream release
+    - This fixes the xfrm monitor mode (Closes: #383133)
+  * Fix typos in manpages (Closes: #387082, #387083)
+  * Split docs in a seperate package
 
- -- Mark O'Brien <mobrien@vyatta.com>  Tue, 18 Mar 2008 19:04:34 -0700
+ -- Alexander Wirt <formorer@debian.org>  Sun, 15 Oct 2006 16:40:34 +0200
 
-vyatta-iproute (0.2) unstable; urgency=low
+iproute (20060323-1) unstable; urgency=low
 
-  vc4.0.0
-  [ Mark O'Brien ]
+  * New upstream release (Closes: #370699)
+  * Removed reenable_short_matches, tc_sample_fix, f_u32 patches (included
+    upstream)
+  * Add manpage for pfifo (Closes: #359971)
+  * Add moo object (Closes: #312843)
+  * Add src option to ip_route usage (Closes: #226142)
+  * Prevent users from renaming an interface to "" (Closes: #241904)
+  * Added timout for ip a f (Closes: #386288)
 
+ -- Alexander Wirt <formorer@debian.org>  Fri,  8 Sep 2006 16:43:20 +0200
 
-  [ Andreas Henriksson ]
-  * iproute2: revert syntax help text mistake.
-  * iproute2: add synonyms for ip rule options to ip(8) manpage.
+iproute (20051007-4) unstable; urgency=low
 
-  [ PJ Waskiewicz ]
-  * Update various classifiers' help output for expected CLASSID syntax
+  * Moved *stat binaries to /usr/bin/ (Closes: #350703)
+  * Fixed some manpage typos
+    (Closes: #350671, #350672, #350673, #350674, #350675)
+  * Conflicts with arpd
+  * Fixes u32 bucket hashing calucation. (Closes: #351751)
+    Thanks to Russel Stuart for the patch
+  * Moved to libdb4.3
+  * Fixed ip help output (Closes: #354909)
+  * Fixed hardcoded module paths for tc (Closes: #290315)
 
-  [ Stephen Hemminger ]
-  * add decode of match rules
-  * Revert "TC action parsing bug fix"
-  * fix typo in ip batch error message
-  * libnetlink: don't spin forever on receive error
-  * remove extra newline from perror() calls
-  * poll for errors after rtnl_send
-  * Add vyatta specific Makefile and versioning
-  * change path to iptables (from debian)
-  * Add debian based build procedures
-  * reset initial changelog
-  * label changelog correctly
-  * Add debian patch to produce txt based documentation
-  * update version information
-  * add entry about debian patches
-  * fix package name
-  * Use Provides to avoid package conflicts
-  * vyatta-iproute replaces debian iproute
-  * fix debian rules to match vyatta-iproute package name
-  * more package name changes
-  * fix problem caused by rtnl_send checks
-  * change version number on command output
-  * don't build unneede doc and devel packages
-  * ignore emacs backup files
-  * fix typos in help message for meta match
-  * Protocol field on tc_filter is required
-  * minor typo fixes
-  * break excessively long lines
-  * decode the output of u32 matches
+ -- Alexander Wirt <formorer@debian.org>  Sun,  5 Feb 2006 09:47:36 +0100
 
-  [ rbalocca ]
-  * Add more derived files to .gitinore for vyatta-iproute
+iproute (20051007-3) unstable; urgency=low
 
-  [ Mark O'Brien ]
+  * New upstream release (Closes: #333643)
+  * Added a patch for tc that add u32 get parsed correct
+    Thanks Russell Stuart for the patch (Closes: #347699)
+  * We now have a manpage for tc-bfifo (Closes: #319871)
+  * "get" is no longer mentioned in tc's usage (Closes: #167314)
+  * We now build arpd (Closes: #296200)
+  * Include htb docs (Closes: #204629)
+  * Added flex to build-deps (Closes: #340004, #339119)
+  * Added symlinks for lnstat (Closes: #302589)
+  * Acknowledge heap correction nmu (Closes: #326961)
+  * Acknowledge douple free fix nmu (Closes: #338575)
+  * Fixed allmulticast mention in ip manpage (Closes: #305338)
+  * Add [ prio NUMBER ] to ip_rule.c (Closes: #213673)
 
- -- Mark O'Brien <mobrien@vyatta.com>  Mon, 25 Feb 2008 17:39:02 -0800
+ -- Alexander Wirt <formorer@debian.org>  Sun,  5 Feb 2006 09:37:01 +0100
 
-vyatta-iproute (0.1) unstable; urgency=low
+iproute (20051007-2) experimental; urgency=low
+
+  * Added flex to build-deps
+
+ -- Alexander Wirt <formorer@debian.org>  Sun, 20 Nov 2005 10:46:39 +0100
+
+iproute (20051007-1) experimental; urgency=low
+
+  * The "lets break other peoples networking release"
+    + New upstream release
+    + New maintainer
+    + Fix netbug script
+    + Reenable short iproute commands
+
+ -- Alexander Wirt <formorer@debian.org>  Tue,  1 Nov 2005 10:22:05 +0100
+
+iproute (20041019-4.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix size of table allocation (closes: #326961, #338575)
+
+ -- Blars Blarson <blarson@blars.org>  Sat, 14 Jan 2006 02:07:18 +0000
+
+iproute (20041019-4) unstable; urgency=low
+
+  * New maintainer, closes: #295122.
+  * Included iproute2 homepage in debian/control and updated it in
+    debian/copyright.
+  * Updated FSF mail address in debian/copyright.
+  * Set Standards-Version to 3.6.2 in debian/control.
+  * Fixed "FTBFS: normal.c heap corrution due to table overflow",
+    closes: #326961. Patch by LaMont Jones <lamont@debian.org>.
+  * Fixed "Netbug script gives syntax error", closes: #313540.
+    Patch by Allard Hoeve <allard@byte.nl>.
+  * Fixed "Netbug creates uuencoded file with wrong suffix", closes:
+    #313541. Patch by Allard Hoeve <allard@byte.nl>.
+  * Fixed "Netbug warns about intended stripping of trailing '/'",
+    closes: #313544. Patch by Allard Hoeve <allard@byte.nl>.
+
+ -- Anibal Monsalve Salazar <anibal@debian.org>  Fri, 11 Nov 2005 13:22:15 +1100
+
+iproute (20041019-3) unstable; urgency=medium
+
+  * fix insecure file creation in netbug. Closes: #289541
+  * remove bogus reference to tc-filters from tc's manpage. Closes: #289225
+  * add support for "hoplimit" and "initcwnd" route metrics. Closes: #221893
+  * ikey for GRE works. Closes: #200714
+  * include wrr qdisc. Closes: #198414
+
+ -- Andreas Barth <aba@not.so.argh.org>  Sun,  9 Jan 2005 11:51:09 +0000
+
+iproute (20041019-2) unstable; urgency=low
+
+  * build fails if subdir fails. Closes: #283797
+  * include q_netem.so. Closes: #283968
+  * fix typo in man page. Closes: #285507
+  * removed the 2. and 3. copy of the man pages.
+  * start using dpatch.
+  * add reference to Advanced Routing HOWTO. Closes: #150087
+
+ -- Andreas Barth <aba@not.so.argh.org>  Wed,  5 Jan 2005 21:20:44 +0000
+
+iproute (20041019-1) unstable; urgency=low
+
+  * New maintainer.
+  * packaging changes:
+    + using debhelper
+    + add all manpages. Closes: #57829, #138432, #203797, #246521
+    + add documentation text and html doc, and adding lynx as build-dep.
+      Closes: #121978, #57828
+    + include all tex-files in the doc. Closes: #107117
+  * get straight with the kernel. Closes: #186808
+  * add header files and libnetlink to new development package.
+    Closes: #128162, #139309
+  * build-depend on libatm1-dev | atm-dev instead of atm-dev
+
+ -- Andreas Barth <aba@not.so.argh.org>  Sun, 28 Nov 2004 01:07:30 +0000
+
+iproute (20041019-0.2) unstable; urgency=low
+
+  * NMU, uploading to unstable.
+
+ -- Andreas Barth <aba@not.so.argh.org>  Mon, 22 Nov 2004 19:43:17 +0200
+
+iproute (20041019-0.1) experimental; urgency=low
+
+  * NMU, fixing only most urgent issues.
+  * New upstream package, fixes:
+    + compatibility with 2.6.7 and above. Closes: #262698
+    + no longer with netinet/in.h. Closes: #221877
+
+ -- Andreas Barth <aba@not.so.argh.org>  Mon,  8 Nov 2004 07:50:35 +0100
+
+iproute (20010824-13.1) unstable; urgency=high
+
+  * NMU for a security fix.
+  * [CAN-2003-0856] Fix a local denial of service vulnerability via
+    spoofed messages to the kernel's Netlink interface. (Closes: #242994)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Sun, 16 May 2004 20:28:43 -0700
+
+iproute (20010824-13) unstable; urgency=low
+
+  * debian/rules: Run dpkg-shlibdeps with all the executables,
+    to fix dependency problem                      (closes: Bug#224063)
+  * Really removed references to obsolete include files
+    (Bug#223165 was not fixed properly)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 25 Jan 2004 23:04:20 +0100
+
+iproute (20010824-12) unstable; urgency=low
+
+  * Updated README.Debian and copyright file
+  * Added two new manpages from http://lartc.org/manpages/:
+    ip(8) and tc-cbq-details(8).
+  * Removed references to obsolete include files which made
+    compilation fail (closes: Bug#223165)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 14 Dec 2003 00:40:10 +0100
+
+iproute (20010824-11) unstable; urgency=low
+
+  * Changed priority to "optional"
+  * Fixed "tc -s qdisc" on sparc (patch by "Nicolas S. Dade"
+    <ndade@nsd.dyndns.org>) (closes: Bug#194128)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 17 Aug 2003 00:22:47 +0200
+
+iproute (20010824-10) unstable; urgency=low
+
+  * Updated manual pages from http://www.lartc.org/manpages/
+                (closes: Bug#156353, Bug#175313, Bug#176989, Bug#189095)
+  * New Standards-Version
+  * Don't "rm -rf /etc/iproute2" on purge (closes: Bug#202862)
+  * Include "iproute2" in the description (closes: Bug#182999)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sat, 16 Aug 2003 18:29:27 +0200
+
+iproute (20010824-9) unstable; urgency=medium
+
+  * Added patch for HTB v3.6 to be able to work with kernel 2.4.20
+    (from http://luxik.cdi.cz/~devik/qos/htb/v3/htb3.6-020525.tgz)
+                (closes: Bug#147550, Bug#167149, Bug#167597, Bug#171277)
+
+ -- Juan Cespedes <cespedes@debian.org>  Thu, 05 Dec 2002 13:44:10 +0100
+
+iproute (20010824-8) unstable; urgency=medium
+
+  * Added support for HTB queuing discipline        (closes: Bug#133381)
+    NOTE: you need a patched kernel in order to use it
+
+ -- Juan Cespedes <cespedes@debian.org>  Tue,  2 Apr 2002 20:29:40 +0200
+
+iproute (20010824-7) unstable; urgency=medium
+
+  * Move `ip' binary to /bin to fix FHS violation   (closes: Bug#134812)
+
+ -- Juan Cespedes <cespedes@debian.org>  Mon,  4 Mar 2002 00:20:30 +0100
+
+iproute (20010824-6) unstable; urgency=low
+
+  * Added a couple of #ifdef's to be able to compile with older
+    kernel headers (needed for arm)                 (closes: Bug#131695)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sat, 16 Feb 2002 19:27:15 +0100
+
+iproute (20010824-5) unstable; urgency=low
+
+  * Really fix Bug#121589 (dead gateway bug); apparently I
+    forgot to include the patch in 20010824-2
+
+ -- Juan Cespedes <cespedes@debian.org>  Tue, 29 Jan 2002 23:22:24 +0100
+
+iproute (20010824-4) unstable; urgency=low
+
+  * Added support for DIFFSERV and ATM in tc
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 13 Jan 2002 03:01:47 +0100
+
+iproute (20010824-3) unstable; urgency=low
+
+  * Updated tc* man pages (thanks to bert hubert <ahu@ds9a.nl>)
+  * Fixed spurious space in `tc -s qdisc' output (closes: Bug#128501)
+
+ -- Juan Cespedes <cespedes@debian.org>  Thu, 10 Jan 2002 22:18:25 +0100
+
+iproute (20010824-2) unstable; urgency=low
+
+  * Fixed the following important and serious bugs:
+    + iproute doesn't compile on Alpha (closes: Bug#118113, Bug#123224)
+    + iproute doesn't compile on MIPS (closes: Bug#118424)
+    + iproute doesn't compile on powerpc (closes: Bug#119601)
+  * Added man pages for tc (closes: Bug#124230), tc-cbq, tc-red, tc-tbf,
+    tc-prio and tc-sfq
+  * Removed references to old programs from iproute(7) (closes: Bug#99536)
+  * Fixed bug which presented first hop as dead in equal cost multipath
+                                                      (closes: Bug#121589)
+  * Do not process .ps with through `psnup' (closes: Bug#119820)
+
+ -- Juan Cespedes <cespedes@debian.org>  Tue,  8 Jan 2002 16:07:27 +0100
+
+iproute (20010824-1) unstable; urgency=low
+
+  * New upstream version
+  * Make ingress qdisc work again with tc           (closes: Bug#84444)
+  * Make it compile properly with new include files (closes: Bug#113112)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 28 Oct 2001 16:38:00 +0100
+
+iproute (20001007-1) unstable; urgency=low
+
+  * New upstream version                             (closes: Bug#63701)
+  * Remove /etc/iproute2 on purge                    (closes: Bug#72743)
+  * Fixed Lintian warnings (no-priority-field and no-section-field)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sat, 14 Oct 2000 19:27:12 +0200
+
+iproute (991023-2) unstable; urgency=low
+
+  * New Standards-Version (3.1.1) (closes: Bug#47923)
+  * Modified description of package to show which kernel options are
+    necessary to use the package (closes: Bug#47922)
+  * Updated manual page to point at /usr/share/doc/iproute (closes: Bug#47924)
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 19 Dec 1999 04:00:21 +0100
+
+iproute (991023-1) unstable; urgency=low
+
+  * New upstream version (closes: Bug#48733)
+
+ -- Juan Cespedes <cespedes@debian.org>  Tue,  2 Nov 1999 16:29:37 +0100
+
+iproute (990824-1) unstable; urgency=low
+
+  * New maintainer
+  * New upstream version
+  * New Standards-Version: 3.1.0
+  * Minor fix in "ip rule list": mask in "from" address was not shown
+    correctly
+  * Removed obsoleted documentation from "debian/" directory
+
+ -- Juan Cespedes <cespedes@debian.org>  Sun, 24 Oct 1999 19:02:56 +0200
+
+iproute (990630-1) unstable; urgency=low
+
+  * New upstream version.
+  * FHS and standards 3.0.1.0.
+
+ -- Roberto Lumbreras <rover@debian.org>  Tue,  3 Aug 1999 02:49:28 +0200
+
+iproute (990530-1) unstable; urgency=low
+
+  * New upstream version.
+  * Build with 2.2.10 kernel headers.
+  * Install new scripts ip/routef ip/routel, but not ip/ifcfg ip/rtpr by
+    now, I don't know who/what needs rtpr; ifcfg uses arping, and it isn't
+    available in debian for now.
+
+ -- Roberto Lumbreras <rover@debian.org>  Tue, 22 Jun 1999 02:28:53 +0200
+
+iproute (990329-1) unstable; urgency=low
+
+  * New upstream version.
+  * Build with 2.2.5 kernel headers.
+
+ -- Roberto Lumbreras <rover@debian.org>  Sun,  4 Apr 1999 18:50:39 +0200
+
+iproute (980630-1) unstable; urgency=low
+
+  * New upstream version.
+  * Build with 2.1.112 kernel headers.
+  * Rewrote the rules file.
+
+ -- Roberto Lumbreras <rover@debian.org>  Wed, 29 Jul 1998 23:37:52 +0200
+
+iproute (980119-1) unstable; urgency=low
+
+  * Outdated documentation. Upstream docs are scarce.
+  * Non-Maintainer release
+  * This package has no correct copyright file!
+  * Include all the README.* docs from the upstream site.
+  * Modified to build under glibc
+  * Build with 2.1.85 kernel headers.
+  * produce a correct diff.
+  * Reworked the rules file to utilize debmake fully
+  * Newest upstream release
+  * glibc compilation
+
+ -- Christoph Lameter <christoph@lameter.com>  Wed,  4 Feb 1998 13:37:28 -0800
+
+iproute (961225-2) unstable frozen; urgency=low
+
+  * Added a man page for iproute. (Fixes #8080).
+  * Removed out-of-date patches.
+  * Added routing.txt from /usr/src/linux/Documentation/networking/routing.txt
+  * Newer version of debmake.
+
+ -- Tom Lees <tom@lpsg.demon.co.uk>  Mon, 17 Apr 1997 17:00:36 +0100
+
+iproute (961225-1) unstable; urgency=low
 
   * Initial Release.
 
- -- Stephen Hemminger <shemminger@vyatta.com>  Tue, 29 Jan 2008 17:39:53 -0700
+ -- Tom Lees <tom@lpsg.demon.co.uk>  Mon, 30 Dec 1996 11:12:23 +0000
 
+Local variables:
+mode: debian-changelog
+End:
